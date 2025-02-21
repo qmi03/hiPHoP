@@ -9,7 +9,7 @@ Requirements:
 
 Steps:
   - Run `npm install`.
-  - Run `cp env.example.php env.php` & fill in environment variables.
+  - Run `cp config/env.example.php config/env.php` & fill in environment variables.
 
 ## Development guide
 
