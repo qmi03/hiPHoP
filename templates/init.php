@@ -1,5 +1,5 @@
 <?php
-  require("env.php");
+  require("config/config.php");
 ?>
 
 <head>
