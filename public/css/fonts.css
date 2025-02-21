@@ -1,0 +1,15 @@
+@font-face {
+  font-family: STIXTwoText;
+  src:
+    url("/public/fonts/STIX_Two_Text/STIXTwoText-VariableFont_wght.ttf")
+    format("truetype"),
+    ;
+
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+* {
+  font-family: STIXTwoText;
+}
