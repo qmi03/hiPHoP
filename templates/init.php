@@ -1,3 +1,7 @@
+<?php
+  require("env.php");
+?>
+
 <head>
   <title>hiPHop - The world's largest music ecommerce platform in PHP</title>
   <meta charset="UTF-8">
