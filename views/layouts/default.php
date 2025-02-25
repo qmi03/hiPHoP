@@ -23,7 +23,9 @@
       </svg>
     </button>
   </header>
-  <?php print $content ?>
+  <main>
+    <?php print $content ?>
+  </main>
 </body>
 
 </html>
