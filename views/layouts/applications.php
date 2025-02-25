@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <?= @$content ?>
+  <?php print $content ?>
 </body>
 
 </html>

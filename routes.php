@@ -1,4 +1,6 @@
 <?php
-$controllers = array(
-  "home" => ["index", "error"],
+require_once("controllers/HomeController.php");
+
+$routes = array(
+  "/" => function() { (new HomeController())->index(); },
 );
