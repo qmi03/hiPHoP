@@ -15,7 +15,7 @@
 
 <body>
   <header class="p-8 flex justify-between items-center">
-    <a role="banner" href="/" class="font-black text-6xl tracking-widest">hiPHoP</a>
+    <a role="banner" href="/" class="font-black text-3xl tracking-widest">hiPHoP</a>
     <button class="font-extralight text-xl flex gap-1">
       <span>MENU</span>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
