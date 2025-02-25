@@ -1,9 +1,8 @@
-<?php
-  require("config/config.php");
-?>
+<!DOCTYPE HTML>
+<html lang="en">
 
 <head>
-  <title>hiPHop - The world's largest music ecommerce platform in PHP</title>
+  <title>hiPHop - Music ecommerce platform</title>
   <meta charset="UTF-8">
   <meta name="description" content="Music ecommerce platform">
   <meta name="keywords" content="Music, Ecommerce">
@@ -13,3 +12,9 @@
   <link rel="stylesheet" href="/public/css/fonts.css">
   <script src="/public/js/jquery.js"></script>
 </head>
+
+<body>
+  <?= @$content ?>
+</body>
+
+</html>
