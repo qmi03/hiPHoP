@@ -14,7 +14,7 @@
 </head>
 
 <body>
-  <header class="p-8 flex justify-between">
+  <header class="p-8 flex justify-between items-center">
     <a role="banner" href="/" class="font-black text-6xl tracking-widest">hiPHoP</a>
     <button class="font-extralight text-xl flex gap-1">
       <span>MENU</span>
