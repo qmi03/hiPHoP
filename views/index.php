@@ -7,6 +7,6 @@ function renderContentInLayout(string $layout, string $content): void {
 function renderView(string $view, array $data): void {
   ob_start();
   include($view);
-  renderContentInLayout("views/layouts/applications.php", ob_get_clean());
+  renderContentInLayout("views/layouts/default.php", ob_get_clean());
   ob_flush();
 }
