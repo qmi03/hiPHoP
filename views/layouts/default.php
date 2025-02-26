@@ -31,13 +31,13 @@ $path = $_SERVER["REQUEST_URI"];
       </div>
     </div>
     <div>
-      <nav class="hidden lg:flex justify-around text-white bg-[#111] py-4 text-lg">
-        <a href="/">HOME</a>
-        <a href="/shop">SHOP</a>
-        <a href="/blog">BLOG</a>
-        <a href="/about">ABOUT US</a>
-        <a href="/contact">CONTACT US</a>
-        <a href="/faq">FAQ</a>
+      <nav class="hidden lg:flex justify-around bg-[#111] text-lg">
+        <a class="border-black py-4 px-6 block <?= $path == "/" ? "text-black bg-white border-1" : "text-white" ?>" href="/">HOME</a>
+        <a class="b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order-black py-4 px-6 block <?= $path == "/shop" ? "text-black bg-white border-1" : "text-white" ?>" href="/shop">SHOP</a>
+        <a class="border-black py-4 px-6 block <?= $path == "/blog" ? "text-black bg-white border-1" : "text-white" ?>" href="/blog">BLOG</a>
+        <a class="border-black py-4 px-6 block <?= $path == "/about" ? "text-black bg-white border-1" : "text-white" ?>" href="/about">ABOUT US</a>
+        <a class="border-black py-4 px-6 block <?= $path == "/contac" ? "text-black bg-white border-1" : "text-white" ?>" href="/contact">CONTACT US</a>
+        <a class="border-black py-4 px-6 block <?= $path == "/faq" ? "text-black bg-white border-1" : "text-white" ?>" href="/faq">FAQ</a>
       </nav>
       <nav id="sidemenu" class="translate-x-full transition-transform transition-duration-[2s] lg:hidden bg-[#111] fixed top-0 right-0 pl-18 pr-32 pt-28 h-[100vh]">
         <button onclick="$('#sidemenu').addClass('translate-x-full')" class="text-white absolute top-10 right-10 cursor-pointer transition-transform">
