@@ -8,6 +8,9 @@
   </div>
   <div class="md:flex-1/4 flex flex-col gap-0">
     <?php foreach ($data["newsLetters"] as $index => $newsLetter): ?>
+      <?php if ($newsLetter->bgUrl): ?>
+        <link rel="preload" as="image" href="<?= $newsLetter->bgUrl ?>">
+      <?php endif ?>
       <button
         class="h-24 cursor-pointer bg-pink-500 flex gap-2 items-center p-2"
         onclick='setNewsLetter(<?= $index ?>)'>
@@ -21,7 +24,13 @@
 
   <script>
     const newsLetters = <?= json_encode($data["newsLetters"]) ?>;
-    setNewsLetter(0);
+    const noOfNewsLetters = newsLetters.length;
+    let curIndexOfNewsLetter = 0;
+    setNewsLetter(curIndexOfNewsLetter);
+    setInterval(() => {
+      curIndexOfNewsLetter = (curIndexOfNewsLetter + 1) % noOfNewsLetters;
+      setNewsLetter(curIndexOfNewsLetter);
+    }, 8000);
 
     function setNewsLetter(index) {
       const currentNewsLetter = newsLetters[index];
