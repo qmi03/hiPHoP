@@ -103,7 +103,7 @@ $path = $_SERVER["REQUEST_URI"];
       <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/contact" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/contact">
         <span class="<?= $path == "/contact" ? "border-white border-b-1" : "" ?>">CONTACT</span>
       </a>
-      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/about" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/about">
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/login" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/login">
         <span class="<?= $path == "/login" ? "border-white border-b-1" : "" ?>">LOGIN</span>
       </a>
       <button class="text-white text-md font-bold flex gap-2 items-center opacity-80 cursor-pointer">
