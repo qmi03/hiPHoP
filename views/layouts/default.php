@@ -18,7 +18,7 @@
 $path = $_SERVER["REQUEST_URI"];
 ?>
 
-<body>
+<body class="xl:px-[10vw] bg-[#eeeeee]">
   <div class="fixed z-[-1] top-0 left-0 w-[100vw]" role="none">
     <div class="h-40 bg-violet-900">
     </div>
@@ -41,7 +41,7 @@ $path = $_SERVER["REQUEST_URI"];
         <path fill-rule="evenodd" d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd" />
       </svg>
     </button>
-    <nav id="sidemenu" class="translate-x-full transition-transform transition-duration-[2s] lg:hidden bg-cyan-700 fixed top-0 right-0 pl-18 pr-32 pt-28 h-[100vh]">
+    <nav id="sidemenu" class="translate-x-full transition-transform transition-duration-[2s] lg:hidden bg-cyan-700 fixed top-0 right-0 pl-18 pr-32 pt-28 h-[100vh] z-60">
       <button onclick="$('#sidemenu').addClass('translate-x-full')" class="text-white absolute top-10 right-10 cursor-pointer transition-transform">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
