@@ -13,7 +13,7 @@
       <?php endif ?>
       <button
         id="newsletter-button-<?= $index ?>"
-        class="transition-colors duration-500 h-24 cursor-pointer bg-pink-500 flex gap-2 items-center p-2"
+        class="origin-right scale-x-100 transition-all translate-x-0 duration-500 h-24 cursor-pointer bg-pink-500 flex gap-2 items-center p-2 hover:bg-violet-600 hover:origin-left hover:scale-x-110"
         onclick='setNewsLetter(<?= $index ?>)'>
         <svg id="newsletter-button-chevron-<?= $index ?>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 rotate-0 transition-all duration-500">
           <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -52,14 +52,20 @@
         $(`#newsletter-button-${i}`).removeClass("bg-cyan-600")
           .addClass("bg-pink-500")
           .removeClass("shadow-black")
-          .removeClass("shadow-sm");
+          .removeClass("shadow-sm")
+          .addClass("translate-x-0")
+          .addClass("scale-x-100")
+          .removeClass("scale-x-110")
         $(`#newsletter-button-chevron-${i}`).removeClass("rotate-180")
           .addClass("rotate-0");
       }
       $(`#newsletter-button-${index}`).removeClass("bg-pink-500")
         .addClass("bg-cyan-600")
         .addClass("shadow-black")
-        .addClass("shadow-sm");
+        .addClass("shadow-sm")
+        .removeClass("translate-x-0")
+        .removeClass("scale-x-100")
+        .addClass("scale-x-110")
       $(`#newsletter-button-chevron-${index}`).removeClass("rotate-0")
         .addClass("rotate-180");
     }
