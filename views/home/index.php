@@ -65,3 +65,22 @@
     }
   </script>
 </section>
+
+<section class="mt-10 bg-white p-10 shadow-gray-300 shadow-sm">
+  <h2 class="text-center text-3xl mb-10"><?= htmlspecialchars($data["introduction"]->title) ?></h2>
+  <?php foreach ($data["introduction"]->paragraphs as $p): ?>
+    <p class="text-lg p-1"><?= htmlspecialchars($p) ?></p>
+  <?php endforeach ?>
+</section>
+
+<section class="mt-10 bg-white pb-10 shadow-gray-300 shadow-sm">
+  <h2 class="text-center text-3xl mb-10 bg-pink-500 text-white p-5">OUR MOST POPULAR INSTRUMENTS</h2>
+  <?php foreach ($data["instrument"]->paragraphs as $p): ?>
+    <p class="text-lg p-1 px-10 "><?= htmlspecialchars($p) ?></p>
+  <?php endforeach ?>
+  <div class="mt-10 px-10 flex justify-between gap-10 flex-wrap">
+    <?php foreach ($data["instrument"]->imageUrls as $url): ?>
+      <img width="200" src="<?= htmlspecialchars($url) ?>" alt="">
+    <?php endforeach ?>
+  </div>
+</section>
