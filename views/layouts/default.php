@@ -20,7 +20,7 @@ $path = $_SERVER["REQUEST_URI"];
 
 <body>
   <div class="fixed z-[-1] top-0 left-0 w-[100vw]" role="none">
-    <div class="h-30 bg-violet-900">
+    <div class="h-40 bg-violet-900">
     </div>
     <div class="h-14 bg-linear-to-b from-violet-900 to-[#00000000]">
     </div>
@@ -104,7 +104,7 @@ $path = $_SERVER["REQUEST_URI"];
       </button>
     </nav>
   </header>
-  <main>
+  <main class="md:px-[2vw]">
     <?php print $content ?>
   </main>
 </body>
