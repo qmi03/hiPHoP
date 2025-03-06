@@ -78,9 +78,34 @@
   <?php foreach ($data["instrument"]->paragraphs as $p): ?>
     <p class="text-lg p-1 px-10 "><?= htmlspecialchars($p) ?></p>
   <?php endforeach ?>
-  <div class="mt-10 px-10 flex justify-between gap-10 flex-wrap">
+  <div class="mt-10 px-10 flex md:justify-between justify-around gap-10 flex-wrap">
     <?php foreach ($data["instrument"]->imageUrls as $url): ?>
       <img width="200" src="<?= htmlspecialchars($url) ?>" alt="">
     <?php endforeach ?>
   </div>
+</section>
+
+<div class="relative top-20 h-5 bg-cyan-500"></div>
+<section class="relative top-20 min-h-[100px] z-50 bg-pink-500 text-white text-3xl p-5 shadow-gray-300 shadow-sm">
+  <p class="text-center transition-all ease-in-out duration-1000">
+    "<span id="quote-content"></span>"
+    ~ <span id="quote-author"></span>
+  </p>
+
+  <script>
+    const quotes = <?= json_encode($data["quote"]) ?>;
+    const noOfQuotes = quotes.length;
+    setQuote(0);
+    let quoteIndex = 0;
+    setInterval(() => {
+      quoteIndex = (quoteIndex + 1) % noOfQuotes;
+      setQuote(quoteIndex);
+    }, 3000);
+
+    function setQuote(index) {
+      const quote = quotes[index];
+      $("#quote-content").text(quote.content);
+      $("#quote-author").text(quote.author);
+    }
+  </script>
 </section>
