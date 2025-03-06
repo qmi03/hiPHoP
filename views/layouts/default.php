@@ -25,8 +25,8 @@ $path = $_SERVER["REQUEST_URI"];
     <div class="h-14 bg-linear-to-b from-violet-900 to-[#00000000]">
     </div>
   </div>
-  <header class="px-[3vw] min-h-30 bg-violet-900 relative">
-    <a href="/" class="float-left flex bg-cyan-600 p-3 gap-2 items-center shadow-gray-900 shadow-lg" role="button">
+  <header class="pl-[calc(3vw+150px)] min-h-20 bg-violet-900 relative">
+    <a href="/" class="absolute z-50 top-0 left-[3vw] flex bg-cyan-600 p-3 gap-2 items-center shadow-gray-900 shadow-lg" role="button">
       <img class="w-14" src="/public/assets/logo_no_music.svg" alt="logo">
       <div class="flex flex-col font-sans font-bold gap-0 text-3xl">
         <span>hiP</span>
