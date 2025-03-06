@@ -9,7 +9,7 @@
   <div class="md:flex-1/4 flex flex-col gap-0">
     <?php foreach ($data["newsLetters"] as $index => $newsLetter): ?>
       <?php if ($newsLetter->bgUrl): ?>
-        <link rel="preload" as="image" href="<?= $newsLetter->bgUrl ?>">
+        <link rel="preload" as="image" href="<?= htmlspecialchars($newsLetter->bgUrl) ?>">
       <?php endif ?>
       <button
         id="newsletter-button-<?= $index ?>"
@@ -18,7 +18,7 @@
         <svg id="newsletter-button-chevron-<?= $index ?>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 rotate-0 transition-all duration-500">
           <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span class="text-left text-lg"><?= $newsLetter->title ?></span>
+        <span class="text-left text-lg"><?= htmlspecialchars($newsLetter->title) ?></span>
       </button>
     <?php endforeach; ?>
   </div>
