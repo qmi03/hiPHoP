@@ -1,9 +1,9 @@
 <?php
 require_once("views/index.php");
-require_once("models/NewsLetter.php");
-require_once("models/Introduction.php");
-require_once("models/PopularInstrument.php");
-require_once("models/Quote.php");
+require_once("models/home/NewsLetter.php");
+require_once("models/home/Introduction.php");
+require_once("models/home/PopularInstrument.php");
+require_once("models/home/Quote.php");
 
 class HomeController
 {
