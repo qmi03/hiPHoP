@@ -83,6 +83,12 @@ $path = $_SERVER["PATH"];
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
       </a>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/faq/" ? "" : "opacity-80" ?> m-4" href="/contact">
+        <span>FAQ</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
     </nav>
     <nav class="flex-wrap gap-6 p-5 pb-8 hidden md:flex">
       <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/">
@@ -102,6 +108,9 @@ $path = $_SERVER["PATH"];
       </a>
       <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/contact/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/contact">
         <span class="<?= $path == "/contact/" ? "border-white border-b-1" : "" ?>">CONTACT</span>
+      </a>
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/faq/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/faq">
+        <span class="<?= $path == "/faq/" ? "border-white border-b-1" : "" ?>">FAQ</span>
       </a>
       <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/login/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/login">
         <span class="<?= $path == "/login/" ? "border-white border-b-1" : "" ?>">LOGIN</span>
