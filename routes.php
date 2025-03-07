@@ -9,4 +9,7 @@ $routes = array(
   "/login/" => function () {
     (new LoginController())->index();
   },
+  "/login/forgot-password/" => function () {
+    (new LoginController())->forgotPassword();
+  },
 );

@@ -7,4 +7,9 @@ class LoginController
   {
     renderView("views/login/index.php", array());
   }
+
+  public function forgotPassword(): void
+  {
+    renderView("views/login/forgot-password.php", array());
+  }
 }
