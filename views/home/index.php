@@ -91,8 +91,8 @@
   </div>
 </section>
 
-<div class="relative top-20 h-5 bg-cyan-500"></div>
-<section class="relative top-20 min-h-[100px] z-50 bg-pink-500 text-white text-3xl p-5 shadow-gray-300 shadow-sm">
+<div class="relative top-5 h-5 bg-cyan-500"></div>
+<section class="relative top-5 min-h-[100px] z-50 bg-pink-500 text-white text-3xl p-5 shadow-gray-300 shadow-sm">
   <p class="text-center transition-all ease-in-out duration-1000">
     "<span id="quote-content"></span>"
     ~ <span id="quote-author"></span>
