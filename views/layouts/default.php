@@ -15,7 +15,7 @@
 </head>
 
 <?php
-$path = $_SERVER["REQUEST_URI"];
+  $path = $_SERVER["PATH"];
 ?>
 
 <body class="min-h-[100vh] bg-[#eeeeee] relative pb-[500px] md:pb-[350px]">
@@ -47,7 +47,7 @@ $path = $_SERVER["REQUEST_URI"];
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
         </svg>
       </button>
-      <a class="flex gap-2 items-center text-xl <?= $path == "/login" ? "text-white" : "text-gray-400" ?> m-4" href="/login">
+      <a class="flex gap-2 items-center text-xl <?= $path == "/login/" ? "text-white" : "text-gray-400" ?> m-4" href="/login">
         <span>LOGIN</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
@@ -59,25 +59,25 @@ $path = $_SERVER["REQUEST_URI"];
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
       </a>
-      <a class="flex gap-2 items-center text-xl <?= $path == "/shop" ? "text-white" : "text-gray-400" ?> m-4" href="/shop">
+      <a class="flex gap-2 items-center text-xl <?= $path == "/shop/" ? "text-white" : "text-gray-400" ?> m-4" href="/shop">
         <span>SHOP</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
       </a>
-      <a class="flex gap-2 items-center text-xl <?= $path == "/blog" ? "text-white" : "text-gray-400" ?> m-4" href="/blog">
+      <a class="flex gap-2 items-center text-xl <?= $path == "/blog/" ? "text-white" : "text-gray-400" ?> m-4" href="/blog">
         <span>BLOG</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
       </a>
-      <a class="flex gap-2 items-center text-xl <?= $path == "/about" ? "text-white" : "text-gray-400" ?> m-4" href="/about">
+      <a class="flex gap-2 items-center text-xl <?= $path == "/about/" ? "text-white" : "text-gray-400" ?> m-4" href="/about">
         <span>ABOUT US</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
       </a>
-      <a class="flex gap-2 items-center text-xl <?= $path == "/contact" ? "text-white" : "text-gray-400" ?> m-4" href="/contact">
+      <a class="flex gap-2 items-center text-xl <?= $path == "/contact/" ? "text-white" : "text-gray-400" ?> m-4" href="/contact">
         <span>CONTACT US</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
@@ -91,20 +91,20 @@ $path = $_SERVER["REQUEST_URI"];
         </svg>
         <span class="<?= $path == "/" ? "border-white border-b-1" : "" ?>">HOME</span>
       </a>
-      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/about" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/about">
-        <span class="<?= $path == "/about" ? "border-white border-b-1" : "" ?>">ABOUT</span>
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/about/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/about">
+        <span class="<?= $path == "/about/" ? "border-white border-b-1" : "" ?>">ABOUT</span>
       </a>
-      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/shop" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/shop">
-        <span class="<?= $path == "/shop" ? "border-white border-b-1" : "" ?>">SHOP</span>
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/shop/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/shop">
+        <span class="<?= $path == "/shop/" ? "border-white border-b-1" : "" ?>">SHOP</span>
       </a>
-      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/blog" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/blog">
-        <span class="<?= $path == "/blog" ? "border-white border-b-1" : "" ?>">BLOG</span>
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/blog/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/blog">
+        <span class="<?= $path == "/blog/" ? "border-white border-b-1" : "" ?>">BLOG</span>
       </a>
-      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/contact" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/contact">
-        <span class="<?= $path == "/contact" ? "border-white border-b-1" : "" ?>">CONTACT</span>
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/contact/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/contact">
+        <span class="<?= $path == "/contact/" ? "border-white border-b-1" : "" ?>">CONTACT</span>
       </a>
-      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/login" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/login">
-        <span class="<?= $path == "/login" ? "border-white border-b-1" : "" ?>">LOGIN</span>
+      <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/login/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/login">
+        <span class="<?= $path == "/login/" ? "border-white border-b-1" : "" ?>">LOGIN</span>
       </a>
       <button class="text-white text-md font-bold flex gap-2 items-center opacity-80 cursor-pointer">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
