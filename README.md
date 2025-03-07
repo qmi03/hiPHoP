@@ -14,3 +14,5 @@ Steps:
 ## Development guide
 
 Run `make dev` to develop.
+
+Create migrations: Run `php migrations/script.php` and follow its instructions.
