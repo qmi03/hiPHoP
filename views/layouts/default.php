@@ -19,7 +19,7 @@
 ?>
 
 <body class="min-h-[100vh] bg-[#eeeeee] relative pb-[500px] md:pb-[280px]">
-  <div class="fixed z-[-1] top-0 left-0 w-[100vw]" role="none">
+  <div class="absolute z-[-1] top-0 left-0 w-[100vw]" role="none">
     <div class="h-40 bg-violet-900">
     </div>
     <div class="h-14 bg-linear-to-b from-violet-900 to-[#00000000]">
