@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>hiPHop - Music ecommerce platform</title>
+  <title>hiPHoP - Music ecommerce platform</title>
   <meta charset="UTF-8">
   <meta name="description" content="Music ecommerce platform">
   <meta name="keywords" content="Music, Ecommerce">
@@ -26,7 +26,7 @@
     </div>
   </div>
   <header class="xl:px-[calc(10vw+100px)] pl-[calc(3vw+150px)] min-h-20 bg-violet-900 relative">
-    <a href="/" class="absolute z-50 top-0 left-[3vw] flex bg-cyan-600 p-3 gap-2 items-center shadow-gray-900 shadow-lg" role="button">
+    <a href="/" class="absolute z-50 top-0 left-[5vw] flex bg-cyan-600 p-3 gap-2 items-center shadow-gray-900 shadow-lg" role="button">
       <img class="w-14" src="/public/assets/logo_no_music.svg" alt="logo">
       <div class="flex flex-col font-sans font-bold gap-0 text-3xl">
         <span>hiP</span>
@@ -113,7 +113,7 @@
       </button>
     </nav>
   </header>
-  <main class="xl:px-[10vw]">
+  <main class="xl:px-[8vw]">
     <div class="md:px-[2vw]">
       <?php print $content ?>
     </div>
