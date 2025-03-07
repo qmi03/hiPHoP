@@ -20,6 +20,7 @@
 
 <section class="mt-10 bg-white mx-5 lg:mx-20 relative">
   <h2 class="p-5 text-xl text-white text-center bg-pink-500">Find Us on the Map</h2>
-  <div id="map">
+  <div id="map" class="flex items-center justify-center">
+    <iframe src="https://maps.google.com/maps?q=<?= $data["latitude"] ?>,<?= $data["longitude"] ?>&hl=es;z=14&amp;output=embed" class="w-[100%] min-h-[500px]"></iframe>
   </div>
 </section>

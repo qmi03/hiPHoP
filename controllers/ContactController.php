@@ -7,6 +7,6 @@ class ContactController
   public function index(): void
   {
     $contact = (new ContactModel())->fetch();
-    renderView("views/contact/index.php", array("email" => $contact["email"], "phone" => $contact["phone"], "address" => $contact["address"]));
+    renderView("views/contact/index.php", $contact);
   }
 }

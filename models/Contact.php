@@ -9,6 +9,8 @@ class ContactModel
       "email" => "info@hiPHoP.com",
       "facebook" => "https://www.facebook.com/huydna",
       "github" => "https://github.com/Huy-DNA",
+      "latitude" => "10.8806",
+      "longitude" => "106.8054",
     );
   }
 }
