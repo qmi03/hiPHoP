@@ -25,7 +25,7 @@
     <div class="h-14 bg-linear-to-b from-violet-900 to-[#00000000]">
     </div>
   </div>
-  <header class="xl:px-[calc(10vw+100px)] pl-[calc(3vw+150px)] min-h-20 bg-violet-900 relative">
+  <header class="xl:px-[calc(10vw+100px)] pl-[calc(3vw+170px)] min-h-20 bg-violet-900 relative">
     <a href="/" class="absolute z-50 top-0 left-[5vw] flex bg-cyan-600 p-3 gap-2 items-center shadow-gray-900 shadow-lg" role="button">
       <img class="w-14" src="/public/assets/logo_no_music.svg" alt="logo">
       <div class="flex flex-col font-sans font-bold gap-0 text-3xl">
