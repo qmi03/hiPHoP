@@ -22,6 +22,10 @@ class LoginController
       } else if ($method == "POST") {
         $this->handleSignupForm($_POST);
       }
+    } else if ($path == "/logout/") {
+      if ($method == "GET") {
+        $this->logout();
+      }
     }
   }
 
@@ -167,5 +171,12 @@ class LoginController
       $conn->rollBack();
       $this->signup(array_merge($formData));
     }
+  }
+
+  public function logout(): void
+  {
+    unset($_SESSION["isLoggedIn"]);
+    unset($_SESSION["email"]);
+    header("Location: /");
   }
 }
