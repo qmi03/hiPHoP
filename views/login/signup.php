@@ -6,50 +6,50 @@
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="username">Username *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="username" name="username" value="<?= htmlspecialchars($data["username"]) ?>">
     <?php if ($data["invalidField"] == "username"): ?>
-      <p class="text-sm text-red-600">Invalid username!</p>
       <div></div>
+      <p class="text-sm text-red-600">Invalid username or it has been taken!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="firstname">First name *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="firstname" name="firstname" value="<?= htmlspecialchars($data["firstname"]) ?>">
     <?php if ($data["invalidField"] == "firstname"): ?>
-      <p class="text-sm text-red-600">Invalid first name!</p>
       <div></div>
+      <p class="text-sm text-red-600">Invalid first name!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="lastname">Last name *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="lastname" name="lastname" value="<?= htmlspecialchars($data["lastname"]) ?>">
-    <?php if ($data["invalidField"] == "firstname"): ?>
-      <p class="text-sm text-red-600">Invalid last name!</p>
+    <?php if ($data["invalidField"] == "lastname"): ?>
       <div></div>
+      <p class="text-sm text-red-600">Invalid last name!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="email">Email *</label>
     <input type="email" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="email" name="email" value="<?= htmlspecialchars($data["email"]) ?>">
     <?php if ($data["invalidField"] == "email"): ?>
-      <p class="text-sm text-red-600">Invalid first name!</p>
       <div></div>
+      <p class="text-sm text-red-600">Invalid email or email is already taken!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="password">Password *</label>
     <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="password" minlength="6" maxlength="256" name="password">
     <?php if ($data["invalidField"] == "password"): ?>
-      <p class="text-sm text-red-600">Password length must be between 6 and 256 characters!</p>
       <div></div>
+      <p class="text-sm text-red-600">Password length must be between 6 and 256 characters!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="re-password">Re-enter password *</label>
     <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="re-password" minlength="6" maxlength="256" name="re-password">
     <?php if ($data["invalidField"] == "re-password"): ?>
-      <p class="text-sm text-red-600">Re-entered password does not match!</p>
       <div></div>
+      <p class="text-sm text-red-600">Re-entered password does not match!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="dob">Date of birth *</label>
     <input type="date" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="dob" name="dob" value="<?= htmlspecialchars($data["dob"]) ?>">
     <?php if ($data["invalidField"] == "dob"): ?>
-      <p class="text-sm text-red-600">Invalid date of birth!</p>
       <div></div>
+      <p class="text-sm text-red-600">Invalid date of birth!</p>
     <?php endif ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="address">Address *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="address" name="address" value="<?= htmlspecialchars($data["address"]) ?>">
     <?php if ($data["invalidField"] == "address"): ?>
-      <p class="text-sm text-red-600">Invalid address!</p>
       <div></div>
+      <p class="text-sm text-red-600">Invalid address!</p>
     <?php endif ?>
     <div></div>
     <div class="mt-5 lg:mt-0 flex items-center justify-start lg:none">
