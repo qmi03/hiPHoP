@@ -45,13 +45,14 @@ class LoginController
 
   public function handleSignupForm(array $formData): void
   {
-    $username = $formData["username"];
-    $password = $formData["password"];
-    $rePassword = $formData["re-password"];
-    $dob = $formData["dob"];
-    $fname = $formData["firstname"];
-    $lname = $formData["lastname"];
-    $email = $formData["email"];
+    $username = trim($formData["username"]);
+    $password = trim($formData["password"]);
+    $rePassword = trim($formData["re-password"]);
+    $dob = trim($formData["dob"]);
+    $fname = trim($formData["firstname"]);
+    $lname = trim($formData["lastname"]);
+    $email = trim($formData["email"]);
+    $address = trim($formData["address"]);
 
     if (!$username || strlen($username) <= 0) {
       $this->signup(array_merge($formData, ["invalidField" => "username"]));
@@ -87,10 +88,37 @@ class LoginController
       $this->signup(array_merge($formData, ["invalidField" => "dob"]));
       return;
     }
-    $dob = date_parse($dob);
-    if ($dob["error_count"] > 0) {
+    if (date_parse($dob)["error_count"] > 0) {
       $this->signup(array_merge($formData, ["invalidField" => "dob"]));
       return;
+    }
+
+    $password = password_hash($password, PASSWORD_BCRYPT);
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("SELECT username FROM users WHERE username = ?");
+      $stmt->execute([$username]);
+      $res = $stmt->fetch();
+      if ($res) {
+        $this->signup(array_merge($formData, ["invalidField" => "username"]));
+        exit();
+      }
+      $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
+      $stmt->execute([$email]);
+      $res = $stmt->fetch();
+      if ($res) {
+        $this->signup(array_merge($formData, ["invalidField" => "email"]));
+        exit();
+      }
+      $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, address, email, dob, username, password, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+      $stmt->execute([$fname, $lname, $address, $email, $dob, $username, $password, 0]);
+      $conn->commit();
+      header("Location: /login");
+      exit();
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      $this->signup(array_merge($formData));
     }
   }
 }
