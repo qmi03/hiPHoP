@@ -4,6 +4,13 @@ require_once("models/Contact.php");
 
 class ContactController
 {
+  public function route(string $method, string $path): void
+  {
+    if ($path == "/contact/" && $method == "GET") {
+      $this->index();
+    }
+  }
+
   public function index(): void
   {
     $contact = (new ContactModel())->fetch();

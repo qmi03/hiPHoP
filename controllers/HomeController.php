@@ -7,6 +7,13 @@ require_once("models/home/Quote.php");
 
 class HomeController
 {
+  public function route(string $method, string $path): void
+  {
+    if ($path == "/" && $method == "GET") {
+      $this->index();
+    }
+  }
+
   public function index(): void
   {
     $newsLetters = new NewsLetterModel();

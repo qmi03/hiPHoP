@@ -4,16 +4,8 @@ require_once("controllers/LoginController.php");
 require_once("controllers/ContactController.php");
 
 $routes = array(
-  "/" => function () {
-    (new HomeController())->index();
-  },
-  "/login/" => function () {
-    (new LoginController())->index();
-  },
-  "/login/forgot-password/" => function () {
-    (new LoginController())->forgotPassword();
-  },
-  "/contact/" => function() {
-    (new ContactController())->index();
-  },
+  "/" => new HomeController(),
+  "/login/" => new LoginController(),
+  "/login/forgot-password/" => new LoginController(),
+  "/contact/" => new ContactController(),
 );
