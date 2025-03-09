@@ -4,15 +4,15 @@
 <section class="bg-white mx-5 lg:mx-20 p-10 relative top-[-10px]">
   <form action="" method="post" class="flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="email">Email *</label>
-    <input type="email" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="email">
+    <input type="email" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="email" name="email">
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="password">Password *</label>
-    <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="password" minlength="6" maxlength="256">
+    <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="password" minlength="6" maxlength="256" name="password">
     <div class="mt-5 lg:mt-0 flex gap-5 lg:justify-end">
       <label class="text-left lg:text-right cursor-pointer" for="remember-me-checked">Remember me</label>
-      <input type="checkbox" id="remember-me-checked" class="lg:hidden cursor-pointer">
+      <input type="checkbox" id="remember-me-checked" class="lg:hidden cursor-pointer" name="remember-me-checked">
     </div>
     <div class="hidden lg:flex items-center justify-start cursor-pointer">
-      <input type="checkbox" id="remember-me-checked">
+      <input type="checkbox" id="remember-me-checked" name="remember-me-checked">
     </div>
     <div></div>
     <div class="mt-5 lg:mt-0 flex items-center justify-start lg:none">
