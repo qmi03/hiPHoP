@@ -17,8 +17,57 @@ class LoginController
       }
     } else if ($path == "/signup/") {
       if ($method == "GET") {
-        $this->signup();
+        $this->signup([]);
       } else if ($method == "POST") {
+        $username = $_POST["username"];
+        $password = $_POST["password"];
+        $rePassword = $_POST["re-password"];
+        $dob = $_POST["dob"];
+        $fname = $_POST["firstname"];
+        $lname = $_POST["lastname"];
+        $email = $_POST["email"];
+
+        if (!$username || strlen($username) <= 0) {
+          $this->signup(array_merge($_POST, ["invalidField" => "username"]));
+          return;
+        }
+
+        if (!$password || strlen($password) < 6 || strlen($password) > 256) {
+          $this->signup(array_merge($_POST, ["invalidField" => "password"]));
+          return;
+        }
+
+        if ($rePassword != $password) {
+          $this->signup(array_merge($_POST, ["invalidField" => "re-password"]));
+          return;
+        }
+
+        if (!$fname || strlen($fname) <= 0) {
+          $this->signup(array_merge($_POST, ["invalidField" => "firstname"]));
+          return;
+        }
+
+        if (!$lname || strlen($lname) <= 0) {
+          $this->signup(array_merge($_POST, ["invalidField" => "lastname"]));
+          return;
+        }
+
+        if (!$email || preg_match_all("^[^@]+@[^@]+\.[^@]+$", $email)) {
+          $this->signup(array_merge($_POST, ["invalidField" => "email"]));
+          return;
+        }
+
+        if (!$dob) {
+          $this->signup(array_merge($_POST, ["invalidField" => "dob"]));
+          return;
+        }
+        $dob = date_parse($dob);
+        if ($dob["error_count"] > 0) {
+          $this->signup(array_merge($_POST, ["invalidField" => "dob"]));
+          return;
+        }
+
+        $this->signup([]);
       }
     }
   }
@@ -37,8 +86,8 @@ class LoginController
     renderView("views/login/forgot-password.php", array());
   }
 
-  public function signup(): void
+  public function signup(array $formData): void
   {
-    renderView("views/login/signup.php", array());
+    renderView("views/login/signup.php", $formData);
   }
 }
