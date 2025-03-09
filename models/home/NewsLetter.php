@@ -3,11 +3,11 @@ class NewsLetter
 {
   public string $title;
   public string $summary;
-  public $targetUrl;
-  public $targetName;
+  public ?string $targetUrl;
+  public ?string $targetName;
   public string $bgUrl;
 
-  public function __construct(string $title, string $summary, $targetUrl, $targetName, string $bgUrl)
+  public function __construct(string $title, string $summary, ?string $targetUrl, ?string $targetName, string $bgUrl)
   {
     $this->title = $title;
     $this->summary = $summary;
