@@ -78,6 +78,8 @@ class LoginController
         exit();
       }
       $conn->commit();
+      $_SESSION["isLoggedIn"] = true;
+      $_SESSION["email"] = $email;
       header("Location: /");
       exit();
     } catch (PDOException $e) {
