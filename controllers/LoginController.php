@@ -7,8 +7,9 @@ class LoginController
   {
     if ($path == "/login/") {
       if ($method == "GET") {
-        $this->index();
+        $this->index([]);
       } else if ($method == "POST") {
+        $this->handleLoginForm($_POST);
       }
     } else if ($path == "/login/forgot-password/") {
       if ($method == "GET") {
@@ -24,13 +25,13 @@ class LoginController
     }
   }
 
-  public function index(): void
+  public function index(array $formData): void
   {
     if ($_SESSION["isLoggedIn"]) {
       header('Location: /');
       exit();
     }
-    renderView("views/login/index.php", array());
+    renderView("views/login/index.php", $formData);
   }
 
   public function forgotPassword(): void
@@ -41,6 +42,48 @@ class LoginController
   public function signup(array $formData): void
   {
     renderView("views/login/signup.php", $formData);
+  }
+
+  public function handleLoginForm(array $formData): void
+  {
+    $email = trim($formData["email"]);
+    $password = trim($formData["password"]);
+    $rememberMe = trim($formData["remember-me-checked"]) == "on";
+
+    if (!$email || preg_match_all("^[^@]+@[^@]+\.[^@]+$", $email)) {
+      $this->signup(array_merge($formData, ["invalidField" => "email"]));
+      return;
+    }
+
+    if (!$password || strlen($password) < 6 || strlen($password) > 256) {
+      $this->signup(array_merge($formData, ["invalidField" => "password"]));
+      return;
+    }
+
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
+      $stmt->execute([$email]);
+      $res = $stmt->fetch();
+      if (!$res) {
+        $this->index(array_merge($formData, ["authFailed" => true]));
+        $conn->rollBack();
+        exit();
+      }
+      $hash = $res["password"];
+      if (!password_verify($password, $hash)) {
+        $this->index(array_merge($formData, ["authFailed" => true]));
+        $conn->rollBack();
+        exit();
+      }
+      $conn->commit();
+      header("Location: /");
+      exit();
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      $this->index(array_merge($formData));
+    }
   }
 
   public function handleSignupForm(array $formData): void
@@ -102,6 +145,7 @@ class LoginController
       $res = $stmt->fetch();
       if ($res) {
         $this->signup(array_merge($formData, ["invalidField" => "username"]));
+        $conn->rollBack();
         exit();
       }
       $stmt = $conn->prepare("SELECT email FROM users WHERE email = ?");
@@ -109,6 +153,7 @@ class LoginController
       $res = $stmt->fetch();
       if ($res) {
         $this->signup(array_merge($formData, ["invalidField" => "email"]));
+        $conn->rollBack();
         exit();
       }
       $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, address, email, dob, username, password, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
