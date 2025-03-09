@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 require_once("config/index.php");
 require_once("routes.php");
 require_once("views/index.php");
