@@ -19,55 +19,7 @@ class LoginController
       if ($method == "GET") {
         $this->signup([]);
       } else if ($method == "POST") {
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-        $rePassword = $_POST["re-password"];
-        $dob = $_POST["dob"];
-        $fname = $_POST["firstname"];
-        $lname = $_POST["lastname"];
-        $email = $_POST["email"];
-
-        if (!$username || strlen($username) <= 0) {
-          $this->signup(array_merge($_POST, ["invalidField" => "username"]));
-          return;
-        }
-
-        if (!$password || strlen($password) < 6 || strlen($password) > 256) {
-          $this->signup(array_merge($_POST, ["invalidField" => "password"]));
-          return;
-        }
-
-        if ($rePassword != $password) {
-          $this->signup(array_merge($_POST, ["invalidField" => "re-password"]));
-          return;
-        }
-
-        if (!$fname || strlen($fname) <= 0) {
-          $this->signup(array_merge($_POST, ["invalidField" => "firstname"]));
-          return;
-        }
-
-        if (!$lname || strlen($lname) <= 0) {
-          $this->signup(array_merge($_POST, ["invalidField" => "lastname"]));
-          return;
-        }
-
-        if (!$email || preg_match_all("^[^@]+@[^@]+\.[^@]+$", $email)) {
-          $this->signup(array_merge($_POST, ["invalidField" => "email"]));
-          return;
-        }
-
-        if (!$dob) {
-          $this->signup(array_merge($_POST, ["invalidField" => "dob"]));
-          return;
-        }
-        $dob = date_parse($dob);
-        if ($dob["error_count"] > 0) {
-          $this->signup(array_merge($_POST, ["invalidField" => "dob"]));
-          return;
-        }
-
-        $this->signup([]);
+        $this->handleSignupForm($_POST);
       }
     }
   }
@@ -89,5 +41,56 @@ class LoginController
   public function signup(array $formData): void
   {
     renderView("views/login/signup.php", $formData);
+  }
+
+  public function handleSignupForm(array $formData): void
+  {
+    $username = $formData["username"];
+    $password = $formData["password"];
+    $rePassword = $formData["re-password"];
+    $dob = $formData["dob"];
+    $fname = $formData["firstname"];
+    $lname = $formData["lastname"];
+    $email = $formData["email"];
+
+    if (!$username || strlen($username) <= 0) {
+      $this->signup(array_merge($formData, ["invalidField" => "username"]));
+      return;
+    }
+
+    if (!$password || strlen($password) < 6 || strlen($password) > 256) {
+      $this->signup(array_merge($formData, ["invalidField" => "password"]));
+      return;
+    }
+
+    if ($rePassword != $password) {
+      $this->signup(array_merge($formData, ["invalidField" => "re-password"]));
+      return;
+    }
+
+    if (!$fname || strlen($fname) <= 0) {
+      $this->signup(array_merge($formData, ["invalidField" => "firstname"]));
+      return;
+    }
+
+    if (!$lname || strlen($lname) <= 0) {
+      $this->signup(array_merge($formData, ["invalidField" => "lastname"]));
+      return;
+    }
+
+    if (!$email || preg_match_all("^[^@]+@[^@]+\.[^@]+$", $email)) {
+      $this->signup(array_merge($formData, ["invalidField" => "email"]));
+      return;
+    }
+
+    if (!$dob) {
+      $this->signup(array_merge($formData, ["invalidField" => "dob"]));
+      return;
+    }
+    $dob = date_parse($dob);
+    if ($dob["error_count"] > 0) {
+      $this->signup(array_merge($formData, ["invalidField" => "dob"]));
+      return;
+    }
   }
 }
