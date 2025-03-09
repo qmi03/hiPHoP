@@ -5,6 +5,10 @@ class LoginController
 {
   public function index(): void
   {
+    if ($_SESSION["isLoggedIn"]) {
+      header('Location: /');
+      exit();
+    }
     renderView("views/login/index.php", array());
   }
 
