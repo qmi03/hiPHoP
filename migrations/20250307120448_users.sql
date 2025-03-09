@@ -4,14 +4,15 @@
 -- Write your SQL here
 
 CREATE TABLE users (
-  id INT PRIMARY KEY,
+  id INT PRIMARY KEY AUTO_INCREMENT,
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   address TEXT NOT NULL,
   email TEXT UNIQUE,
   dob TIMESTAMP NOT NULL,
   username TEXT NOT NULL UNIQUE,
-  password TEXT NOT NULL
-)
+  password TEXT NOT NULL,
+  is_admin BOOL NOT NULL
+);
 
 CREATE INDEX idx_users__username ON users(username);
