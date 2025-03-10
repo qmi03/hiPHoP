@@ -12,3 +12,11 @@ function renderView(string $view, array $data): void
   renderContentInLayout("views/layouts/default.php", ob_get_clean(), (new ContactModel())->fetch());
   ob_flush();
 }
+
+function renderAdminView(string $view, array $data): void
+{
+  ob_start();
+  include($view);
+  renderContentInLayout("views/layouts/admin.php", ob_get_clean(), array());
+  ob_flush();
+}
