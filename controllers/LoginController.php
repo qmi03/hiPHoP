@@ -15,6 +15,7 @@ class LoginController
       if ($method == "GET") {
         $this->forgotPassword();
       } else if ($method == "POST") {
+        $this->handleForgotPasswordForm($_POST);
       }
     } else if ($path == "/signup/") {
       if ($method == "GET") {
@@ -178,5 +179,17 @@ class LoginController
     unset($_SESSION["isLoggedIn"]);
     unset($_SESSION["email"]);
     header("Location: /");
+  }
+
+  public function handleForgotPasswordForm(array $formData): void
+  {
+    $email = $formData["email"];
+    $subject = "hiPHoP account recovery";
+    $txt = "This is your recovery PIN: ";
+    $headers = "From: hiPHoP@example.com";
+
+    mail($email, $subject, $txt, $headers);
+
+    renderView("views/login/forgot-password-sent.php", array());
   }
 }
