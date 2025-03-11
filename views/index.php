@@ -17,6 +17,6 @@ function renderAdminView(string $view, array $data): void
 {
   ob_start();
   include($view);
-  renderContentInLayout("views/layouts/admin.php", ob_get_clean(), array());
+  renderContentInLayout("views/layouts/admin.php", ob_get_clean(), array("user" => $GLOBALS["user"]));
   ob_flush();
 }

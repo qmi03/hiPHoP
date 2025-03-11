@@ -4,6 +4,7 @@ session_start();
 require_once("config/index.php");
 require_once("routes.php");
 require_once("views/index.php");
+require_once("middleware/UserMiddleware.php");
 
 $path = $_SERVER["PATH"];
 $method = $_SERVER['REQUEST_METHOD'];

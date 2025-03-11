@@ -68,7 +68,7 @@ class LoginController
     $conn = Database::getInstance();
     try {
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT password FROM users WHERE email = ?");
+      $stmt = $conn->prepare("SELECT password, id FROM users WHERE email = ?");
       $stmt->execute([$email]);
       $res = $stmt->fetch();
       if (!$res) {
@@ -84,7 +84,7 @@ class LoginController
       }
       $conn->commit();
       $_SESSION["isLoggedIn"] = true;
-      $_SESSION["email"] = $email;
+      $_SESSION["id"] = $res["id"];
       header("Location: /");
       exit();
     } catch (PDOException $e) {

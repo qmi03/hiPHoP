@@ -8,6 +8,8 @@
   <meta name="keywords" content="Music, Ecommerce">
   <meta name="author" content="namdayneee, qmi03, Huy-DNA">
   <title>hiPHoP - Admin Dashboard</title>
+  <link rel="stylesheet" href="/public/css/fonts.css">
+  <link rel="stylesheet" href="/public/css/tailwind.output.css">
   <link rel="stylesheet" href="/public/mazer/compiled/css/app.css">
   <link rel="stylesheet" href="/public/mazer/compiled/css/app-dark.css">
   <link rel="stylesheet" href="/public/mazer/compiled/css/iconly.css">
@@ -20,8 +22,9 @@
       <header class="mb-5">
         <div class="header-top">
           <div class="container">
-            <div class="logo">
-              <a href="/admin/"><img src="/public/mazer/compiled/svg/logo.svg" alt="Logo"></a>
+            <div class="logo flex gap-2 items-center">
+              <a href="/admin/"><img src="/public/assets/logo_no_music.svg" alt="Logo"></a>
+              <p class="m-0 text-xl">hiPHoP</p>
             </div>
             <div class="header-top-right">
               <div class="dropdown">
@@ -30,8 +33,8 @@
                     <img src="/public/mazer/compiled/jpg/1.jpg" alt="Avatar">
                   </div>
                   <div class="text">
-                    <h6 class="user-dropdown-name">John Ducky</h6>
-                    <p class="user-dropdown-status text-sm text-muted">Member</p>
+                    <h6 class="user-dropdown-name"><?= htmlspecialchars($data["user"]->username) ?></h6>
+                    <p class="user-dropdown-status text-sm text-muted">Admin</p>
                   </div>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="topbarUserDropdown">

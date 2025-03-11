@@ -12,6 +12,6 @@ class AdminController
 
   public function index(): void
   {
-    renderAdminView("views/admin/index.php", array());
+    renderAdminView("views/admin/index.php", array("user" => $GLOBALS["user"]));
   }
 }
