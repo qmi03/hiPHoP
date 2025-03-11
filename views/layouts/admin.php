@@ -24,7 +24,9 @@
           <div class="container">
             <div class="logo flex gap-2 items-center">
               <a href="/admin/"><img src="/public/assets/logo_no_music.svg" alt="Logo"></a>
-              <p class="m-0 text-xl">hiPHoP</p>
+              <a href="/admin/">
+                <p class="m-0 text-xl">hiPHoP</p>
+              </a>
             </div>
             <div class="header-top-right">
               <div class="dropdown">
@@ -302,11 +304,11 @@
         <div class="container">
           <div class="footer clearfix mb-0 text-muted">
             <div class="float-start">
-              <p>2023 &copy; Mazer</p>
+              <p>2025 &copy; hiPHoP</p>
             </div>
             <div class="float-end">
               <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                  href="https://saugi.me">Saugi</a></p>
+                  href="https://saugi.me">Huy-DNA</a></p>
             </div>
           </div>
         </div>
