@@ -190,7 +190,7 @@ array_pop($subpaths);
             </div>
             <div class="float-end">
               <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
-                  href="https://saugi.me">Huy-DNA</a></p>
+                  href="https://github.com/Huy-DNA">Huy-DNA</a></p>
             </div>
           </div>
         </div>
