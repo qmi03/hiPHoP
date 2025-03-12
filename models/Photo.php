@@ -17,8 +17,8 @@ class PhotoModel
 {
   public function fetchById(int $id): Photo | null
   {
+    $conn = Database::getInstance();
     try {
-      $conn = Database::getInstance();
       $conn->beginTransaction();
       $stmt = $conn->prepare("SELECT name, url FROM photos WHERE id = ?;");
       $stmt->execute([$id]);
@@ -36,8 +36,8 @@ class PhotoModel
 
   public function fetchPage(int $pageNumber, int $pageSize): array
   {
+    $conn = Database::getInstance();
     try {
-      $conn = Database::getInstance();
       $conn->beginTransaction();
       $stmt = $conn->prepare("SELECT name, url FROM photos ORDER BY id LIMIT ? OFFSET ?;");
       $stmt->execute([$pageNumber, $pageNumber * $pageSize]);
@@ -54,8 +54,8 @@ class PhotoModel
 
   public function fetchCount(): int
   {
+    $conn = Database::getInstance();
     try {
-      $conn = Database::getInstance();
       $conn->beginTransaction();
       $stmt = $conn->prepare("SELECT COUNT(*) FROM photos;");
       $stmt->execute();

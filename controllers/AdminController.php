@@ -55,5 +55,20 @@ class AdminController
       $this->index(array_merge($formData, ["invalidPhotoField" => "filepond"]));
       exit();
     }
+
+    rename($formData["filepond"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'] . "/public/data/" . basename($formData["filepond"]["tmp_name"]) . "_" . $formData["name"] . "_" . $formData["filepond"]["name"]);
+
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("INSERT INTO photos(name, url) VALUES (?, ?)");
+      $stmt->execute([$formData["name"], "/public/data/" . basename($formData["filepond"]["tmp_name"]) . "_" . $formData["name"] . "_" . $formData["filepond"]["name"]]);
+      $conn->commit();
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      echo "<script>Unknown database error</script>";
+    }
+
+    header("Location: /admin");
   }
 }
