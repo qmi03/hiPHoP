@@ -118,10 +118,13 @@
       <h5 class="card-title">Photo uploader</h5>
     </div>
     <div class="card-body mt-0">
-      <form method="POST" action="/admin/photo">
+      <form method="POST" action="/admin/photo/upload" enctype="multipart/form-data">
         <div class="mb-3">
-          <label class="form-label cursor-pointer" for="image-name">Name</label>
-          <input type="text" class="form-control" name="name" id="image-name">
+          <label class="form-label cursor-pointer" for="image-name">Name *</label>
+          <input type="text" required class="form-control" name="name" id="image-name">
+          <?php if ($data["invalidPhotoField"] == "name"): ?>
+            <p class="text-red-600">Invalid name!</p>
+          <?php endif ?>
         </div>
         <div class="mb-3">
           <!-- File uploader with image preview -->
@@ -138,6 +141,9 @@
             <fieldset class="filepond--data"></fieldset>
             <div class="filepond--drip"></div>
           </div>
+          <?php if ($data["invalidPhotoField"] == "filepond"): ?>
+            <p class="text-red-600">Please add a photo!</p>
+          <?php endif ?>
         </div>
         <div>
           <input type="submit" class="btn btn-primary mb-3" value="Upload">
