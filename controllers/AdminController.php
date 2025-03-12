@@ -1,5 +1,6 @@
 <?php
 require_once("views/index.php");
+require_once("models/Photo.php");
 
 class AdminController
 {
@@ -16,7 +17,9 @@ class AdminController
 
   public function index(): void
   {
-    renderAdminView("views/admin/index.php", array("user" => $GLOBALS["user"]));
+    $galleryPage = $_GET['gallery-page'] || 0;
+    $photoModel = new PhotoModel();
+    renderAdminView("views/admin/index.php", array("user" => $GLOBALS["user"], "photoCount" => $photoModel->fetchCount(), "photos" => $photoModel->fetchPage((int)$galleryPage, 10)));
   }
 
   public function contacts(): void
