@@ -7,6 +7,15 @@
       <div class="card">
         <div class="card-header">
           <h5 class="card-title">Photo Gallery</h5>
+          <div class="mb-2 flex gap-3 items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+            <form method="post" action="/admin/photo/search" style="width: 100%">
+              <input type="search" class="form-control" style="width: 100%" placeholder="Search image" name="name">
+              <input type="submit" hidden />
+            </form>
+          </div>
         </div>
         <div class="card-body">
           <?php if ($data["photoCount"] == 0): ?>
