@@ -50,15 +50,22 @@
 
   function updateCurrentPage(page) {
     currentPage = page;
-    $("#page-item-1").children("a").first().text(firstPage() + 1).attr("href", `/admin?gallery-page=${firstPage()}`).removeClass("active");
-    $("#page-item-2").children("a").first().text(firstPage() + 2).attr("href", `/admin?gallery-page=${firstPage() + 1}`).removeClass("active");
-    $("#page-item-3").children("a").first().text(firstPage() + 3).attr("href", `/admin?gallery-page=${firstPage() + 2}`).removeClass("active");
+    $("#page-item-1").removeClass("hidden").children("a").first().text(firstPage() + 1).attr("href", `/admin?gallery-page=${firstPage()}`).removeClass("active");
+    $("#page-item-2").removeClass("hidden").children("a").first().text(firstPage() + 2).attr("href", `/admin?gallery-page=${firstPage() + 1}`).removeClass("active");
+    $("#page-item-3").removeClass("hidden").children("a").first().text(firstPage() + 3).attr("href", `/admin?gallery-page=${firstPage() + 2}`).removeClass("active");
     if (firstPage() === currentPage) {
       $("#page-item-1").children("a").first().addClass("active");
     } else if (firstPage() + 1 === currentPage) {
       $("#page-item-2").children("a").first().addClass("active");
     } else if (firstPage() + 2 === currentPage) {
       $("#page-item-3").children("a").first().addClass("active");
+    }
+
+    if (firstPage() + 1 >= <?= $data["totalPhotoPages"] ?>) {
+      $("#page-item-2").addClass("hidden");
+    }
+    if (firstPage() + 2 >= <?= $data["totalPhotoPages"] ?>) {
+      $("#page-item-3").addClass("hidden");
     }
   }
 
