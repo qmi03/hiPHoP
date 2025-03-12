@@ -16,6 +16,8 @@ class AdminController
       } else if ($method == "POST") {
         if (array_key_exists("upload-photo", $_REQUEST)) {
           $this->uploadPhoto(array_merge($_POST, $_FILES));
+        } else if (array_key_exists("delete-photo", $_REQUEST)) {
+          $this->deletePhoto(["id" => $_REQUEST["delete-photo"]]);
         }
       }
     } else if ($path == "/admin/basic-info/" && $method = "GET") {
@@ -52,7 +54,6 @@ class AdminController
   {
     if (!$formData["name"] || strlen($formData["name"]) <= 0) {
       $this->index(array_merge($formData, ["invalidPhotoField" => "name"]));
-      header('Location: /');
       exit();
     }
 
@@ -77,7 +78,7 @@ class AdminController
     header("Location: /admin");
   }
 
-  public function searchPhoto(array $formData)
+  public function searchPhoto(array $formData): void
   {
     $galleryPage = (int)$_GET["gallery-page"] + 0;
     if (!$formData["name"] || strlen($formData["name"]) <= 0) {
@@ -87,5 +88,26 @@ class AdminController
     $photoModel = new PhotoModel();
     $photoCount = $photoModel->fetchCountByKeyword($formData["name"]);
     renderAdminView("views/admin/index.php", array("user" => $GLOBALS["user"], "photoCount" => $photoCount, "photos" => $photoModel->fetchPageByKeyword($formData["name"], (int)$galleryPage, 12), "currentPhotoPage" => $galleryPage, "totalPhotoPages" => (int)($photoCount / 12)));
+  }
+
+  public function deletePhoto(array $formData): void
+  {
+    if (!$formData["id"] || strlen($formData["id"]) <= 0) {
+      $this->index([]);
+      exit();
+    }
+
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("DELETE FROM photos WHERE id = ?");
+      $stmt->execute([$formData["id"]]);
+      $conn->commit();
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      echo "<script>Unknown database error</script>";
+    }
+
+    header("Location: /admin");
   }
 }

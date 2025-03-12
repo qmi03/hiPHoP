@@ -23,9 +23,27 @@
           <p>No photo on this page!</p>
         <?php else: ?>
           <div class="row gallery">
-            <?php foreach ($data["photos"] as $photo): ?>
+            <?php foreach ($data["photos"] as $index => $photo): ?>
               <div class="col-6 col-sm-6 col-lg-3 mt-2 mt-md-0 mb-md-0 mb-2">
-                <a href="<?= htmlspecialchars($photo->url) ?>"><img class="h-64 w-100 object-cover active" src="<?= htmlspecialchars($photo->url) ?>"></a>
+                <a class="cursor-pointer" data-bs-toggle="modal" data-bs-target="#image-preview-<?= $index ?>"><img class="h-64 w-100 object-cover active" src="<?= htmlspecialchars($photo->url) ?>"></a>
+                <div class="modal fade" id="image-preview-<?= $index ?>" tabindex="-1" aria-labelledby="image-preview-<?= $index ?>" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5"><?= htmlspecialchars($photo->name) ?></h1>
+                      </div>
+                      <div class="modal-body">
+                        <img src="<?= htmlspecialchars($photo->url) ?>">
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <form method="post" action="/admin?delete-photo=<?= $photo->id ?>">
+                          <input type="submit" class="btn btn-danger" value="Delete">
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             <?php endforeach ?>
           </div>
@@ -46,6 +64,7 @@
     </div>
     </div>
   </section>
+
   <script>
     let currentPage;
     updateCurrentPage(<?= htmlspecialchars($data["currentPhotoPage"]) ?>);
