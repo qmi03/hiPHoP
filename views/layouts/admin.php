@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="/public/mazer/compiled/css/app-dark.css">
   <link rel="stylesheet" href="/public/mazer/compiled/css/iconly.css">
   <script src="/public/mazer/static/js/initTheme.js"></script>
+  <script src="/public/js/jquery.js"></script>
 </head>
 
 <?php
