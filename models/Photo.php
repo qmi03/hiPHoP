@@ -20,7 +20,7 @@ class PhotoModel
     $conn = Database::getInstance();
     try {
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT name, url FROM photos WHERE id = ?;");
+      $stmt = $conn->prepare("SELECT name, url FROM photos WHERE id = ?");
       $stmt->execute([$id]);
       $photo = $stmt->fetch();
       $conn->commit();
@@ -39,8 +39,9 @@ class PhotoModel
     $conn = Database::getInstance();
     try {
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT name, url FROM photos ORDER BY id LIMIT ? OFFSET ?;");
-      $stmt->execute([$pageNumber, $pageNumber * $pageSize]);
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare("SELECT id, name, url FROM photos ORDER BY id LIMIT $pageSize OFFSET $offset");
+      $stmt->execute();
       $photos = $stmt->fetchAll();
       $conn->commit();
       return array_map(function ($photo) {
@@ -57,7 +58,7 @@ class PhotoModel
     $conn = Database::getInstance();
     try {
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT COUNT(*) FROM photos;");
+      $stmt = $conn->prepare("SELECT COUNT(*) FROM photos");
       $stmt->execute();
       $total = $stmt->fetch();
       $conn->commit();
