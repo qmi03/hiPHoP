@@ -16,6 +16,15 @@
   <script src="/public/mazer/static/js/initTheme.js"></script>
 </head>
 
+<?php
+$path = $_SERVER["PATH"];
+$subpaths = explode("/", $path);
+array_shift($subpaths);
+array_shift($subpaths);
+array_unshift($subpaths, "home");
+array_pop($subpaths);
+?>
+
 <body>
   <div id="app">
     <div id="main" class="layout-horizontal">
@@ -157,6 +166,18 @@
         </nav>
       </header>
       <div class="content-wrapper container">
+        <div class="mb-5">
+          <div aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <?php foreach ($subpaths as $subpath): ?>
+                <li class="breadcrumb-item text-black" aria-current="page">
+                  <a href="/admin/<?= $subpath == "home" ? "" : $subpath ?>"><?= htmlspecialchars(ucwords(join(" ", explode("-", $subpath)))) ?>
+                  </a>
+                </li>
+              <?php endforeach ?>
+            </ol>
+          </div>
+        </div>
         <?php print $content ?>
       </div>
       <footer>
