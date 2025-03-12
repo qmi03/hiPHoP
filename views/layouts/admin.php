@@ -170,11 +170,12 @@ array_pop($subpaths);
           <div aria-label="breadcrumb">
             <ol class="breadcrumb">
               <?php foreach ($subpaths as $subpath): ?>
-                <li class="breadcrumb-item text-black" aria-current="page">
+                <li class="breadcrumb-item" aria-current="page">
                   <a href="/admin/<?= $subpath == "home" ? "" : $subpath ?>"><?= htmlspecialchars(ucwords(join(" ", explode("-", $subpath)))) ?>
                   </a>
                 </li>
               <?php endforeach ?>
+              <li class="breadcrumb-item"></li>
             </ol>
           </div>
         </div>
