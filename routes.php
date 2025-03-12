@@ -12,4 +12,6 @@ $routes = array(
   "/login/forgot-password/" => new LoginController(),
   "/contact/" => new ContactController(),
   "/admin/" => new AdminController(),
+  "/admin/basic-info/" => new AdminController(),
+  "/admin/contacts/" => new AdminController(),
 );
