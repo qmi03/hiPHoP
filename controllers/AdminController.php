@@ -26,6 +26,11 @@ class AdminController
 
   public function info(): void
   {
-    renderAdminView("views/admin/basic-info.php", array("user" => $GLOBALS["user"]));
+    $newsLetters = new NewsLetterModel();
+    $introduction = new IntroductionModel();
+    $instrument = new PopularInstrumentModel();
+    $quote = new QuoteModel();
+
+    renderAdminView("views/admin/basic-info.php", array("user" => $GLOBALS["user"], "newsLetters" => $newsLetters->fetchAll(), "introduction" => $introduction, "instrument" => $instrument->fetch(), "quote" => $quote->fetchAll()));
   }
 }
