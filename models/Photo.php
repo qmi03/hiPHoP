@@ -53,6 +53,27 @@ class PhotoModel
     }
   }
 
+  public function fetchPageByKeyword(string $keyword, int $pageNumber, int $pageSize): array
+  {
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare("SELECT id, name, url FROM photos WHERE name LIKE CONCAT('%', ?, '%') ORDER BY id LIMIT $pageSize OFFSET $offset");
+      $stmt->execute([$keyword]);
+      $photos = $stmt->fetchAll();
+      $conn->commit();
+      return array_map(function ($photo) {
+        return new Photo($photo["id"], $photo["name"], $photo["url"]);
+      }, $photos);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      return array();
+    }
+  }
+
+
+
   public function fetchCount(): int
   {
     $conn = Database::getInstance();
@@ -60,6 +81,22 @@ class PhotoModel
       $conn->beginTransaction();
       $stmt = $conn->prepare("SELECT COUNT(*) FROM photos");
       $stmt->execute();
+      $total = $stmt->fetch();
+      $conn->commit();
+      return $total[0];
+    } catch (PDOException $e) {
+      $conn->rollBack();
+      return 0;
+    }
+  }
+
+  public function fetchCountByKeyword(string $keyword): int
+  {
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("SELECT COUNT(*) FROM photos WHERE name LIKE CONCAT('%', ?, '%')");
+      $stmt->execute([$keyword]);
       $total = $stmt->fetch();
       $conn->commit();
       return $total[0];

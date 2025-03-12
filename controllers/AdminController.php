@@ -18,6 +18,12 @@ class AdminController
       } else if ($method == "GET") {
         header("Location: /admin");
       }
+    } else if ($path == "/admin/photo/search/") {
+      if ($method == "POST") {
+        $this->searchPhoto($_POST);
+      } else if ($method == "GET") {
+        header("Location: /admin");
+      }
     }
   }
 
@@ -25,7 +31,8 @@ class AdminController
   {
     $galleryPage = (int)$_GET["gallery-page"] + 0;
     $photoModel = new PhotoModel();
-    renderAdminView("views/admin/index.php", array_merge(array("user" => $GLOBALS["user"], "photoCount" => $photoModel->fetchCount(), "photos" => $photoModel->fetchPage((int)$galleryPage, 12), "currentPhotoPage" => $galleryPage, "totalPhotoPages" => (int)($galleryPage / 12)), $data));
+    $photoCount = $photoModel->fetchCount();
+    renderAdminView("views/admin/index.php", array_merge(array("user" => $GLOBALS["user"], "photoCount" => $photoModel->fetchCount(), "photos" => $photoModel->fetchPage((int)$galleryPage, 12), "currentPhotoPage" => $galleryPage, "totalPhotoPages" => (int)($photoCount / 12)), $data));
   }
 
   public function contacts(): void
@@ -70,5 +77,17 @@ class AdminController
     }
 
     header("Location: /admin");
+  }
+
+  public function searchPhoto(array $formData)
+  {
+    $galleryPage = (int)$_GET["gallery-page"] + 0;
+    if (!$formData["name"] || strlen($formData["name"]) <= 0) {
+      $this->index(array());
+      exit();
+    }
+    $photoModel = new PhotoModel();
+    $photoCount = $photoModel->fetchCountByKeyword($formData["name"]);
+    renderAdminView("views/admin/index.php", array("user" => $GLOBALS["user"], "photoCount" => $photoCount, "photos" => $photoModel->fetchPageByKeyword($formData["name"], (int)$galleryPage, 12), "currentPhotoPage" => $galleryPage, "totalPhotoPages" => (int)($photoCount / 12)));
   }
 }

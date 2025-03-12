@@ -15,4 +15,5 @@ $routes = array(
   "/admin/basic-info/" => new AdminController(),
   "/admin/contacts/" => new AdminController(),
   "/admin/photo/upload/" => new AdminController(),
+  "/admin/photo/search/" => new AdminController(),
 );
