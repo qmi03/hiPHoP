@@ -25,7 +25,7 @@ class AdminController
   {
     $galleryPage = (int)$_GET["gallery-page"] + 0;
     $photoModel = new PhotoModel();
-    renderAdminView("views/admin/index.php", array_merge(array("user" => $GLOBALS["user"], "photoCount" => $photoModel->fetchCount(), "photos" => $photoModel->fetchPage((int)$galleryPage, 24), "currentPhotoPage" => $galleryPage, "totalPhotoPages" => (int)($galleryPage / 24)), $data));
+    renderAdminView("views/admin/index.php", array_merge(array("user" => $GLOBALS["user"], "photoCount" => $photoModel->fetchCount(), "photos" => $photoModel->fetchPage((int)$galleryPage, 12), "currentPhotoPage" => $galleryPage, "totalPhotoPages" => (int)($galleryPage / 12)), $data));
   }
 
   public function contacts(): void
