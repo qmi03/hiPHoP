@@ -170,7 +170,6 @@ array_pop($subpaths);
         </nav>
       </header>
       <div class="content-wrapper container">
-        <!--
         <div class="mb-5">
           <div aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -183,8 +182,7 @@ array_pop($subpaths);
               <li class="breadcrumb-item"></li>
             </ol>
           </div>
-      </div>
-            -->
+        </div>
         <?php print $content ?>
       </div>
       <footer>
