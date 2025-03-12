@@ -67,10 +67,10 @@
         $("#page-item-3").children("a").first().addClass("active");
       }
 
-      if (firstPage() + 1 >= <?= $data["totalPhotoPages"] ?>) {
+      if (firstPage() + 1 > <?= $data["totalPhotoPages"] ?>) {
         $("#page-item-2").addClass("hidden");
       }
-      if (firstPage() + 2 >= <?= $data["totalPhotoPages"] ?>) {
+      if (firstPage() + 2 > <?= $data["totalPhotoPages"] ?>) {
         $("#page-item-3").addClass("hidden");
       }
     }
