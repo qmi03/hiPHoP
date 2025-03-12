@@ -6,24 +6,22 @@ class AdminController
 {
   public function route(string $method, string $path): void
   {
-    if ($path == "/admin/" && $method == "GET") {
-      $this->index([]);
+    if ($path == "/admin/") {
+      if ($method == "GET") {
+        if ($_REQUEST["photo-query"]) {
+          $this->searchPhoto(["name" => $_REQUEST["photo-query"]]);
+        } else {
+          $this->index([]);
+        }
+      } else if ($method == "POST") {
+        if (array_key_exists("upload-photo", $_REQUEST)) {
+          $this->uploadPhoto(array_merge($_POST, $_FILES));
+        }
+      }
     } else if ($path == "/admin/basic-info/" && $method = "GET") {
       $this->info();
     } else if ($path == "/admin/contacts/" && $method == "GET") {
       $this->contacts();
-    } else if ($path == "/admin/photo/upload/") {
-      if ($method == "POST") {
-        $this->uploadPhoto(array_merge($_POST, $_FILES));
-      } else if ($method == "GET") {
-        header("Location: /admin");
-      }
-    } else if ($path == "/admin/photo/search/") {
-      if ($method == "POST") {
-        $this->searchPhoto($_POST);
-      } else if ($method == "GET") {
-        header("Location: /admin");
-      }
     }
   }
 

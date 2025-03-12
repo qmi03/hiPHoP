@@ -11,8 +11,8 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
-            <form method="post" action="/admin/photo/search" style="width: 100%">
-              <input type="search" class="form-control" style="width: 100%" placeholder="Search image" name="name">
+            <form method="get" action="/admin" style="width: 100%">
+              <input type="search" class="form-control" style="width: 100%" placeholder="Search image" name="photo-query">
               <input type="submit" hidden />
             </form>
           </div>
@@ -100,7 +100,7 @@
     <h5 class="card-title">Photo uploader</h5>
   </div>
   <div class="card-body mt-0">
-    <form method="POST" action="/admin/photo/upload" enctype="multipart/form-data">
+    <form method="POST" action="/admin?upload-photo" enctype="multipart/form-data">
       <div class="mb-3">
         <label class="form-label cursor-pointer" for="image-name">Name *</label>
         <input type="text" required class="form-control" name="name" id="image-name">
