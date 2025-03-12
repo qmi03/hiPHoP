@@ -198,10 +198,6 @@ array_pop($subpaths);
 </body>
 
 <script src="public/mazer/static/js/components/dark.js"></script>
-<script src="public/mazer/static/js/pages/horizontal-layout.js"></script>
 <script src="public/mazer/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="public/mazer/compiled/js/app.js"></script>
-<script src="public/mazer/extensions/apexcharts/apexcharts.min.js"></script>
-<script src="public/mazer/static/js/pages/dashboard.js"></script>
-
 </html>
