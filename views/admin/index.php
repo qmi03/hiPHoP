@@ -17,7 +17,7 @@
             <div class="row gallery">
               <?php foreach ($data["photos"] as $photo): ?>
                 <div class="col-6 col-sm-6 col-lg-3 mt-2 mt-md-0 mb-md-0 mb-2">
-                  <img class="w-100 active" src="<?= htmlspecialchars($photo->url) ?>">
+                  <a href="<?= htmlspecialchars($photo->url) ?>"><img class="h-64 w-100 object-cover active" src="<?= htmlspecialchars($photo->url) ?>"></a>
                 </div>
               <?php endforeach ?>
             </div>
