@@ -1,6 +1,29 @@
 <?php
 require_once("views/index.php");
 
+function decodeDataUrl(string $dataUrl)
+{
+  if (strpos($dataUrl, "data:") !== 0) {
+    return false;
+  }
+
+  $parts = explode(",", $dataUrl, 2);
+  if (count($parts) !== 2) {
+    return false;
+  }
+
+  $mimeType = explode(";", $parts[0])[0];
+  $mimeType = str_replace("data:", "", $mimeType);
+
+  $imageData = base64_decode($parts[1]);
+
+  return [
+    "mime_type" => $mimeType,
+    "data" => $imageData,
+  ];
+}
+
+
 class LoginController
 {
   public function route(string $method, string $path): void
@@ -103,6 +126,7 @@ class LoginController
     $lname = trim($formData["lastname"]);
     $email = trim($formData["email"]);
     $address = trim($formData["address"]);
+    $avatarDataUrl = trim($formData["avatarDataUrl"]);
 
     if (!$username || strlen($username) <= 0) {
       $this->signup(array_merge($formData, ["invalidField" => "username"]));
@@ -143,6 +167,35 @@ class LoginController
       return;
     }
 
+    $avatarUrl = "/public/assets/default-avatar.jpg";
+    if ($avatarDataUrl) {
+      $res = decodeDataUrl($avatarDataUrl);
+      if (!$res) {
+        $this->signup(array_merge($formData, ["invalidField" => "avatar"]));
+        return;
+      }
+
+      $mimeExtensions = [
+        'image/jpeg' => 'jpg',
+        'image/png' => 'png',
+        'image/gif' => 'gif',
+        'image/webp' => 'webp',
+        'image/bmp' => 'bmp',
+        'image/svg+xml' => 'svg'
+      ];
+
+      $extension = isset($mimeExtensions[$res['mime_type']])
+        ? $mimeExtensions[$res['mime_type']]
+        : 'jpg';
+
+      $filename = 'avatar_' . time() . '_' . mt_rand(1000, 9999) . '.' . $extension;
+
+      $filePath = $_SERVER['DOCUMENT_ROOT'] . "/public/data/" . $filename;
+      file_put_contents($filePath, $res['data']);
+
+      $avatarUrl = "/public/data/" . $filename;
+    }
+
     $password = password_hash($password, PASSWORD_BCRYPT);
     $conn = Database::getInstance();
     try {
@@ -163,8 +216,8 @@ class LoginController
         $conn->rollBack();
         exit();
       }
-      $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, address, email, dob, username, password, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-      $stmt->execute([$fname, $lname, $address, $email, $dob, $username, $password, 0]);
+      $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, address, email, dob, username, password, avatar_url, is_admin) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+      $stmt->execute([$fname, $lname, $address, $email, $dob, $username, $password, $avatarUrl, 0]);
       $conn->commit();
       header("Location: /login");
       exit();
