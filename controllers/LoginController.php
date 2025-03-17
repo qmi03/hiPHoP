@@ -108,6 +108,10 @@ class LoginController
       $conn->commit();
       $_SESSION["isLoggedIn"] = true;
       $_SESSION["id"] = $res["id"];
+      if ($rememberMe) {
+        $cookieLifetime = 60 * 60 * 24 * 30; // 30 days
+        session_set_cookie_params($cookieLifetime);
+      }
       header("Location: /");
       exit();
     } catch (PDOException $e) {
