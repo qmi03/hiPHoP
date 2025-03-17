@@ -231,6 +231,7 @@ class LoginController
   {
     unset($_SESSION["isLoggedIn"]);
     unset($_SESSION["email"]);
+    session_destroy();
     header("Location: /");
   }
 
