@@ -124,16 +124,15 @@ $path = $_SERVER["PATH"];
         <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/login/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/login">
           <span class="<?= $path == "/login/" ? "border-white border-b-1" : "" ?>">LOGIN</span>
         </a>
-      <?php else: ?>
-        <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/logout/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/logout">
-          <span class="<?= $path == "/logout/" ? "border-white border-b-1" : "" ?>">LOGOUT</span>
-        </a>
       <?php endif ?>
-      <button class="text-white text-md font-bold flex gap-2 items-center opacity-80 cursor-pointer">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-        </svg>
-      </button>
+      <?php if ($_SESSION["isLoggedIn"]): ?>
+        <div class="ml-auto">
+          <button class="text-white text-lg font-bold items-center flex gap-2 <?= $path == "/account/" ? "" : "opacity-90 hover:opacity-100 hover:italic" ?>">
+            <img width="30px" height="30px" alt="user avatar" src="<?= $GLOBALS["user"]->avatarUrl ?>" class="block w-[30px] h-[30px] rounded-full">
+            <span><?= $GLOBALS["user"]->username ?></span>
+          </button>
+        </div>
+      <?php endif ?>
     </nav>
   </header>
   <main class="xl:px-[8vw]">
