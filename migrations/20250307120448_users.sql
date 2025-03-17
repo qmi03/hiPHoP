@@ -12,7 +12,8 @@ CREATE TABLE users (
   dob TIMESTAMP NOT NULL,
   username TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  is_admin BOOL NOT NULL
+  is_admin BOOL NOT NULL,
+  avatar_url TEXT NOT NULL
 );
 
 CREATE INDEX idx_users__username ON users(username);
