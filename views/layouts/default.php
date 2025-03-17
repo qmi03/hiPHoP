@@ -187,6 +187,8 @@ $path = $_SERVER["PATH"];
         <span role="none" aria-hidden="true" class="opacity-80">•</span>
         <?php if (!$_SESSION["isLoggedIn"]): ?>
           <a class="font-bold text-lg opacity-80" href="/login">Login</a>
+        <?php else: ?>
+          <a class="font-bold text-lg opacity-80" href="/logout">Logout</a>
         <?php endif ?>
         <span role="none" aria-hidden="true" class="opacity-80">•</span>
         <a class="font-bold text-lg opacity-80" href="/about">About</a>
