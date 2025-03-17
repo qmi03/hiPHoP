@@ -53,50 +53,57 @@ $path = $_SERVER["PATH"];
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
             <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
           </svg>
-        <?php else: ?>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/logout/" ? "" : "opacity-80" ?> m-4" href="/logout">
-            <span>LOGOUT</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          <?php endif ?>
+        </a>
+      <?php else: ?>
+        <div class="m-4 mb-8 text-lg">
+          <a class="relative text-white text-xl font-bold items-center flex gap-2 <?= $path == "/account/" ? "" : "opacity-90 hover:opacity-100 hover:italic" ?> cursor-pointer" href="/account">
+            <img width="30px" height="30px" alt="user avatar" src="<?= $GLOBALS["user"]->avatarUrl ?>" class="block w-[30px] h-[30px] rounded-full">
+            <span><?= $GLOBALS["user"]->username ?></span>
           </a>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/" ? "" : "opacity-80" ?> m-4" href="/">
-            <span>HOME</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </a>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/shop/" ? "" : "opacity-80" ?> m-4" href="/shop">
-            <span>SHOP</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </a>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/blog/" ? "" : "opacity-80" ?> m-4" href="/blog">
-            <span>BLOG</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </a>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/about/" ? "" : "opacity-80" ?> m-4" href="/about">
-            <span>ABOUT US</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </a>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/contact/" ? "" : "opacity-80" ?> m-4" href="/contact">
-            <span>CONTACT US</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </a>
-          <a class="flex gap-2 items-center text-xl text-white <?= $path == "/faq/" ? "" : "opacity-80" ?> m-4" href="/contact">
-            <span>FAQ</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
-          </a>
+        </div>
+        <a class="flex gap-2 items-center text-xl text-white <?= $path == "/logout/" ? "" : "opacity-80" ?> m-4" href="/logout">
+          <span>LOGOUT</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+          </svg>
+        </a>
+      <?php endif ?>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/" ? "" : "opacity-80" ?> m-4" href="/">
+        <span>HOME</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/shop/" ? "" : "opacity-80" ?> m-4" href="/shop">
+        <span>SHOP</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/blog/" ? "" : "opacity-80" ?> m-4" href="/blog">
+        <span>BLOG</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/about/" ? "" : "opacity-80" ?> m-4" href="/about">
+        <span>ABOUT US</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/contact/" ? "" : "opacity-80" ?> m-4" href="/contact">
+        <span>CONTACT US</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
+      <a class="flex gap-2 items-center text-xl text-white <?= $path == "/faq/" ? "" : "opacity-80" ?> m-4" href="/contact">
+        <span>FAQ</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+        </svg>
+      </a>
     </nav>
     <nav class="flex-wrap gap-6 p-5 pb-8 hidden md:flex">
       <a class="text-white text-lg font-bold flex gap-2 items-center <?= $path == "/" ? "" : "opacity-80 hover:opacity-100 hover:italic" ?>" href="/">
@@ -180,8 +187,6 @@ $path = $_SERVER["PATH"];
         <span role="none" aria-hidden="true" class="opacity-80">•</span>
         <?php if (!$_SESSION["isLoggedIn"]): ?>
           <a class="font-bold text-lg opacity-80" href="/login">Login</a>
-        <?php else: ?>
-          <a class="font-bold text-lg opacity-80" href="/logout">Logout</a>
         <?php endif ?>
         <span role="none" aria-hidden="true" class="opacity-80">•</span>
         <a class="font-bold text-lg opacity-80" href="/about">About</a>
