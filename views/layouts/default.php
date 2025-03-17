@@ -87,13 +87,13 @@ $path = $_SERVER["PATH"];
         </svg>
       </a>
       <a class="flex gap-2 items-center text-xl text-white <?= $path == "/about/" ? "" : "opacity-80" ?> m-4" href="/about">
-        <span>ABOUT US</span>
+        <span>ABOUT</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
       </a>
       <a class="flex gap-2 items-center text-xl text-white <?= $path == "/contact/" ? "" : "opacity-80" ?> m-4" href="/contact">
-        <span>CONTACT US</span>
+        <span>CONTACT</span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
           <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
