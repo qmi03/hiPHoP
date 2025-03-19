@@ -2,11 +2,13 @@
 
 class Quote
 {
+  public string $id;
   public string $content;
   public string $author;
 
-  public function __construct(string $content, string $author)
+  public function __construct(string $id, string $content, string $author)
   {
+    $this->id = $id;
     $this->content = $content;
     $this->author = $author;
   }
@@ -28,7 +30,7 @@ class QuoteModel
       }
       $conn->commit();
       return array_map(function ($quote) {
-        return new Quote($quote["content"], $quote["author"]);
+        return new Quote($quote["id"], $quote["content"], $quote["author"]);
       }, $quotes);
     } catch (PDOException $e) {
       return [];

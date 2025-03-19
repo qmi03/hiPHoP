@@ -4,6 +4,7 @@
 -- Write your SQL here
 
 CREATE TABLE quotes (
+  id INT PRIMARY KEY AUTO_INCREMENT,
   content TEXT NOT NULL,
   author TEXT NOT NULL
 );
