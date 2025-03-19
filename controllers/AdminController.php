@@ -20,8 +20,8 @@ class AdminController
           $this->deletePhoto(["id" => $_REQUEST["delete-photo"]]);
         }
       }
-    } else if ($path == "/admin/basic-info/" && $method = "GET") {
-      $this->info();
+    } else if ($path == "/admin/home-page/" && $method = "GET") {
+      $this->homePage();
     } else if ($path == "/admin/contacts/" && $method == "GET") {
       $this->contacts();
     }
@@ -40,14 +40,14 @@ class AdminController
     renderAdminView("views/admin/contacts.php", array("user" => $GLOBALS["user"]));
   }
 
-  public function info(): void
+  public function homePage(): void
   {
     $newsLetters = new NewsLetterModel();
     $introduction = new IntroductionModel();
     $instrument = new PopularInstrumentModel();
     $quote = new QuoteModel();
 
-    renderAdminView("views/admin/basic-info.php", array("user" => $GLOBALS["user"], "newsLetters" => $newsLetters->fetchAll(), "introduction" => $introduction, "instrument" => $instrument->fetch(), "quote" => $quote->fetchAll()));
+    renderAdminView("views/admin/home-page.php", array("user" => $GLOBALS["user"], "newsLetters" => $newsLetters->fetchAll(), "introduction" => $introduction, "instrument" => $instrument->fetch(), "quote" => $quote->fetchAll()));
   }
 
   public function uploadPhoto(array $formData): void

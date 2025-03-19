@@ -79,8 +79,8 @@ array_pop($subpaths);
               </li>
               <li
                 class="menu-item active">
-                <a href="/admin/basic-info" class='menu-link'>
-                  <span><i class="bi bi-file-earmark-medical-fill"></i> Basic info</span>
+                <a href="/admin/home-page" class='menu-link'>
+                  <span><i class="bi bi-file-earmark-medical-fill"></i> Home page</span>
                 </a>
               </li>
               <li
