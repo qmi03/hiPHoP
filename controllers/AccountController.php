@@ -12,6 +12,14 @@ class AccountController
 
   public function index(): void
   {
-    renderView("views/account/index.php", []);
+    $user = $GLOBALS["user"];
+    renderView("views/account/index.php", [
+      "username" => $user->username,
+      "firstname" => $user->firstName,
+      "lastname" => $user->lastName,
+      "email" => $user->email,
+      "dob" => $user->dob,
+      "address" => $user->address,
+    ]);
   }
 }
