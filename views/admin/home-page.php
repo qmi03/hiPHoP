@@ -19,10 +19,17 @@
       <div class="card-header">
         <h5 class="card-title">Introduction</h5>
       </div>
-      <div class="card-body">
-      </div>
-      <div class="card-footer">
-      </div>
+      <form method="POST" action="/admin/home-page?introduction-update=true" class="card-body items-stretch">
+        <div class="mb-3">
+          <label for="introduction-title" class="form-label">Title *</label>
+          <input type="text" id="introduction-title" name="title" class="form-control" required value="<?= htmlspecialchars($data["introduction"]->title) ?>">
+        </div>
+        <div class="mb-3">
+          <label for="introduction-paragraphs" class="form-lael">Content *</label>
+          <textarea required class="form-control" id="introduction-paragraphs" name="paragraphs"><?= htmlspecialchars(join("\n", $data["introduction"]->paragraphs)) ?></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mb-3">Update</button>
+      </form>
     </div>
   </section>
 
