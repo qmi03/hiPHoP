@@ -32,4 +32,16 @@ class IntroductionModel
       return null;
     }
   }
+
+  public function update(string $title, array $paragraphs)
+  {
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("UPDATE introductions SET title = ?, paragraphs = ?");
+      $stmt->execute([$title, json_encode($paragraphs)]);
+      $conn->commit();
+    } catch (PDOException $e) {
+    }
+  }
 }

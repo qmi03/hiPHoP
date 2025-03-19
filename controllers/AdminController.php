@@ -20,8 +20,12 @@ class AdminController
           $this->deletePhoto(["id" => $_REQUEST["delete-photo"]]);
         }
       }
-    } else if ($path == "/admin/home-page/" && $method = "GET") {
-      $this->homePage();
+    } else if ($path == "/admin/home-page/") {
+      if ($method == "GET") {
+        $this->homePage();
+      } else if ($method == "POST" && $_REQUEST["introduction-update"]) {
+        $this->handleIntroductionUpdate($_POST);
+      }
     } else if ($path == "/admin/contacts/" && $method == "GET") {
       $this->contacts();
     }
@@ -38,6 +42,26 @@ class AdminController
   public function contacts(): void
   {
     renderAdminView("views/admin/contacts.php", array("user" => $GLOBALS["user"]));
+  }
+
+  public function handleIntroductionUpdate(array $formData): void
+  {
+    $title = trim($formData["title"]);
+    $paragraphs = trim($formData["paragraphs"]);
+
+    if (!$title || strlen($title) <= 0) {
+      $this->homePage(array_merge($formData, ["invalidField" => "introduction-title"]));
+      return;
+    }
+
+    if (!$paragraphs || strlen($paragraphs) <= 0) {
+      $this->homePage(array_merge($formData, ["invalidField" => "introduction-paragraphs"]));
+      return;
+    }
+
+    $introduction = new IntroductionModel();
+    $introduction->update($title, explode("\n", $paragraphs));
+    header("Location: /admin/home-page");
   }
 
   public function homePage(): void
