@@ -3,6 +3,7 @@ require_once("controllers/HomeController.php");
 require_once("controllers/LoginController.php");
 require_once("controllers/ContactController.php");
 require_once("controllers/AdminController.php");
+require_once("controllers/AccountController.php");
 
 $routes = array(
   "/" => new HomeController(),
@@ -16,4 +17,5 @@ $routes = array(
   "/admin/contacts/" => new AdminController(),
   "/admin/photo/upload/" => new AdminController(),
   "/admin/photo/search/" => new AdminController(),
+  "/account/" => new AccountController(),
 );
