@@ -16,10 +16,22 @@ class QuoteModel
 {
   public function fetchAll(): array
   {
-    return [
-      new Quote("Your instruments aspire me to be a great musician", "Huy-DNA"),
-      new Quote("You are the best teachers that I have ever met!", "Jill Jay"),
-      new Quote("I was very surprised by the thoroughness of your courses", "Rose Mallet"),
-    ];
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("SELECT * FROM quotes");
+      $stmt->execute([]);
+      $quotes = $stmt->fetchAll();
+      if (!$quotes) {
+        $conn->commit();
+        return [];
+      }
+      $conn->commit();
+      return array_map(function ($quote) {
+        return new Quote($quote["content"], $quote["author"]);
+      }, $quotes);
+    } catch (PDOException $e) {
+      return [];
+    }
   }
 }
