@@ -47,21 +47,21 @@
               </div>
             <?php endforeach ?>
           </div>
+        <?php endif ?>
       </div>
-    <?php endif ?>
-    <div class="card-footer">
-      <ul class="pagination pagination-primary">
-        <li class="page-item" id="page-item-left"><a class="page-link cursor-pointer">
-            <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
-          </a></li>
-        <li class="page-item" id="page-item-1"><a class="page-link" href="#"></a></li>
-        <li class="page-item" id="page-item-2"><a class="page-link" href="#"></a></li>
-        <li class="page-item" id="page-item-3"><a class="page-link" href="#"></a></li>
-        <li class="page-item" id="page-item-right"><a class="page-link cursor-pointer">
-            <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
-          </a></li>
-      </ul>
-    </div>
+      <div class="card-footer">
+        <ul class="pagination pagination-primary">
+          <li class="page-item" id="page-item-left"><a class="page-link cursor-pointer">
+              <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+            </a></li>
+          <li class="page-item" id="page-item-1"><a class="page-link" href="#"></a></li>
+          <li class="page-item" id="page-item-2"><a class="page-link" href="#"></a></li>
+          <li class="page-item" id="page-item-3"><a class="page-link" href="#"></a></li>
+          <li class="page-item" id="page-item-right"><a class="page-link cursor-pointer">
+              <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+            </a></li>
+        </ul>
+      </div>
     </div>
   </section>
 
