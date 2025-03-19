@@ -16,9 +16,20 @@ class PopularInstrumentModel
 {
   public function fetch(): PopularInstrument
   {
-    return new PopularInstrument(
-      ["Wouldn't your child love to join the thousands of others who have learned these (or a dozen other instruments) in this place where FUN is FIRST?"],
-      ["https://musicplace.com/templates/rt_photon/custom/images/Instruments/Piano/SQ_PianoYamahaFreeCrop.jpg", "https://musicplace.com/templates/rt_photon/custom/images/Instruments/Guitar/SQ_GuitarsUse.jpg", "https://musicplace.com/images/Instruments/SQ_TrapCloseUp_400NoPurple_UN.jpg", "https://musicplace.com/templates/rt_photon/custom/images/Instruments/Violin/SQ_ViolinUse.jpg"],
-    );
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare("SELECT * FROM popular_instruments");
+      $stmt->execute([]);
+      $info = $stmt->fetch();
+      if (!$info) {
+        $conn->commit();
+        return null;
+      }
+      $conn->commit();
+      return new PopularInstrument(json_decode($info["paragraphs"]), json_decode($info["image_urls"]));
+    } catch (PDOException $e) {
+      return null;
+    }
   }
 }
