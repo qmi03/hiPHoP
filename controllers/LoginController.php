@@ -172,7 +172,7 @@ class LoginController
     }
 
     $avatarUrl = "/public/assets/default-avatar.jpg";
-    if ($avatarDataUrl) {
+    if ($avatarDataUrl && strlen($avatarDataUrl) > 0) {
       $res = decodeDataUrl($avatarDataUrl);
       if (!$res) {
         $this->signup(array_merge($formData, ["invalidField" => "avatar"]));

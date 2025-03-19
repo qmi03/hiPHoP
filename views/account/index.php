@@ -3,14 +3,14 @@
 </section>
 
 <section class="bg-white mx-5 lg:mx-20 p-10 relative top-[-10px]">
-  <form action="/account?update" method="post" class="flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
+  <form action="/account?update=true" method="post" class="flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="avatar">Avatar *</label>
     <div>
       <input type="file" id="avatar" class="hidden" accept="image/*">
       <input type="text" id="avatar-data-url" name="avatarDataUrl" class="hidden" value="<?= $data["avatarDataUrl"] ?>">
       <div class="flex items-center justify-center">
         <label class="block relative" for="avatar">
-          <img id="user-avatar-display" width="200px" height="200px" class="block h-[200px] w-[200px] rounded-full" alt="user avatar" src="<?= $data["avatarDataUrl"] ? $data["avatarDataUrl"] : "/public/assets/default-avatar.jpg" ?>">
+          <img id="user-avatar-display" width="200px" height="200px" class="block h-[200px] w-[200px] rounded-full" alt="user avatar" src="<?= $data["avatarUrl"] ?>">
           <div class="absolute top-[-10px] left-[-10px] h-[220px] w-[220px] rounded-full bg-[#55555522] hover:bg-[#55555577] transition-all shadow-sm z-50 cursor-pointer">
           </div>
         </label>
