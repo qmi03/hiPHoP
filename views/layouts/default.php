@@ -137,7 +137,7 @@ $path = $_SERVER["PATH"];
           <button class="relative text-white text-lg font-bold items-center flex gap-2 <?= $path == "/account/" ? "" : "opacity-90 hover:opacity-100 hover:italic" ?> group cursor-pointer">
             <img width="30px" height="30px" alt="user avatar" src="<?= $GLOBALS["user"]->avatarUrl ?>" class="block w-[30px] h-[30px] rounded-full">
             <span><?= $GLOBALS["user"]->username ?></span>
-            <div role="menu" tabindex="-1" class="bg-pink-600 w-[200px] absolute group-hover:opacity-100 opacity-0 top-[30px] left-[35px] z-50 transition-all shadow-md shadow-gray-800 border-gray-800 border-1 flex flex-col items-stretch not-italic text-white">
+            <div role="menu" tabindex="-1" class="bg-pink-600 w-[200px] absolute group-hover:opacity-100 opacity-0 top-[35px] right-0 z-50 transition-all shadow-md shadow-gray-800 border-gray-800 border-1 flex flex-col items-stretch not-italic text-white">
               <a class="p-1 hover:bg-cyan-600" href="/account">Account</a>
               <a class="p-1 hover:bg-cyan-600" href="/logout">Logout</a>
             </div>
