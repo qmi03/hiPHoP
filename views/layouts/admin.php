@@ -214,5 +214,6 @@ array_pop($subpaths);
 <script src="/public/mazer/extensions/filepond/filepond.js"></script>
 <script src="/public/mazer/extensions/toastify-js/src/toastify.js"></script>
 <script src="/public/mazer/static/js/pages/filepond.js"></script>
+<script src="/public/mazer/static/js/pages/horizontal-layout.js"></script>
 
 </html>
