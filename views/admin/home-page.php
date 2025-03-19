@@ -29,7 +29,7 @@
         </div>
         <div class="mb-3">
           <label for="introduction-paragraphs" class="form-label">Content *</label>
-          <textarea required class="form-control" id="introduction-paragraphs" name="paragraphs"><?= htmlspecialchars(join("\n", $data["introduction"]->paragraphs)) ?></textarea>
+          <textarea required rows="5" class="form-control" id="introduction-paragraphs" name="paragraphs"><?= htmlspecialchars(join("\n", $data["introduction"]->paragraphs)) ?></textarea>
           <?php if ($data["invalidField"] == "introduction-paragraphs"): ?>
             <p class="text-sm text-red-600">Introduction paragraphs must not be empty!</p>
           <?php endif ?>
