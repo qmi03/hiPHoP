@@ -44,12 +44,27 @@
       <div class="card-header">
         <h5 class="card-title">Popular instruments</h5>
       </div>
-      <div class="card-body">
-      </div>
-      <div class="card-footer">
-      </div>
+      <form method="POST" action="/admin/home-page?instrument-update=true" class="card-body items-stretch">
+        <div class="mb-3">
+          <label for="instrument-paragraphs" class="form-label">Description *</label>
+          <input type="text" id="instrument-paragraphs" name="description" class="form-control" required value="<?php echo htmlspecialchars(join("\n", $data['instrument']->paragraphs)); ?>">
+          <?php if ('instrument-paragraphs' == $data['invalidField']) { ?>
+            <p class="text-sm text-red-600">Description must not be empty!</p>
+          <?php } ?>
+        </div>
+        <div class="mb-3 flex">
+          <a onclick="openImagePicker()" class="h-[40px]">Choose an image!</a>
+        </div>
+        <button type="submit" class="btn btn-primary mb-3">Update</button>
+      </form>
     </div>
   </section>
+
+  <div id="image-picker-modal" class="fixed h-[100vh] w-[100vw] z-50 flex items-center justify-center top-0 left-0">
+    <div class="bg-white p-5 shadow-sm shadow-gray-500 relative">
+      
+    </div>
+  </div>
 
   <section class="section">
     <div class="card">
