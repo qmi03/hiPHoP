@@ -30,6 +30,7 @@ class Instrument
     $this->price = $price;
     $this->description = $description;
     $this->stockQuantity = $stockQuantity;
+    $this->imgURL = $imgURL;
   }
 }
 
