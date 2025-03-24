@@ -10,6 +10,8 @@ require_once 'controllers/AdminController.php';
 
 require_once 'controllers/AccountController.php';
 
+require_once 'controllers/ShopController.php';
+
 $routes = [
   '/' => new HomeController(),
   '/login/' => new LoginController(),
@@ -23,4 +25,5 @@ $routes = [
   '/admin/photo/upload/' => new AdminController(),
   '/admin/photo/search/' => new AdminController(),
   '/account/' => new AccountController(),
+  '/shop/' => new ShopController(),
 ];
