@@ -22,17 +22,17 @@
       <form method="POST" action="/admin/home-page?introduction-update=true" class="card-body items-stretch">
         <div class="mb-3">
           <label for="introduction-title" class="form-label">Title *</label>
-          <input type="text" id="introduction-title" name="title" class="form-control" required value="<?= htmlspecialchars($data["introduction"]->title) ?>">
-          <?php if ($data["invalidField"] == "introduction-title"): ?>
+          <input type="text" id="introduction-title" name="title" class="form-control" required value="<?php echo htmlspecialchars($data['introduction']->title); ?>">
+          <?php if ('introduction-title' == $data['invalidField']) { ?>
             <p class="text-sm text-red-600">Introduction title must not be empty!</p>
-          <?php endif ?>
+          <?php } ?>
         </div>
         <div class="mb-3">
           <label for="introduction-paragraphs" class="form-label">Content *</label>
-          <textarea required rows="5" class="form-control" id="introduction-paragraphs" name="paragraphs"><?= htmlspecialchars(join("\n", $data["introduction"]->paragraphs)) ?></textarea>
-          <?php if ($data["invalidField"] == "introduction-paragraphs"): ?>
+          <textarea required rows="5" class="form-control" id="introduction-paragraphs" name="paragraphs"><?php echo htmlspecialchars(join("\n", $data['introduction']->paragraphs)); ?></textarea>
+          <?php if ('introduction-paragraphs' == $data['invalidField']) { ?>
             <p class="text-sm text-red-600">Introduction paragraphs must not be empty!</p>
-          <?php endif ?>
+          <?php } ?>
         </div>
         <button type="submit" class="btn btn-primary mb-3">Update</button>
       </form>

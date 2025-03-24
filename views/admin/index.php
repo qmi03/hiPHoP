@@ -17,27 +17,27 @@
         </div>
       </div>
       <div class="card-body">
-        <?php if ($data["photoCount"] == 0): ?>
+        <?php if (0 == $data['photoCount']) { ?>
           <p>No photo yet!</p>
-        <?php elseif (count($data["photos"]) == 0): ?>
+        <?php } elseif (0 == count($data['photos'])) { ?>
           <p>No photo on this page!</p>
-        <?php else: ?>
+        <?php } else { ?>
           <div class="row gallery">
-            <?php foreach ($data["photos"] as $index => $photo): ?>
+            <?php foreach ($data['photos'] as $index => $photo) { ?>
               <div class="col-6 col-sm-6 col-lg-3 mt-2 mt-md-0 mb-md-0 mb-2">
-                <a class="cursor-pointer" data-bs-toggle="modal" data-bs-target="#image-preview-<?= $index ?>"><img class="h-64 w-100 object-cover active" src="<?= htmlspecialchars($photo->url) ?>"></a>
-                <div class="modal fade" id="image-preview-<?= $index ?>" tabindex="-1" aria-labelledby="image-preview-<?= $index ?>" aria-hidden="true">
+                <a class="cursor-pointer" data-bs-toggle="modal" data-bs-target="#image-preview-<?php echo $index; ?>"><img class="h-64 w-100 object-cover active" src="<?php echo htmlspecialchars($photo->url); ?>"></a>
+                <div class="modal fade" id="image-preview-<?php echo $index; ?>" tabindex="-1" aria-labelledby="image-preview-<?php echo $index; ?>" aria-hidden="true">
                   <div class="modal-dialog">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h1 class="modal-title fs-5"><?= htmlspecialchars($photo->name) ?></h1>
+                        <h1 class="modal-title fs-5"><?php echo htmlspecialchars($photo->name); ?></h1>
                       </div>
                       <div class="modal-body">
-                        <img src="<?= htmlspecialchars($photo->url) ?>">
+                        <img src="<?php echo htmlspecialchars($photo->url); ?>">
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <form method="post" action="/admin?delete-photo=<?= $photo->id ?>">
+                        <form method="post" action="/admin?delete-photo=<?php echo $photo->id; ?>">
                           <input type="submit" class="btn btn-danger" value="Delete">
                         </form>
                       </div>
@@ -45,9 +45,9 @@
                   </div>
                 </div>
               </div>
-            <?php endforeach ?>
+            <?php } ?>
           </div>
-        <?php endif ?>
+        <?php } ?>
       </div>
       <div class="card-footer">
         <ul class="pagination pagination-primary">
@@ -67,7 +67,7 @@
 
   <script>
     let currentPage;
-    updateCurrentPage(<?= htmlspecialchars($data["currentPhotoPage"]) ?>);
+    updateCurrentPage(<?php echo htmlspecialchars($data['currentPhotoPage']); ?>);
 
     function firstPage() {
       return Math.floor(currentPage / 3) * 3;
@@ -86,10 +86,10 @@
         $("#page-item-3").children("a").first().addClass("active");
       }
 
-      if (firstPage() + 1 > <?= $data["totalPhotoPages"] ?>) {
+      if (firstPage() + 1 > <?php echo $data['totalPhotoPages']; ?>) {
         $("#page-item-2").addClass("hidden");
       }
-      if (firstPage() + 2 > <?= $data["totalPhotoPages"] ?>) {
+      if (firstPage() + 2 > <?php echo $data['totalPhotoPages']; ?>) {
         $("#page-item-3").addClass("hidden");
       }
     }
@@ -103,7 +103,7 @@
     })
 
     $("#page-item-right").on("click", () => {
-      if (Math.floor(currentPage / 3) >= Math.floor(<?= $data["totalPhotoPages"] ?> / 3)) {
+      if (Math.floor(currentPage / 3) >= Math.floor(<?php echo $data['totalPhotoPages']; ?> / 3)) {
         return;
       }
       currentPage += 3;
@@ -120,9 +120,9 @@
         <div class="mb-3">
           <label class="form-label cursor-pointer" for="image-name">Name *</label>
           <input type="text" required class="form-control" name="name" id="image-name">
-          <?php if ($data["invalidPhotoField"] == "name"): ?>
+          <?php if ('name' == $data['invalidPhotoField']) { ?>
             <p class="text-red-600">Invalid name!</p>
-          <?php endif ?>
+          <?php } ?>
         </div>
         <div class="mb-3">
           <!-- File uploader with image preview -->
@@ -139,9 +139,9 @@
             <fieldset class="filepond--data"></fieldset>
             <div class="filepond--drip"></div>
           </div>
-          <?php if ($data["invalidPhotoField"] == "filepond"): ?>
+          <?php if ('filepond' == $data['invalidPhotoField']) { ?>
             <p class="text-red-600">Please add a photo!</p>
-          <?php endif ?>
+          <?php } ?>
         </div>
         <div>
           <input type="submit" class="btn btn-primary mb-3" value="Upload">

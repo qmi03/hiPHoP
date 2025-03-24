@@ -2,22 +2,22 @@
   <h1 class="italic text-white text-4xl text-center">Login to your music experience!</h1>
 </section>
 <section class="bg-white mx-5 lg:mx-20 p-10 relative top-[-10px]">
-  <?php if ($data["authFailed"]): ?>
+  <?php if ($data['authFailed']) { ?>
     <p class="text-red-600 mb-5">Email or password is incorrect!</p>
-  <?php endif ?>
+  <?php } ?>
   <form action="/login" method="post" class="flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="email">Email *</label>
-    <input type="email" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="email" name="email" value="<?= htmlspecialchars($data["email"]) ?>">
-    <?php if ($data["invalidField"] == "email"): ?>
+    <input type="email" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="email" name="email" value="<?php echo htmlspecialchars($data['email']); ?>">
+    <?php if ('email' == $data['invalidField']) { ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid email!</p>
-    <?php endif ?>
+    <?php } ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="password">Password *</label>
     <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="password" minlength="6" maxlength="256" name="password">
-    <?php if ($data["invalidField"] == "password"): ?>
+    <?php if ('password' == $data['invalidField']) { ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid password!</p>
-    <?php endif ?>
+    <?php } ?>
     <div class="mt-5 lg:mt-0 flex gap-5 lg:justify-end">
       <label class="text-left lg:text-right cursor-pointer" for="remember-me-checked">Remember me</label>
       <input type="checkbox" id="remember-me-checked" class="lg:hidden cursor-pointer" name="remember-me-checked">

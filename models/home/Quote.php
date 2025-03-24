@@ -21,16 +21,18 @@ class QuoteModel
     try {
       $conn = Database::getInstance();
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT * FROM quotes");
+      $stmt = $conn->prepare('SELECT * FROM quotes');
       $stmt->execute([]);
       $quotes = $stmt->fetchAll();
       if (!$quotes) {
         $conn->commit();
+
         return [];
       }
       $conn->commit();
+
       return array_map(function ($quote) {
-        return new Quote($quote["id"], $quote["content"], $quote["author"]);
+        return new Quote($quote['id'], $quote['content'], $quote['author']);
       }, $quotes);
     } catch (PDOException $e) {
       return [];

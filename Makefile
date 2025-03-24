@@ -5,3 +5,6 @@ dev:
 
 clean:
 	rm -rf ./public/css/tailwind.output.css
+
+fix:
+	php-cs-fixer fix

@@ -7,24 +7,24 @@
     </div>
   </div>
   <div class="md:flex-1/4 flex flex-col gap-0">
-    <?php foreach ($data["newsLetters"] as $index => $newsLetter): ?>
-      <?php if ($newsLetter->bgUrl): ?>
-        <link rel="preload" as="image" href="<?= htmlspecialchars($newsLetter->bgUrl) ?>">
-      <?php endif ?>
+    <?php foreach ($data['newsLetters'] as $index => $newsLetter) { ?>
+      <?php if ($newsLetter->bgUrl) { ?>
+        <link rel="preload" as="image" href="<?php echo htmlspecialchars($newsLetter->bgUrl); ?>">
+      <?php } ?>
       <button
-        id="newsletter-button-<?= $index ?>"
+        id="newsletter-button-<?php echo $index; ?>"
         class="origin-right md:scale-x-100 transition-all translate-x-0 duration-500 h-24 cursor-pointer bg-pink-500 flex gap-2 items-center p-2 hover:bg-violet-600 hover:origin-left md:hover:scale-x-110"
-        onclick='setNewsLetter(<?= $index ?>)'>
-        <svg id="newsletter-button-chevron-<?= $index ?>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 rotate-0 transition-all duration-500">
+        onclick='setNewsLetter(<?php echo $index; ?>)'>
+        <svg id="newsletter-button-chevron-<?php echo $index; ?>" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-8 rotate-0 transition-all duration-500">
           <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
         </svg>
-        <span class="text-left text-lg"><?= htmlspecialchars($newsLetter->title) ?></span>
+        <span class="text-left text-lg"><?php echo htmlspecialchars($newsLetter->title); ?></span>
       </button>
-    <?php endforeach; ?>
+    <?php } ?>
   </div>
 
   <script>
-    const newsLetters = <?= json_encode($data["newsLetters"]) ?>;
+    const newsLetters = <?php echo json_encode($data['newsLetters']); ?>;
     const noOfNewsLetters = newsLetters.length;
     let curIndexOfNewsLetter = 0;
     setNewsLetter(curIndexOfNewsLetter);
@@ -73,21 +73,21 @@
 </section>
 
 <section class="mt-10 bg-white p-10 shadow-gray-300 shadow-sm">
-  <h2 class="text-center text-3xl mb-10"><?= htmlspecialchars($data["introduction"]->title) ?></h2>
-  <?php foreach ($data["introduction"]->paragraphs as $p): ?>
-    <p class="text-lg p-1"><?= htmlspecialchars($p) ?></p>
-  <?php endforeach ?>
+  <h2 class="text-center text-3xl mb-10"><?php echo htmlspecialchars($data['introduction']->title); ?></h2>
+  <?php foreach ($data['introduction']->paragraphs as $p) { ?>
+    <p class="text-lg p-1"><?php echo htmlspecialchars($p); ?></p>
+  <?php } ?>
 </section>
 
 <section class="mt-10 bg-white pb-10 shadow-gray-300 shadow-sm">
   <h2 class="text-center text-3xl mb-10 bg-pink-500 text-white p-5">OUR MOST POPULAR INSTRUMENTS</h2>
-  <?php foreach ($data["instrument"]->paragraphs as $p): ?>
-    <p class="text-lg p-1 px-10 "><?= htmlspecialchars($p) ?></p>
-  <?php endforeach ?>
+  <?php foreach ($data['instrument']->paragraphs as $p) { ?>
+    <p class="text-lg p-1 px-10 "><?php echo htmlspecialchars($p); ?></p>
+  <?php } ?>
   <div class="mt-10 px-10 flex md:justify-between justify-around gap-10 flex-wrap">
-    <?php foreach ($data["instrument"]->imageUrls as $url): ?>
-      <img width="200" src="<?= htmlspecialchars($url) ?>" alt="">
-    <?php endforeach ?>
+    <?php foreach ($data['instrument']->imageUrls as $url) { ?>
+      <img width="200" src="<?php echo htmlspecialchars($url); ?>" alt="">
+    <?php } ?>
   </div>
 </section>
 
@@ -99,7 +99,7 @@
   </p>
 
   <script>
-    const quotes = <?= json_encode($data["quote"]) ?>;
+    const quotes = <?php echo json_encode($data['quote']); ?>;
     const noOfQuotes = quotes.length;
     setQuote(0);
     let quoteIndex = 0;
