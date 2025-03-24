@@ -21,11 +21,11 @@
 </head>
 
 <?php
-$path = $_SERVER["PATH"];
-$subpaths = explode("/", $path);
+$path = $_SERVER['PATH'];
+$subpaths = explode('/', $path);
 array_shift($subpaths);
 array_shift($subpaths);
-array_unshift($subpaths, "home");
+array_unshift($subpaths, 'home');
 array_pop($subpaths);
 ?>
 
@@ -48,7 +48,7 @@ array_pop($subpaths);
                     <img src="/public/mazer/compiled/jpg/1.jpg" alt="Avatar">
                   </div>
                   <div class="text">
-                    <h6 class="user-dropdown-name"><?= htmlspecialchars($data["user"]->username) ?></h6>
+                    <h6 class="user-dropdown-name"><?php echo htmlspecialchars($data['user']->username); ?></h6>
                     <p class="user-dropdown-status text-sm text-muted">Admin</p>
                   </div>
                 </a>
@@ -173,17 +173,17 @@ array_pop($subpaths);
         <div class="mb-5">
           <div aria-label="breadcrumb">
             <ol class="breadcrumb">
-              <?php foreach ($subpaths as $subpath): ?>
+              <?php foreach ($subpaths as $subpath) { ?>
                 <li class="breadcrumb-item" aria-current="page">
-                  <a href="/admin/<?= $subpath == "home" ? "" : $subpath ?>"><?= htmlspecialchars(ucwords(join(" ", explode("-", $subpath)))) ?>
+                  <a href="/admin/<?php echo 'home' == $subpath ? '' : $subpath; ?>"><?php echo htmlspecialchars(ucwords(join(' ', explode('-', $subpath)))); ?>
                   </a>
                 </li>
-              <?php endforeach ?>
+              <?php } ?>
               <li class="breadcrumb-item"></li>
             </ol>
           </div>
         </div>
-        <?php print $content ?>
+        <?php echo $content; ?>
       </div>
       <footer>
         <div class="container">

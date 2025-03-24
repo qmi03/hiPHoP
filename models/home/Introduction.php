@@ -19,15 +19,17 @@ class IntroductionModel
     try {
       $conn = Database::getInstance();
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT * FROM introductions");
+      $stmt = $conn->prepare('SELECT * FROM introductions');
       $stmt->execute([]);
       $introduction = $stmt->fetch();
       if (!$introduction) {
         $conn->commit();
+
         return null;
       }
       $conn->commit();
-      return new Introduction($introduction["title"], json_decode($introduction["paragraphs"]));
+
+      return new Introduction($introduction['title'], json_decode($introduction['paragraphs']));
     } catch (PDOException $e) {
       return null;
     }
@@ -38,7 +40,7 @@ class IntroductionModel
     try {
       $conn = Database::getInstance();
       $conn->beginTransaction();
-      $stmt = $conn->prepare("UPDATE introductions SET title = ?, paragraphs = ?");
+      $stmt = $conn->prepare('UPDATE introductions SET title = ?, paragraphs = ?');
       $stmt->execute([$title, json_encode($paragraphs)]);
       $conn->commit();
     } catch (PDOException $e) {

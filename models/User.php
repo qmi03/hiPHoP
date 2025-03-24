@@ -1,4 +1,5 @@
 <?php
+
 class User
 {
   public int $id;
@@ -27,20 +28,22 @@ class User
 
 class UserModel
 {
-  public function fetchById(int $id): User | null
+  public function fetchById(int $id): ?User
   {
     try {
       $conn = Database::getInstance();
       $conn->beginTransaction();
-      $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+      $stmt = $conn->prepare('SELECT * FROM users WHERE id = ?');
       $stmt->execute([$id]);
       $user = $stmt->fetch();
       if (!$user) {
         $conn->commit();
+
         return null;
       }
       $conn->commit();
-      return new User($id, new DateTime($user["dob"]), $user["first_name"], $user["last_name"], $user["address"], $user["email"], $user["username"], $user["avatar_url"], $user["is_admin"]);
+
+      return new User($id, new DateTime($user['dob']), $user['first_name'], $user['last_name'], $user['address'], $user['email'], $user['username'], $user['avatar_url'], $user['is_admin']);
     } catch (PDOException $e) {
       return null;
     }
