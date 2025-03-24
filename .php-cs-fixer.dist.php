@@ -16,6 +16,7 @@ return (new Config())
   ->setIndent('  ') // Two spaces for indentation
   ->setRules([
     '@PhpCsFixer' => true,
+    'escape_implicit_backslashes' => false, // Prevent unescaping in strings
   ])
   ->setFinder($finder) // Attach the Finder configuration
 ;
