@@ -41,35 +41,204 @@
 
   <section class="section">
     <div class="card">
-      <div class="card-header">
-        <h5 class="card-title">Quotes</h5>
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title m-0">Quotes Management</h5>
+        <button id="addQuoteBtn" class="btn btn-primary btn-sm me-2">+</button>
       </div>
       <div class="card-body">
         <div class="table-responsive">
-          <table class="table mb-0">
+          <table id="quotesTable" class="table table-hover mb-0">
             <thead class="thead-dark">
               <tr>
                 <th>AUTHOR</th>
                 <th>QUOTE</th>
-                <th>ACTION</th>
+                <th>ACTIONS</th>
               </tr>
             </thead>
-            <tbody>
-              <?php foreach ($data["quote"] as $q): ?>
-                <tr>
-                  <td class="text-bold-500"><?= $q->author ?></td>
-                  <td><?= $q->content ?></td>
-                  <td>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                    </svg>
-                  </td>
-                </tr>
-              <?php endforeach; ?>
+            <tbody id="quotesTableBody">
             </tbody>
           </table>
+          <button id="submitChangesBtn" class="btn btn-success btn-sm mt-3">Submit Changes</button>
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="quoteModal" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Add/Edit Quote</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form id="quoteForm">
+              <input type="hidden" id="quoteIndex" name="quoteIndex">
+              <input type="hidden" id="quoteId" name="quoteId">
+              <div class="mb-3">
+                <label for="authorInput" class="form-label">Author</label>
+                <input type="text" class="form-control" id="authorInput" required>
+              </div>
+              <div class="mb-3">
+                <label for="quoteInput" class="form-label">Quote</label>
+                <textarea class="form-control" id="quoteInput" rows="3" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Save Quote</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const quotesTableBody = document.getElementById('quotesTableBody');
+        const quoteModal = new bootstrap.Modal(document.getElementById('quoteModal'));
+        const quoteForm = document.getElementById('quoteForm');
+        const addQuoteBtn = document.getElementById('addQuoteBtn');
+        const submitChangesBtn = document.getElementById('submitChangesBtn');
+        const modalTitle = document.getElementById('modalTitle');
+
+        let quotes = <?= json_encode($data['quote']) ?>;
+
+        let changedQuotes = {};
+        let createdQuotes = {};
+        let deletedQuoteIds = [];
+        let nextTempId = 10000;
+
+        function renderQuotes() {
+          quotesTableBody.innerHTML = quotes.map((quote, index) => `
+            <tr>
+                <td>${quote.author}</td>
+                <td>${quote.content}</td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary edit-btn" data-index="${index}">Edit</button>
+                    <button class="btn btn-sm btn-outline-danger delete-btn" data-index="${index}">Delete</button>
+                </td>
+            </tr>
+        `).join('');
+
+          document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', handleEdit);
+          });
+
+          document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', handleDelete);
+          });
+        }
+
+        function handleEdit(event) {
+          const index = event.target.dataset.index;
+          const quote = quotes[index];
+
+          document.getElementById('quoteIndex').value = index;
+          document.getElementById('quoteId').value = quote.id;
+          document.getElementById('authorInput').value = quote.author;
+          document.getElementById('quoteInput').value = quote.content;
+
+          modalTitle.textContent = 'Edit Quote';
+          quoteModal.show();
+        }
+
+        function handleDelete(event) {
+          const index = event.target.dataset.index;
+          const quote = quotes[index];
+
+          if (confirm('Are you sure you want to delete this quote?')) {
+            if (quote.id < 10000) {
+              deletedQuoteIds.push(quote.id);
+            } else {
+              delete createdQuotes[quote.id];
+            }
+
+            quotes.splice(index, 1);
+            renderQuotes();
+          }
+        }
+
+        addQuoteBtn.addEventListener('click', function() {
+          quoteForm.reset();
+          document.getElementById('quoteIndex').value = '';
+          const newQuoteId = nextTempId++;
+          document.getElementById('quoteId').value = newQuoteId;
+          modalTitle.textContent = 'Add New Quote';
+          quoteModal.show();
+        });
+
+        quoteForm.addEventListener('submit', function(event) {
+          event.preventDefault();
+
+          const index = document.getElementById('quoteIndex').value;
+          const quoteId = document.getElementById('quoteId').value;
+          const author = document.getElementById('authorInput').value;
+          const content = document.getElementById('quoteInput').value;
+
+          if (index === '') {
+            const newQuote = {
+              id: quoteId,
+              author,
+              content
+            };
+            quotes.push(newQuote);
+
+            createdQuotes[quoteId] = {
+              author,
+              content
+            };
+          } else {
+            const quote = quotes[index];
+
+            if (quote.author !== author || quote.content !== content) {
+              if (quote.id < 10000) {
+                changedQuotes[quote.id] = {
+                  author,
+                  content
+                };
+              }
+
+              quote.author = author;
+              quote.content = content;
+            }
+          }
+
+          renderQuotes();
+          quoteModal.hide();
+        });
+
+        submitChangesBtn.addEventListener('click', function() {
+          const changes = {
+            changed: changedQuotes,
+            created: Object.values(createdQuotes),
+            deleted: deletedQuoteIds
+          };
+
+          fetch('/admin/quotes/update', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(changes)
+            })
+            .then(response => response.json())
+            .then(result => {
+              if (result.success) {
+                changedQuotes = {};
+                createdQuotes = {};
+                deletedQuoteIds = [];
+
+                alert('Changes submitted successfully!');
+                changesSummaryModal.hide();
+              } else {
+                alert('Error submitting changes: ' + result.message);
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('Failed to submit changes');
+            });
+        });
+
+        renderQuotes();
+      });
+    </script>
   </section>
 </div>
