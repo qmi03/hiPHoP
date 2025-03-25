@@ -79,18 +79,6 @@
   <?php } ?>
 </section>
 
-<section class="mt-10 bg-white pb-10 shadow-gray-300 shadow-sm">
-  <h2 class="text-center text-3xl mb-10 bg-pink-500 text-white p-5">OUR MOST POPULAR INSTRUMENTS</h2>
-  <?php foreach ($data['instrument']->paragraphs as $p) { ?>
-    <p class="text-lg p-1 px-10 "><?php echo htmlspecialchars($p); ?></p>
-  <?php } ?>
-  <div class="mt-10 px-10 flex md:justify-between justify-around gap-10 flex-wrap">
-    <?php foreach ($data['instrument']->imageUrls as $url) { ?>
-      <img width="200" src="<?php echo htmlspecialchars($url); ?>" alt="">
-    <?php } ?>
-  </div>
-</section>
-
 <div class="relative top-5 h-5 bg-cyan-500"></div>
 <section class="relative top-5 min-h-[100px] z-50 bg-pink-500 text-white text-3xl p-5 shadow-gray-300 shadow-sm">
   <p class="text-center transition-all ease-in-out duration-1000">

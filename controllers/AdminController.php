@@ -72,10 +72,9 @@ class AdminController
   {
     $newsLetters = new NewsLetterModel();
     $introduction = new IntroductionModel();
-    $instrument = new PopularInstrumentModel();
     $quote = new QuoteModel();
 
-    renderAdminView('views/admin/home-page.php', ['user' => $GLOBALS['user'], 'newsLetters' => $newsLetters->fetchAll(), 'introduction' => $introduction->fetch(), 'instrument' => $instrument->fetch(), 'quote' => $quote->fetchAll()]);
+    renderAdminView('views/admin/home-page.php', ['user' => $GLOBALS['user'], 'newsLetters' => $newsLetters->fetchAll(), 'introduction' => $introduction->fetch(), 'quote' => $quote->fetchAll()]);
   }
 
   public function uploadPhoto(array $formData): void
