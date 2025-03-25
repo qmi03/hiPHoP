@@ -38,4 +38,76 @@ class QuoteModel
       return [];
     }
   }
+
+  public function update(array $changes): void
+  {
+    if (empty($changes)) {
+      return;
+    }
+
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare(
+        "UPDATE quotes
+         SET author = :author, content = :content
+         WHERE id = :id"
+      );
+      foreach ($changes as $id => $quote) {
+        $stmt->execute([
+          ":id" => $id,
+          ":author" => $quote["author"],
+          ":content" => $quote["content"],
+        ]);
+      }
+      $conn->commit();
+    } catch (PDOException $e) {
+    }
+  }
+
+  public function create(array $created): void
+  {
+    if (empty($created)) {
+      return;
+    }
+
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare(
+        "INSERT INTO quotes (author, content)
+         VALUES (:author, :content)"
+      );
+      foreach ($created as $quote) {
+        $stmt->execute([
+          ":author" => $quote["author"],
+          ":content" => $quote["content"],
+        ]);
+      }
+      $conn->commit();
+    } catch (PDOException $e) {
+    }
+  }
+
+  public function delete(array $deleted): void
+  {
+    if (empty($deleted)) {
+      return;
+    }
+
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare(
+        "DELETE FROM quotes WHERE id = :id",
+      );
+      foreach ($deleted as $id) {
+        $stmt->execute([
+          ":id" => $id,
+        ]);
+      }
+      $conn->commit();
+    } catch (PDOException $e) {
+    }
+  }
 }

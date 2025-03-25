@@ -130,10 +130,10 @@
           const index = event.target.dataset.index;
           const quote = quotes[index];
 
-          document.getElementById('quoteIndex').value = index;
-          document.getElementById('quoteId').value = quote.id;
-          document.getElementById('authorInput').value = quote.author;
-          document.getElementById('quoteInput').value = quote.content;
+          $('#quoteIndex').val(index);
+          $('#quoteId').val(quote.id);
+          $('#authorInput').val(quote.author);
+          $('#quoteInput').val(quote.content);
 
           modalTitle.textContent = 'Edit Quote';
           quoteModal.show();
@@ -157,9 +157,9 @@
 
         addQuoteBtn.addEventListener('click', function() {
           quoteForm.reset();
-          document.getElementById('quoteIndex').value = '';
+          $('#quoteIndex').val('');
           const newQuoteId = nextTempId++;
-          document.getElementById('quoteId').value = newQuoteId;
+          $('#quoteId').val(newQuoteId);
           modalTitle.textContent = 'Add New Quote';
           quoteModal.show();
         });
@@ -167,10 +167,10 @@
         quoteForm.addEventListener('submit', function(event) {
           event.preventDefault();
 
-          const index = document.getElementById('quoteIndex').value;
-          const quoteId = document.getElementById('quoteId').value;
-          const author = document.getElementById('authorInput').value;
-          const content = document.getElementById('quoteInput').value;
+          const index = $('#quoteIndex').val();
+          const quoteId = $('#quoteId').val();
+          const author = $('#authorInput').val();
+          const content = $('#quoteInput').val();
 
           if (index === '') {
             const newQuote = {
@@ -211,30 +211,13 @@
             deleted: deletedQuoteIds
           };
 
-          fetch('/admin/quotes/update', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(changes)
-            })
-            .then(response => response.json())
-            .then(result => {
-              if (result.success) {
-                changedQuotes = {};
-                createdQuotes = {};
-                deletedQuoteIds = [];
-
-                alert('Changes submitted successfully!');
-                changesSummaryModal.hide();
-              } else {
-                alert('Error submitting changes: ' + result.message);
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-              alert('Failed to submit changes');
-            });
+          fetch('/admin/home-page?quote-update=true', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(changes),
+          }).then(() => location.reload());
         });
 
         renderQuotes();

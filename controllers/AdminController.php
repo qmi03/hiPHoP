@@ -27,6 +27,8 @@ class AdminController
         $this->homePage();
       } elseif ('POST' == $method && $_REQUEST['introduction-update']) {
         $this->handleIntroductionUpdate($_POST);
+      } elseif ('POST' == $method && $_REQUEST['quote-update']) {
+        $this->handleQuoteUpdate(json_decode(file_get_contents("php://input"), true));
       }
     } elseif ('/admin/contacts/' == $path && 'GET' == $method) {
       $this->contacts();
@@ -44,6 +46,18 @@ class AdminController
   public function contacts(): void
   {
     renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user']]);
+  }
+
+  public function handleQuoteUpdate(array $formData): void
+  {
+    $quoteModel = new QuoteModel();
+    $quoteModel->update(array_filter($formData["changed"], function ($change) {
+      return strlen($change["author"]) > 0 && strlen($change["content"]) > 0;
+    }));
+    $quoteModel->delete($formData["deleted"]);
+    $quoteModel->create(array_filter($formData["created"], function ($created) {
+      return strlen($created["author"]) > 0 && strlen($created["content"]) > 0;
+    }));
   }
 
   public function handleIntroductionUpdate(array $formData): void
@@ -91,14 +105,14 @@ class AdminController
       exit;
     }
 
-    rename($formData['filepond']['tmp_name'], $_SERVER['DOCUMENT_ROOT'].'/public/data/'.basename($formData['filepond']['tmp_name']).'_'.$formData['name'].'_'.$formData['filepond']['name']);
+    rename($formData['filepond']['tmp_name'], $_SERVER['DOCUMENT_ROOT'] . '/public/data/' . basename($formData['filepond']['tmp_name']) . '_' . $formData['name'] . '_' . $formData['filepond']['name']);
 
     $conn = Database::getInstance();
 
     try {
       $conn->beginTransaction();
       $stmt = $conn->prepare('INSERT INTO photos(name, url) VALUES (?, ?)');
-      $stmt->execute([$formData['name'], '/public/data/'.basename($formData['filepond']['tmp_name']).'_'.$formData['name'].'_'.$formData['filepond']['name']]);
+      $stmt->execute([$formData['name'], '/public/data/' . basename($formData['filepond']['tmp_name']) . '_' . $formData['name'] . '_' . $formData['filepond']['name']]);
       $conn->commit();
     } catch (PDOException $e) {
       $conn->rollBack();
