@@ -50,17 +50,169 @@ class Instrument
 
 class InstrumentModel
 {
-  /**
-   * @return array<int,Instrument>
-   */
-  public function fetchAll(): array
+  public function fetchById(int $id): ?Instrument
   {
-    return [
-      new Instrument(1, 'Yamaha Genos 2', InstrumentType::Keyboard, 'Yamaha', 4999.99, 5, 'Professional arranger workstation'),
-      new Instrument(2, 'Fender Stratocaster', InstrumentType::Guitar, 'Fender', 1499.99, 10, 'Classic electric guitar'),
-      new Instrument(3, 'Roland TD-27KV', InstrumentType::Drum, 'Roland', 3199.99, 3, 'Advanced electronic drum set'),
-      new Instrument(4, 'Yamaha YFL-222', InstrumentType::Flute, 'Yamaha', 499.99, 7, 'Student flute with great tone'),
-      new Instrument(5, 'Stradivarius 1721', InstrumentType::Violin, 'Antonio Stradivari', 1200000.00, 1, 'Rare handcrafted violin'),
-    ];
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('
+                SELECT i.*, it.name AS type_name, it.category 
+                FROM instruments i 
+                JOIN instrument_types it ON i.type_id = it.id 
+                WHERE i.id = ?
+            ');
+      $stmt->execute([$id]);
+      $instrument = $stmt->fetch(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      if (!$instrument) {
+        return null;
+      }
+
+      return new Instrument(
+        $instrument['id'],
+        $instrument['title'],
+        $instrument['type_name'],
+        InstrumentCategory::from($instrument['category']),
+        $instrument['brand'],
+        $instrument['price'],
+        $instrument['stock_quantity'],
+        $instrument['description'],
+        $instrument['img_id'],
+        $instrument['serial_number'],
+        $instrument['is_buyable'],
+        $instrument['is_rentable']
+      );
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return null;
+    }
+  }
+
+  public function fetchPage(int $pageNumber, int $pageSize): array
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare('
+                SELECT i.*, it.name AS type_name, it.category 
+                FROM instruments i 
+                JOIN instrument_types it ON i.type_id = it.id 
+                ORDER BY i.id 
+                LIMIT ? OFFSET ?
+            ');
+      $stmt->execute([$pageSize, $offset]);
+      $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      return array_map(function ($instrument) {
+        return new Instrument(
+          $instrument['id'],
+          $instrument['title'],
+          $instrument['type_name'],
+          InstrumentCategory::from($instrument['category']),
+          $instrument['brand'],
+          $instrument['price'],
+          $instrument['stock_quantity'],
+          $instrument['description'],
+          $instrument['img_id'],
+          $instrument['serial_number'],
+          $instrument['is_buyable'],
+          $instrument['is_rentable']
+        );
+      }, $instruments);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
+  public function fetchPageByKeyword(string $keyword, int $pageNumber, int $pageSize): array
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare('
+                SELECT i.*, it.name AS type_name, it.category 
+                FROM instruments i 
+                JOIN instrument_types it ON i.type_id = it.id 
+                WHERE i.title LIKE CONCAT("%", ?, "%") OR i.brand LIKE CONCAT("%", ?, "%")
+                ORDER BY i.id 
+                LIMIT ? OFFSET ?
+            ');
+      $stmt->execute([$keyword, $keyword, $pageSize, $offset]);
+      $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      return array_map(function ($instrument) {
+        return new Instrument(
+          $instrument['id'],
+          $instrument['title'],
+          $instrument['type_name'],
+          InstrumentCategory::from($instrument['category']),
+          $instrument['brand'],
+          $instrument['price'],
+          $instrument['stock_quantity'],
+          $instrument['description'],
+          $instrument['img_id'],
+          $instrument['serial_number'],
+          $instrument['is_buyable'],
+          $instrument['is_rentable']
+        );
+      }, $instruments);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
+  public function fetchCount(): int
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('SELECT COUNT(*) FROM instruments');
+      $stmt->execute();
+      $total = $stmt->fetch();
+      $conn->commit();
+
+      return $total[0];
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return 0;
+    }
+  }
+
+  public function fetchCountByKeyword(string $keyword): int
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('
+                SELECT COUNT(*) 
+                FROM instruments 
+                WHERE title LIKE CONCAT("%", ?, "%") OR brand LIKE CONCAT("%", ?, "%")
+            ');
+      $stmt->execute([$keyword, $keyword]);
+      $total = $stmt->fetch();
+      $conn->commit();
+
+      return $total[0];
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return 0;
+    }
   }
 }
