@@ -11,7 +11,7 @@ class Instrument
   public ?string $description;
   public float $price;
   public int $stockQuantity;
-  public string $imgURL;
+  public int $imgId;
 
   public function __construct(
     string $id,
@@ -21,7 +21,7 @@ class Instrument
     float $price = 0,
     int $stockQuantity = 0,
     ?string $description = null,
-    string $imgURL = 'https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg'
+    int $imgId = 0
   ) {
     $this->id = $id;
     $this->title = $title;
@@ -30,7 +30,7 @@ class Instrument
     $this->price = $price;
     $this->description = $description;
     $this->stockQuantity = $stockQuantity;
-    $this->imgURL = $imgURL;
+    $this->imgId = $imgId;
   }
 }
 
