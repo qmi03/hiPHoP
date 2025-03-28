@@ -6,11 +6,11 @@
 INSERT INTO users(first_name, last_name, address, email, dob, username, password, is_admin, avatar_url) VALUES (
   "root",
   "",
-  "root@admin.com",
   "",
+  "root@admin.com",
   "2003-01-01",
   "root",
   "",
   true,
-  "/public/default-avatar.jpg"
+  "/public/assets/default-avatar.jpg"
 );
