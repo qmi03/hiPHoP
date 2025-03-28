@@ -36,6 +36,8 @@ class AdminController
     } elseif ('/admin/contacts/' == $path) {
       if ('GET' == $method) {
         $this->contacts();
+      } elseif ('POST' == $method && $_REQUEST['contact-update']) {
+        $this->handleContactUpdate($_POST);
       }
     }
   }

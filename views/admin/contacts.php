@@ -7,7 +7,7 @@
     <div class="card-header">
       <h5 class="card-title">Information</h5>
     </div>
-    <form method="POST" action="/admin/contact/contact-update=true" class="card-body items-stretch">
+    <form method="POST" action="/admin/contacts?contact-update=true" class="card-body items-stretch">
       <div class="mb-3">
         <label for="contact-address" class="form-label">Address *</label>
         <input type="text" id="contact-address" name="address" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['address']); ?>">
