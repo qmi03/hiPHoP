@@ -2,35 +2,49 @@
 
 require_once 'models/shop/InstrumentType.php';
 
+require_once 'models/shop/InstrumentCategory.php';
+
 class Instrument
 {
-  public string $title;
   public int $id;
-  public InstrumentType $type;
+  public string $title;
+  public string $type;
+  public InstrumentCategory $category;
   public string $brand;
   public ?string $description;
-  public float $price;
+  public int $price;
   public int $stockQuantity;
-  public int $imgId;
+  public ?int $imgId;
+  public ?string $serialNumber;
+  public bool $isBuyable;
+  public bool $isRentable;
 
   public function __construct(
     int $id,
     string $title,
-    InstrumentType $type,
+    string $type,
+    InstrumentCategory $category,
     string $brand,
-    float $price = 0,
-    int $stockQuantity = 0,
+    int $price,
+    int $stockQuantity,
     ?string $description = null,
-    int $imgId = 0
+    ?int $imgId = null,
+    ?string $serialNumber = null,
+    bool $isBuyable = true,
+    bool $isRentable = false
   ) {
     $this->id = $id;
     $this->title = $title;
     $this->type = $type;
+    $this->category = $category;
     $this->brand = $brand;
     $this->price = $price;
-    $this->description = $description;
     $this->stockQuantity = $stockQuantity;
+    $this->description = $description;
     $this->imgId = $imgId;
+    $this->serialNumber = $serialNumber;
+    $this->isBuyable = $isBuyable;
+    $this->isRentable = $isRentable;
   }
 }
 
