@@ -3,6 +3,7 @@
 require_once 'views/index.php';
 
 require_once 'models/Photo.php';
+require_once 'models/home/NewsLetter.php';
 
 class AdminController
 {
@@ -29,6 +30,8 @@ class AdminController
         $this->handleIntroductionUpdate($_POST);
       } elseif ('POST' == $method && $_REQUEST['quote-update']) {
         $this->handleQuoteUpdate(json_decode(file_get_contents("php://input"), true));
+      } elseif ('POST' == $method && $_REQUEST['newsletter-update']) {
+        $this->handleNewsLetterUpdate($_POST);
       }
     } elseif ('/admin/contacts/' == $path && 'GET' == $method) {
       $this->contacts();
@@ -58,6 +61,24 @@ class AdminController
     $quoteModel->create(array_filter($formData["created"], function ($created) {
       return strlen($created["author"]) > 0 && strlen($created["content"]) > 0;
     }));
+  }
+
+  public function handleNewsLetterUpdate(array $formData): void
+  {
+    $newsLetterModel = new NewsLetterModel();
+    if ($formData["changed"]) {
+      $newsLetterModel->update(array_filter($formData["changed"], function ($change) {
+        return strlen($change["title"]) > 0 && strlen($change["summary"]) > 0 && strlen($change["bgUrl"]) > 0;
+      }));
+    }
+    if ($formData["deleted"]) {
+      $newsLetterModel->delete($formData["deleted"]);
+    }
+    if ($formData["created"]) {
+      $newsLetterModel->create(array_filter($formData["created"], function ($created) {
+        return strlen($created["title"]) > 0 && strlen($created["summary"]) > 0 && strlen($created["bgUrl"]) > 0;
+      }));
+    }
   }
 
   public function handleIntroductionUpdate(array $formData): void

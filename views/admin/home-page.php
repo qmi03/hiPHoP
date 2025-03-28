@@ -57,7 +57,7 @@
                 <input type="text" class="form-control" id="targetNameInput">
               </div>
               <div class="mb-3">
-                <label for="backgroundInput" class="form-label">Background Image</label>
+                <label for="backgroundInput" class="form-label" required>Background Image *</label>
                 <div class="relative">
                   <input
                     type="text"
