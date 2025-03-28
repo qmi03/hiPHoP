@@ -208,12 +208,12 @@ class LoginController
         ? $mimeExtensions[$res['mime_type']]
         : 'jpg';
 
-      $filename = 'avatar_'.time().'_'.mt_rand(1000, 9999).'.'.$extension;
+      $filename = 'avatar_' . time() . '_' . mt_rand(1000, 9999) . '.' . $extension;
 
-      $filePath = $_SERVER['DOCUMENT_ROOT'].'/public/data/'.$filename;
+      $filePath = $_SERVER['DOCUMENT_ROOT'] . '/public/data/' . $filename;
       file_put_contents($filePath, $res['data']);
 
-      $avatarUrl = '/public/data/'.$filename;
+      $avatarUrl = '/public/data/' . $filename;
     }
 
     $password = password_hash($password, PASSWORD_BCRYPT);

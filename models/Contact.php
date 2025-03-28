@@ -14,6 +14,7 @@ class ContactModel
 
       return $contact;
     } catch (PDOException $e) {
+      return [];
     }
   }
 
