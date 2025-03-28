@@ -237,6 +237,7 @@
           $('#summaryInput').val(newsletter.summary);
           $('#targetUrlInput').val(newsletter.targetUrl || '');
           $('#targetNameInput').val(newsletter.targetName || '');
+          $('#backgroundInput').val(newsletter.bgUrl || '');
 
           newsletterModalTitle.textContent = 'Edit Newsletter';
           newsletterModal.show();
@@ -313,7 +314,7 @@
                   summary,
                   targetUrl,
                   targetName,
-                  backgroundInput,
+                  bgUrl: backgroundInput,
                 };
               }
 
@@ -331,6 +332,8 @@
 
         submitNewsletterChangesBtn.addEventListener('click', function() {
           const formData = new FormData();
+
+          console.log(changedNewsletters);
 
           Object.entries(changedNewsletters).forEach(([id, newsletter]) => {
             formData.append(`changed[${id}][title]`, newsletter.title);
