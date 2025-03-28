@@ -5,7 +5,7 @@ require_once 'models/shop/InstrumentType.php';
 class Instrument
 {
   public string $title;
-  public string $id;
+  public int $id;
   public InstrumentType $type;
   public string $brand;
   public ?string $description;
@@ -14,7 +14,7 @@ class Instrument
   public int $imgId;
 
   public function __construct(
-    string $id,
+    int $id,
     string $title,
     InstrumentType $type,
     string $brand,
@@ -42,11 +42,11 @@ class InstrumentModel
   public function fetchAll(): array
   {
     return [
-      new Instrument('INS001', 'Yamaha Genos 2', InstrumentType::Keyboard, 'Yamaha', 4999.99, 5, 'Professional arranger workstation'),
-      new Instrument('INS002', 'Fender Stratocaster', InstrumentType::Guitar, 'Fender', 1499.99, 10, 'Classic electric guitar'),
-      new Instrument('INS003', 'Roland TD-27KV', InstrumentType::Drum, 'Roland', 3199.99, 3, 'Advanced electronic drum set'),
-      new Instrument('INS004', 'Yamaha YFL-222', InstrumentType::Flute, 'Yamaha', 499.99, 7, 'Student flute with great tone'),
-      new Instrument('INS005', 'Stradivarius 1721', InstrumentType::Violin, 'Antonio Stradivari', 1200000.00, 1, 'Rare handcrafted violin'),
+      new Instrument(1, 'Yamaha Genos 2', InstrumentType::Keyboard, 'Yamaha', 4999.99, 5, 'Professional arranger workstation'),
+      new Instrument(2, 'Fender Stratocaster', InstrumentType::Guitar, 'Fender', 1499.99, 10, 'Classic electric guitar'),
+      new Instrument(3, 'Roland TD-27KV', InstrumentType::Drum, 'Roland', 3199.99, 3, 'Advanced electronic drum set'),
+      new Instrument(4, 'Yamaha YFL-222', InstrumentType::Flute, 'Yamaha', 499.99, 7, 'Student flute with great tone'),
+      new Instrument(5, 'Stradivarius 1721', InstrumentType::Violin, 'Antonio Stradivari', 1200000.00, 1, 'Rare handcrafted violin'),
     ];
   }
 }
