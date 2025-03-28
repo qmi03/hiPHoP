@@ -38,52 +38,52 @@
     </div>
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="username">Username *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="username" name="username" value="<?php echo htmlspecialchars($data['username']); ?>">
-    <?php if ('username' == $data['invalidField']) { ?>
+    <?php if ('username' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid username or it has been taken!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="firstname">First name *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="firstname" name="firstname" value="<?php echo htmlspecialchars($data['firstname']); ?>">
-    <?php if ('firstname' == $data['invalidField']) { ?>
+    <?php if ('firstname' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid first name!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="lastname">Last name *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="lastname" name="lastname" value="<?php echo htmlspecialchars($data['lastname']); ?>">
-    <?php if ('lastname' == $data['invalidField']) { ?>
+    <?php if ('lastname' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid last name!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="email">Email *</label>
     <input type="email" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="email" name="email" value="<?php echo htmlspecialchars($data['email']); ?>">
-    <?php if ('email' == $data['invalidField']) { ?>
+    <?php if ('email' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid email or email is already taken!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="password">Password *</label>
     <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="password" minlength="6" maxlength="256" name="password">
-    <?php if ('password' == $data['invalidField']) { ?>
+    <?php if ('password' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Password length must be between 6 and 256 characters!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="re-password">Re-enter password *</label>
     <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" required id="re-password" minlength="6" maxlength="256" name="re-password">
-    <?php if ('re-password' == $data['invalidField']) { ?>
+    <?php if ('re-password' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Re-entered password does not match!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="dob">Date of birth *</label>
     <input type="date" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="dob" name="dob" value="<?php echo htmlspecialchars($data['dob']->format('Y-m-d')); ?>">
-    <?php if ('dob' == $data['invalidField']) { ?>
+    <?php if ('dob' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid date of birth!</p>
-    <?php } ?>
+    <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="address">Address *</label>
     <input required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="address" name="address" value="<?php echo htmlspecialchars($data['address']); ?>">
-    <?php if ('address' == $data['invalidField']) { ?>
+    <?php if ('address' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid address!</p>
-    <?php } ?>
+    <?php endif; ?>
     <div></div>
     <div class="mt-5 lg:mt-0 flex items-center justify-start lg:none">
       <input type="submit" value="SIGN UP" class="cursor-pointer text-white text-lg font-bold px-3 py-2 bg-cyan-600 hover:bg-gray-500 transition-colors">
