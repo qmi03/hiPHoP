@@ -73,7 +73,7 @@
       <p class="text-sm text-red-600">Re-entered password does not match!</p>
     <?php endif; ?>
     <label class="mt-5 lg:mt-0 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="dob">Date of birth *</label>
-    <input type="date" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="dob" name="dob" value="<?php echo htmlspecialchars($data['dob']->format('Y-m-d')); ?>">
+    <input type="date" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="dob" name="dob" value="">
     <?php if ('dob' == $data['invalidField']): ?>
       <div></div>
       <p class="text-sm text-red-600">Invalid date of birth!</p>
