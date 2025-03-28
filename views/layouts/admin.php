@@ -43,7 +43,7 @@ array_pop($subpaths);
             </div>
             <div class="header-top-right">
               <div class="dropdown">
-                <a href="#" id="topbarUserDropdown" class="user-dropdown d-flex align-items-center dropend dropdown-toggle " data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" id="topbarUserDropdown" class="user-dropdown d-flex align-items-center dropend" data-bs-toggle="dropdown" aria-expanded="false">
                   <div class="avatar avatar-md2">
                     <img src="<?php echo $GLOBALS['user']->avatarUrl; ?>" alt="Avatar">
                   </div>
@@ -52,14 +52,6 @@ array_pop($subpaths);
                     <p class="user-dropdown-status text-sm text-muted">Admin</p>
                   </div>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end shadow-lg" aria-labelledby="topbarUserDropdown">
-                  <li><a class="dropdown-item" href="#">My Account</a></li>
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  <li>
-                    <hr class="dropdown-divider">
-                  </li>
-                  <li><a class="dropdown-item" href="#">Logout</a></li>
-                </ul>
               </div>
               <!-- Burger button responsive -->
               <a href="#" class="burger-btn d-block d-xl-none">
