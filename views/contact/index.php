@@ -11,6 +11,23 @@
   </ul>
 </section>
 
+<section class="mt-10 bg-white mx-5 lg:mx-20 p-10 relative text-lg">
+  You can also fill out our contact form, and we’ll get back to you as soon as possible!
+
+  <form action="" method="post" class="mt-10 flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
+    <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="title">Title *</label>
+    <input type="text" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="title">
+    <label class="mt-5 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="content">Content *</label>
+    <textarea required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="content"></textarea>
+    <div></div>
+    <div class="mt-5 lg:mt-0 flex items-center justify-start lg:none">
+      <input type="submit" value="SEND" class="cursor-pointer text-white text-lg font-bold px-3 py-2 bg-cyan-600 hover:bg-gray-500 transition-colors">
+    </div>
+  </form>
+</section>
+
+
+
 <section class="mt-10 bg-white mx-5 lg:mx-20 relative">
   <h2 class="p-5 text-xl text-white text-center bg-pink-500">Find Us on the Map</h2>
   <div id="map" class="flex items-center justify-center">
