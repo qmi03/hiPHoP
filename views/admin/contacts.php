@@ -38,14 +38,14 @@
       </div>
       <div class="mb-3">
         <label for="contact-longitude" class="form-label">Longitude *</label>
-        <input type="text" id="contact-longitude" name="longitude" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['longitude']); ?>">
+        <input type="number" step="0.0001" id="contact-longitude" name="longitude" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['longitude']); ?>">
         <?php if ('contact-longitude' == $data['invalidField']) { ?>
           <p class="text-sm text-red-600">Contact longitude must not be empty!</p>
         <?php } ?>
       </div>
       <div class="mb-3">
         <label for="contact-latitude" class="form-label">Latitude *</label>
-        <input type="text" id="contact-latitude" name="latitude" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['latitude']); ?>">
+        <input type="number" step="0.0001" id="contact-latitude" name="latitude" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['latitude']); ?>">
         <?php if ('contact-latitude' == $data['invalidField']) { ?>
           <p class="text-sm text-red-600">Contact latitude must not be empty!</p>
         <?php } ?>
