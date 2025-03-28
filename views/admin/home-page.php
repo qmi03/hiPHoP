@@ -58,14 +58,132 @@
               </div>
               <div class="mb-3">
                 <label for="backgroundInput" class="form-label">Background Image</label>
-                <input type="file" class="form-control" id="backgroundInput" accept="image/*">
-              </div>
-              <button type="submit" class="btn btn-primary">Save Newsletter</button>
+                <div class="relative">
+                  <input
+                    type="text"
+                    id="backgroundInput"
+                    placeholder="Enter photo name..."
+                    class="form-control">
+                  <div
+                    id="searchResults"
+                    class="absolute z-10 w-fill mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-52 w-[100%] overflow-y-auto hidden">
+                  </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Save Newsletter</button>
             </form>
           </div>
         </div>
       </div>
     </div>
+
+    <script>
+      function debounce(func, delay) {
+        let timeoutId;
+        return function() {
+          const context = this;
+          const args = arguments;
+          clearTimeout(timeoutId);
+          timeoutId = setTimeout(() => {
+            func.apply(context, args);
+          }, delay);
+        };
+      }
+
+      async function searchPhotos(keyword = '') {
+        const searchResults = document.getElementById('searchResults');
+
+        searchResults.innerHTML = '';
+        searchResults.classList.add('hidden');
+
+        try {
+          const formData = new FormData();
+          formData.append('keyword', keyword);
+          formData.append('pageSize', keyword ? 5 : 12);
+
+          const response = await fetch('/api/search-photos', {
+            method: 'POST',
+            body: formData
+          });
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+
+          if (!data.photos.length) {
+            return;
+          }
+
+          searchResults.classList.remove('hidden');
+
+          data.photos.forEach(photo => {
+            const photoDiv = document.createElement('div');
+            photoDiv.className = `
+                    flex items-center p-2 hover:bg-gray-100 cursor-pointer 
+                    transition duration-300 border-b border-gray-200 last:border-b-0
+                `;
+
+            const img = document.createElement('img');
+            img.src = photo.url;
+            img.alt = photo.name;
+            img.className = 'w-16 h-16 object-cover rounded mr-4';
+
+            const textDiv = document.createElement('div');
+
+            const name = document.createElement('p');
+            name.textContent = photo.name;
+            name.className = 'text-gray-800 font-semibold';
+
+            textDiv.appendChild(name);
+            photoDiv.appendChild(img);
+            photoDiv.appendChild(textDiv);
+
+            photoDiv.addEventListener('click', () => {
+              const input = document.getElementById('backgroundInput');
+              input.value = photo.url;
+              searchResults.classList.add('hidden');
+            });
+
+            searchResults.appendChild(photoDiv);
+          });
+
+        } catch (error) {
+          console.error('Error:', error);
+          searchResults.innerHTML = `
+                <div class="text-center text-red-500 p-4">
+                    <p>Error loading photos: ${error.message}</p>
+                </div>
+            `;
+          searchResults.classList.remove('hidden');
+        }
+      }
+
+      const debouncedSearch = debounce(function() {
+        const keyword = this.value.trim();
+
+        if (keyword === '') {
+          searchPhotos();
+        } else {
+          searchPhotos(keyword);
+        }
+      }, 300);
+
+      const backgroundInput = document.getElementById('backgroundInput');
+      backgroundInput.addEventListener('input', debouncedSearch);
+
+      document.addEventListener('click', (event) => {
+        const searchResults = document.getElementById('searchResults');
+        const backgroundInput = document.getElementById('backgroundInput');
+
+        if (!searchResults.contains(event.target) &&
+          event.target !== backgroundInput) {
+          searchResults.classList.add('hidden');
+        }
+      });
+
+      searchPhotos();
+    </script>
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {
@@ -158,7 +276,7 @@
           const summary = $('#summaryInput').val();
           const targetUrl = $('#targetUrlInput').val() || null;
           const targetName = $('#targetNameInput').val() || null;
-          const backgroundInput = document.getElementById('backgroundInput');
+          const backgroundInput = $('#backgroundInput').val() || null;
 
           const newNewsletter = {
             id: newsletterId,
@@ -166,7 +284,7 @@
             summary,
             targetUrl,
             targetName,
-            bgUrl: backgroundInput.files.length ? URL.createObjectURL(backgroundInput.files[0]) : null
+            bgUrl: backgroundInput,
           };
 
           if (index === '') {
@@ -176,7 +294,7 @@
               summary,
               targetUrl,
               targetName,
-              bgFile: backgroundInput.files[0]
+              bgUrl: backgroundInput
             };
           } else {
             const newsletter = newsletters[index];
@@ -186,7 +304,7 @@
               newsletter.summary !== summary ||
               newsletter.targetUrl !== targetUrl ||
               newsletter.targetName !== targetName ||
-              backgroundInput.files.length > 0;
+              newsletter.bgUrl !== backgroundInput;
 
             if (newsletterChanged) {
               if (newsletter.id < 10000) {
@@ -195,7 +313,7 @@
                   summary,
                   targetUrl,
                   targetName,
-                  bgFile: backgroundInput.files[0]
+                  backgroundInput,
                 };
               }
 
@@ -203,10 +321,7 @@
               newsletter.summary = summary;
               newsletter.targetUrl = targetUrl;
               newsletter.targetName = targetName;
-
-              if (backgroundInput.files.length > 0) {
-                newsletter.bgUrl = URL.createObjectURL(backgroundInput.files[0]);
-              }
+              newsletter.bgUrl = backgroundInput;
             }
           }
 
@@ -222,9 +337,7 @@
             formData.append(`changed[${id}][summary]`, newsletter.summary);
             formData.append(`changed[${id}][targetUrl]`, newsletter.targetUrl || '');
             formData.append(`changed[${id}][targetName]`, newsletter.targetName || '');
-            if (newsletter.bgFile) {
-              formData.append(`changed[${id}][bgFile]`, newsletter.bgFile);
-            }
+            formData.append(`changed[${id}][bgUrl]`, newsletter.bgUrl);
           });
 
           Object.values(createdNewsletters).forEach((newsletter, index) => {
@@ -232,9 +345,7 @@
             formData.append(`created[${index}][summary]`, newsletter.summary);
             formData.append(`created[${index}][targetUrl]`, newsletter.targetUrl || '');
             formData.append(`created[${index}][targetName]`, newsletter.targetName || '');
-            if (newsletter.bgFile) {
-              formData.append(`created[${index}][bgFile]`, newsletter.bgFile);
-            }
+            formData.append(`created[${index}][bgUrl]`, newsletter.bgUrl);
           });
 
           deletedNewsletterIds.forEach((id, index) => {

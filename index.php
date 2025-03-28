@@ -13,7 +13,9 @@ require_once 'middleware/UserMiddleware.php';
 $path = $_SERVER['PATH'];
 $method = $_SERVER['REQUEST_METHOD'];
 
-if (!array_key_exists($path, $routes)) {
+if (str_starts_with($path, "/api/")) {
+  require_once(trim($path, '/') . '.php');
+} else if (!array_key_exists($path, $routes)) {
   renderView('views/404.php', []);
 } else {
   $controller = $routes[$path];
