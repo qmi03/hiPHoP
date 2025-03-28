@@ -1,4 +1,4 @@
-<section class="md:flex text-white">
+<section class="md:flex text-white min-h-[500px]">
   <div id="thumbnail-container" class="transition-all duration-1000 min-h-[500px] md:min-h-0 md:flex-3/4 bg-no-repeat bg-cover bg-center relative">
     <div class="absolute bottom-10">
       <h2 id="thumbnail-title" class="text-3xl bg-[#11111155] px-8 pt-8"></h2>
@@ -35,7 +35,7 @@
 
     function setNewsLetter(index) {
       const currentNewsLetter = newsLetters[index];
-      $("#thumbnail-container").css("background-image", `url(${currentNewsLetter.bgUrl})`);
+      $("#thumbnail-container").css("background-image", `url('${currentNewsLetter.bgUrl}')`);
       $("#thumbnail-title").text(currentNewsLetter.title);
       $("#thumbnail-summary").text(currentNewsLetter.summary);
       const thumbnailButton = $("#thumbnail-button");
