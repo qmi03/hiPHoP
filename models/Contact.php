@@ -4,14 +4,28 @@ class ContactModel
 {
   public function fetch(): array
   {
-    return [
-      'address' => 'BKU, Di An, Thu Duc, TP.HCM, Vietnam',
-      'phone' => '123-456-7890',
-      'email' => 'info@hiPHoP.com',
-      'facebook' => 'https://www.facebook.com/huydna',
-      'github' => 'https://github.com/Huy-DNA',
-      'latitude' => '10.8806',
-      'longitude' => '106.8054',
-    ];
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('SELECT * FROM contacts');
+      $stmt->execute([]);
+      $contact = $stmt->fetch();
+      $conn->commit();
+
+      return $contact;
+    } catch (PDOException $e) {
+    }
+  }
+
+  public function update(string $address, string $phone, string $email, string $facebook, string $github, string $latitude, string $longitude)
+  {
+    try {
+      $conn = Database::getInstance();
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('UPDATE contacts SET address = ?, phone = ?, facebook = ?, github = ?, latitude = ?, longitude = ?, email = ?');
+      $stmt->execute([$address, $phone, $facebook, $github, $latitude, $longitude, $email]);
+      $conn->commit();
+    } catch (PDOException $e) {
+    }
   }
 }
