@@ -23,6 +23,13 @@
         <?php } ?>
       </div>
       <div class="mb-3">
+        <label for="contact-email" class="form-label">Email *</label>
+        <input type="text" id="contact-email" name="email" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['email']); ?>">
+        <?php if ('contact-email' == $data['invalidField']) { ?>
+          <p class="text-sm text-red-600">Contact email must not be empty!</p>
+        <?php } ?>
+      </div>
+      <div class="mb-3">
         <label for="contact-facebook" class="form-label">Facebook *</label>
         <input type="text" id="contact-facebook" name="facebook" class="form-control" required value="<?php echo htmlspecialchars($data['contact']['facebook']); ?>">
         <?php if ('contact-facebook' == $data['invalidField']) { ?>

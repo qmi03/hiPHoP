@@ -109,7 +109,62 @@ class AdminController
     header('Location: /admin/home-page');
   }
 
-  public function handleContactUpdate(array $formData): void {}
+  public function handleContactUpdate(array $formData): void
+  {
+    $address = trim($formData['address']);
+    $phone = trim($formData['phone']);
+    $longitude = trim($formData['longitude']);
+    $latitude = trim($formData['latitude']);
+    $facebook = trim($formData['facebook']);
+    $github = trim($formData['github']);
+    $email = trim($formData['email']);
+
+    if (!$address || strlen($address) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-address']));
+
+      return;
+    }
+
+    if (!$phone || strlen($phone) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-phone']));
+
+      return;
+    }
+
+    if (!$facebook || strlen($facebook) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-facebook']));
+
+      return;
+    }
+
+    if (!$github || strlen($github) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-github']));
+
+      return;
+    }
+
+    if (!$longitude || strlen($longitude) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-longitude']));
+
+      return;
+    }
+
+    if (!$latitude || strlen($latitude) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-latitude']));
+
+      return;
+    }
+
+    if (!$email || strlen($email) <= 0) {
+      $this->contacts(array_merge($formData, ['invalidField' => 'contact-email']));
+
+      return;
+    }
+
+    $contact = new ContactModel();
+    $contact->update($address, $phone, $email, $facebook, $github, $latitude, $longitude);
+    header('Location: /admin/contacts');
+  }
 
   public function homePage(): void
   {
