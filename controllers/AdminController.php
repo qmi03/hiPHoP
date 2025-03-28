@@ -33,8 +33,10 @@ class AdminController
       } elseif ('POST' == $method && $_REQUEST['newsletter-update']) {
         $this->handleNewsLetterUpdate($_POST);
       }
-    } elseif ('/admin/contacts/' == $path && 'GET' == $method) {
-      $this->contacts();
+    } elseif ('/admin/contacts/' == $path) {
+      if ('GET' == $method) {
+        $this->contacts();
+      }
     }
   }
 
@@ -48,7 +50,9 @@ class AdminController
 
   public function contacts(): void
   {
-    renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user']]);
+    $contact = new ContactModel();
+
+    renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user'], 'contact' => $contact->fetch()]);
   }
 
   public function handleQuoteUpdate(array $formData): void
@@ -102,6 +106,8 @@ class AdminController
     $introduction->update($title, explode("\n", $paragraphs));
     header('Location: /admin/home-page');
   }
+
+  public function handleContactUpdate(array $formData): void {}
 
   public function homePage(): void
   {
