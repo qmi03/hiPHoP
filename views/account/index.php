@@ -61,9 +61,15 @@
       <div></div>
       <p class="text-sm text-red-600">Invalid email or email is already taken!</p>
     <?php } ?>
-    <label class="mt-5 lg:mt-0 text-left lg:text-right lg:self-center cursor-pointer" for="password">Password</label>
-    <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" id="password" minlength="6" maxlength="256" name="password">
-    <?php if ('password' == $data['invalidField']) { ?>
+    <label class="mt-5 lg:mt-0 text-left lg:text-right lg:self-center cursor-pointer" for="old-password">Old password</label>
+    <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" id="old-password" minlength="6" maxlength="256" name="old-password">
+    <?php if ('old-password' == $data['invalidField']) { ?>
+      <div></div>
+      <p class="text-sm text-red-600">Wrong password!</p>
+    <?php } ?>
+    <label class="mt-5 lg:mt-0 text-left lg:text-right lg:self-center cursor-pointer" for="new-password">New password</label>
+    <input class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg" type="password" id="new-password" minlength="6" maxlength="256" name="new-password">
+    <?php if ('new-password' == $data['invalidField']) { ?>
       <div></div>
       <p class="text-sm text-red-600">Password length must be between 6 and 256 characters!</p>
     <?php } ?>
