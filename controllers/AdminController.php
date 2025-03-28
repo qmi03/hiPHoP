@@ -9,6 +9,10 @@ class AdminController
 {
   public function route(string $method, string $path): void
   {
+    if (!$GLOBALS['user']->isAdmin) {
+      renderView('views/404.php', []);
+      exit();
+    }
     if ('/admin/' == $path) {
       if ('GET' == $method) {
         if ($_REQUEST['photo-query']) {

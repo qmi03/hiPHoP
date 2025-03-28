@@ -1,4 +1,9 @@
 <?php
+if (!$GLOBALS['user']->isAdmin) {
+  http_response_code(403);
+  exit();
+}
+
 header('Content-Type: application/json');
 
 require_once 'config/index.php';
