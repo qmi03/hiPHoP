@@ -80,13 +80,13 @@ class LoginController
     $rememberMe = 'on' == trim($formData['remember-me-checked']);
 
     if (!$email || preg_match_all('^[^@]+@[^@]+\\.[^@]+$', $email)) {
-      $this->signup(array_merge($formData, ['invalidField' => 'email']));
+      $this->index(array_merge($formData, ['invalidField' => 'email']));
 
       return;
     }
 
     if (!$password || strlen($password) < 6 || strlen($password) > 256) {
-      $this->signup(array_merge($formData, ['invalidField' => 'password']));
+      $this->index(array_merge($formData, ['invalidField' => 'password']));
 
       return;
     }
