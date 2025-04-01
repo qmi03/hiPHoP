@@ -25,6 +25,8 @@ class AdminController
           $this->uploadPhoto(array_merge($_POST, $_FILES));
         } elseif (array_key_exists('delete-photo', $_REQUEST)) {
           $this->deletePhoto(['id' => $_REQUEST['delete-photo']]);
+        } elseif ($_REQUEST['contact-update']) {
+          $this->handleContactUpdate($_POST);
         }
       }
     } elseif ('/admin/home-page/' == $path) {
@@ -40,8 +42,6 @@ class AdminController
     } elseif ('/admin/contacts/' == $path) {
       if ('GET' == $method) {
         $this->contacts();
-      } elseif ('POST' == $method && $_REQUEST['contact-update']) {
-        $this->handleContactUpdate($_POST);
       }
     }
   }
@@ -51,14 +51,13 @@ class AdminController
     $galleryPage = (int) $_GET['gallery-page'] + 0;
     $photoModel = new PhotoModel();
     $photoCount = $photoModel->fetchCount();
-    renderAdminView('views/admin/index.php', array_merge(['user' => $GLOBALS['user'], 'photoCount' => $photoModel->fetchCount(), 'photos' => $photoModel->fetchPage((int) $galleryPage, 12), 'currentPhotoPage' => $galleryPage, 'totalPhotoPages' => (int) ($photoCount / 12)], $data));
+    $contact = new ContactModel();
+    renderAdminView('views/admin/index.php', array_merge(['user' => $GLOBALS['user'], 'photoCount' => $photoModel->fetchCount(), 'photos' => $photoModel->fetchPage((int) $galleryPage, 12), 'currentPhotoPage' => $galleryPage, 'totalPhotoPages' => (int) ($photoCount / 12), "contact" => $contact->fetch()], $data));
   }
 
   public function contacts(): void
   {
-    $contact = new ContactModel();
-
-    renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user'], 'contact' => $contact->fetch()]);
+    renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user']]);
   }
 
   public function handleQuoteUpdate(array $formData): void
@@ -167,7 +166,7 @@ class AdminController
 
     $contact = new ContactModel();
     $contact->update($address, $phone, $email, $facebook, $github, $latitude, $longitude);
-    header('Location: /admin/contacts');
+    header('Location: /admin');
   }
 
   public function homePage(): void
