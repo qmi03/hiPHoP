@@ -55,8 +55,7 @@ class AccountController
         $stmt->execute([$email]);
         $res = $stmt->fetch();
         $hash = $res['password'];
-        if ($hash == "" && $email == "root@admin.com" && $oldPassword == "123456") {
-        } elseif (!password_verify($oldPassword, $hash)) {
+        if (!password_verify($oldPassword, $hash)) {
           $this->index(array_merge($formData, ['invalidField' => 'old-password']));
           $conn->rollBack();
 
