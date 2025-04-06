@@ -44,7 +44,9 @@
 #pagebreak()
 
 #outline()
+#pagebreak()
 
+#include "/auxiliaries/work_division.typ"
 #pagebreak()
 
 #include "/chapters/main.typ"

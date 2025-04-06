@@ -18,6 +18,9 @@ id = 2111762
 name = "Đỗ Nguyễn An Huy"
 id = 2110193
 
+[contacts]
+email = "huy.do862003@hcmut.edu.vn"
+
 [fonts]
 serif = "Times New Roman"
 monospace = "JetBrains Mono"

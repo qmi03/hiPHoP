@@ -20,7 +20,6 @@
 
 #align(center, image("/static/logo.png", height: 5cm))
 
-#v(1fr)
 
 #[
   #set text(size: 15pt)
@@ -29,8 +28,6 @@
   *#upper(t.at("course").at("name"))*
 ]
 
-#v(.5fr)
-
 #block(width: 100%, inset: (y: 2em), stroke: (y: 1pt))[
   #set text(weight: "bold", size: 16pt)
   #upper(t.at("title"))
@@ -38,8 +35,6 @@
   #set text(weight: "regular", size: 15pt)
   Major: Computer Science
 ]
-
-#v(1fr)
 
 #set text(weight: "regular", size: 15pt)
 #grid(
@@ -68,6 +63,17 @@
       #v(0.5em, weak: true)
       #s.at("name") - #s.at("id")
     ],
+  ),
+)
+
+#grid(
+  columns: (1fr, 1fr),
+  rows: (2em, auto),
+  column-gutter: .2cm,
+  align(right, [Email:]),
+  align(
+    left,
+    t.at("contacts").at("email"),
   ),
 )
 
