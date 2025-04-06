@@ -59,6 +59,112 @@
       </div>
       <button type="submit" class="btn btn-primary mb-3">Update</button>
     </form>
+
+    <script>
+      $(document).ready(function() {
+        const form = $("form[action='/admin?contact-update=true']");
+
+        const validations = {
+          'contact-address': {
+            validate: function(value) {
+              return value.length >= 5 && value.length <= 100;
+            },
+            errorMessage: "Address must be between 5 and 100 characters"
+          },
+          'contact-phone': {
+            validate: function(value) {
+              return /^\+?[1-9]\d{1,14}$/.test(value);
+            },
+            errorMessage: "Invalid phone number format"
+          },
+          'contact-email': {
+            validate: function(value) {
+              return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            },
+            errorMessage: "Invalid email format"
+          },
+          'contact-facebook': {
+            validate: function(value) {
+              return /^(https?:\/\/)?(www\.)?facebook\.com\/[a-zA-Z0-9(\.\-)]+$/.test(value);
+            },
+            errorMessage: "Invalid Facebook URL"
+          },
+          'contact-github': {
+            validate: function(value) {
+              return /^(https?:\/\/)?(www\.)?github\.com\/[a-zA-Z0-9\-]+$/.test(value);
+            },
+            errorMessage: "Invalid GitHub URL"
+          },
+          'contact-longitude': {
+            validate: function(value) {
+              return value >= -180 && value <= 180;
+            },
+            errorMessage: "Longitude must be between -180 and 180"
+          },
+          'contact-latitude': {
+            validate: function(value) {
+              return value >= -90 && value <= 90;
+            },
+            errorMessage: "Latitude must be between -90 and 90"
+          }
+        };
+
+        function addErrorMessage(field, message) {
+          const $field = $("#" + field);
+          const errorId = field + "-error";
+
+          if ($("#" + errorId).length === 0) {
+            $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+          }
+
+          $field.addClass("border-red-600");
+        }
+
+        function removeErrorMessage(field) {
+          const $field = $("#" + field);
+          const errorId = field + "-error";
+
+          $("#" + errorId).remove();
+          $field.removeClass("border-red-600");
+        }
+
+        function validateField(field) {
+          const $field = $("#" + field);
+          const value = $field.val();
+          const validation = validations[field];
+
+          if (!validation) return true;
+
+          if (!validation.validate(value)) {
+            addErrorMessage(field, validation.errorMessage);
+            return false;
+          } else {
+            removeErrorMessage(field);
+            return true;
+          }
+        }
+
+        form.on("submit", function(event) {
+          let isValid = true;
+
+          Object.keys(validations).forEach(function(field) {
+            if (!validateField(field)) {
+              isValid = false;
+            }
+          });
+
+          if (!isValid) {
+            event.preventDefault();
+          }
+        });
+
+        Object.keys(validations).forEach(function(field) {
+          $("#" + field).on("input blur", function() {
+            validateField(field);
+          });
+        });
+      });
+    </script>
   </div>
 </section>
 
@@ -186,9 +292,8 @@
           <?php } ?>
         </div>
         <div class="mb-3">
-          <!-- File uploader with image preview -->
           <div class="filepond--root image-preview-filepond filepond--hopper" data-style-button-remove-item-position="left" data-style-button-process-item-position="right" data-style-load-indicator-position="right" data-style-progress-indicator-position="right" data-style-button-remove-item-align="false" style="height: 76px;"><input class="filepond--browser" type="file" id="filepond--browser-mr225r250" name="filepond" aria-controls="filepond--assistant-mr225r250" aria-labelledby="filepond--drop-label-mr225r250" accept="image/png,image/jpg,image/jpeg">
-            <div class="filepond--drop-label" style="transform: translate3d(0px, 0px, 0px); opacity: 1;"><label for="filepond--browser-mr225r250" id="filepond--drop-label-mr225r250" aria-hidden="true">Drag &amp; Drop your files or <span class="filepond--label-action" tabindex="0">Browse</span></label></div>
+            <div class="filepond--drop-label" style="transform: translate3d(0px, 0px, 0px); opacity: 1;"><label for="filepond--browser-mr225r250" id="filepond--drop-label-mr225r250" aria-hidden="true">Drag & Drop your files or <span class="filepond--label-action" tabindex="0">Browse</span></label></div>
             <div class="filepond--list-scroller" style="transform: translate3d(0px, 0px, 0px);">
               <ul class="filepond--list" role="list"></ul>
             </div>
@@ -208,6 +313,86 @@
           <input type="submit" class="btn btn-primary mb-3" value="Upload">
         </div>
       </form>
+
+      <script>
+        $(document).ready(function() {
+          const form = $("form[action='/admin?upload-photo']");
+
+          const validations = {
+            'image-name': {
+              validate: function(value) {
+                return value.length >= 3 && value.length <= 50;
+              },
+              errorMessage: "Name must be between 3 and 50 characters"
+            }
+          };
+
+          function addErrorMessage(field, message) {
+            const $field = $("#" + field);
+            const errorId = field + "-error";
+
+            if ($("#" + errorId).length === 0) {
+              $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+            }
+
+            $field.addClass("border-red-600");
+          }
+
+          function removeErrorMessage(field) {
+            const $field = $("#" + field);
+            const errorId = field + "-error";
+
+            $("#" + errorId).remove();
+            $field.removeClass("border-red-600");
+          }
+
+          function validateField(field) {
+            const $field = $("#" + field);
+            const value = $field.val();
+            const validation = validations[field];
+
+            if (!validation) return true;
+
+            if (!validation.validate(value)) {
+              addErrorMessage(field, validation.errorMessage);
+              return false;
+            } else {
+              removeErrorMessage(field);
+              return true;
+            }
+          }
+
+          form.on("submit", function(event) {
+            let isValid = true;
+
+            Object.keys(validations).forEach(function(field) {
+              if (!validateField(field)) {
+                isValid = false;
+              }
+            });
+
+            const fileInput = $("#filepond--browser-mr225r250");
+            if (!fileInput[0].files || fileInput[0].files.length === 0) {
+              addErrorMessage('filepond--browser-mr225r250', 'Please select an image');
+              isValid = false;
+            }
+
+            if (!isValid) {
+              event.preventDefault();
+            }
+          });
+
+          Object.keys(validations).forEach(function(field) {
+            $("#" + field).on("input blur", function() {
+              validateField(field);
+            });
+          });
+
+          $("#filepond--browser-mr225r250").on("change", function() {
+            removeErrorMessage('filepond--browser-mr225r250');
+          });
+        });
+      </script>
     </div>
   </section>
 </div>
