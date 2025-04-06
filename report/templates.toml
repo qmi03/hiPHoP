@@ -1,28 +1,22 @@
-title = "BTL LTW"
+title = "Music ecommerce website - hiPHoP"
 institution = "Vietnam National University - Ho Chi Minh City University of Technology"
 semester = 242
 major = "Computer Science"
 faculty = "Computer Science and Engineer"
 
 [course]
-name = "LTW"
+name = "Web programming"
 id = "CO3049"
 
-[committee]
-id = 12
-secretary = "Nguyễn Quang Hùng"
-
 [[teachers]] 
-name = "Thoại Nam" 
-[[teachers]] 
-name = "Diệp Thanh Đăng"
+name = "Nguyễn Hữu Hiếu" 
 
 [[students]]
 name = "Phạm Võ Quang Minh"
 id = 2111762
 [[students]]
-name = "Võ Kiều My"
-id = 6969696
+name = "Đỗ Nguyễn An Huy"
+id = 2110193
 
 [fonts]
 serif = "Times New Roman"

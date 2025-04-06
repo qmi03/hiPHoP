@@ -42,32 +42,16 @@
 #v(1fr)
 
 #set text(weight: "regular", size: 15pt)
-#show: upper
 #grid(
   columns: (1fr, 1fr),
   rows: (2em, auto),
   column-gutter: .2cm,
-  align(right, [thesis committee:\ member secretary:]),
-  align(
-    left,
-    [
-      #v(1em, weak: true)
-      #t.committee.id\
-      #t.committee.secretary
-  ]
-  ),
-)
-#grid(
-  columns: (1fr, 1fr),
-  rows: (2em, auto),
-  column-gutter: .2cm,
-  align(right, [supervisors:]),
+  align(right, [Supervisors:]),
   align(
     left,
     for s in t.at("teachers") [
       #v(0.5em, weak: true)
       #s.at("name")
-
     ],
   ),
 )
