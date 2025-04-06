@@ -46,3 +46,101 @@
     </a>
   </div>
 </section>
+
+<script>
+$(document).ready(function() {
+  const form = $("form[action='/login']");
+  
+  const validations = {
+    email: {
+      validate: function(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      },
+      errorMessage: "Invalid email!"
+    },
+    password: {
+      validate: function(value) {
+        return value.length >= 6 && value.length <= 256;
+      },
+      errorMessage: "Invalid password!"
+    }
+  };
+  
+  function addErrorMessage(field, message) {
+    const $field = $("#" + field);
+    const errorId = field + "-error";
+    
+    if ($("#" + errorId).length === 0) {
+      if ($field.closest('.lg\\:grid').length > 0) {
+        $field.after('<div></div><p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+      } else {
+        $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+      }
+    }
+    
+    $field.addClass("border-red-600");
+  }
+  
+  function removeErrorMessage(field) {
+    const $field = $("#" + field);
+    const errorId = field + "-error";
+    
+    $("#" + errorId).remove();
+    
+    if ($field.next().is("div") && $field.next().next().attr("id") === errorId) {
+      $field.next().remove();
+    }
+    
+    $field.removeClass("border-red-600");
+  }
+  
+  function validateField(field) {
+    const $field = $("#" + field);
+    const value = $field.val();
+    const validation = validations[field];
+    
+    if (!validation) return true;
+    
+    if (!validation.validate(value)) {
+      addErrorMessage(field, validation.errorMessage);
+      return false;
+    } else {
+      removeErrorMessage(field);
+      return true;
+    }
+  }
+  
+  form.on("submit", function(event) {
+    let isValid = true;
+    
+    Object.keys(validations).forEach(function(field) {
+      if (!validateField(field)) {
+        isValid = false;
+      }
+    });
+    
+    if (isValid) {
+      return true;
+    }
+    
+    event.preventDefault();
+  });
+  
+  Object.keys(validations).forEach(function(field) {
+    $("#" + field).on("input blur", function() {
+      validateField(field);
+      
+      if ($(".auth-error-message").length > 0) {
+        $(".auth-error-message").fadeOut(300, function() {
+          $(this).remove();
+        });
+      }
+    });
+  });
+  
+  $("input[id='remember-me-checked']").on("change", function() {
+    const isChecked = $(this).prop("checked");
+    $("input[id='remember-me-checked']").prop("checked", isChecked);
+  });
+});
+</script>
