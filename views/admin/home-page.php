@@ -42,34 +42,37 @@
               <input type="hidden" id="newsletterId" name="newsletterId">
               <div class="mb-3">
                 <label for="titleInput" class="form-label">Title *</label>
-                <input type="text" class="form-control" id="titleInput" required>
+                <input type="text" class="form-control" id="titleInput" name="title" required>
               </div>
               <div class="mb-3">
                 <label for="summaryInput" class="form-label">Summary *</label>
-                <textarea class="form-control" id="summaryInput" rows="3" required></textarea>
+                <textarea class="form-control" id="summaryInput" name="summary" rows="3" required></textarea>
               </div>
               <div class="mb-3">
                 <label for="targetUrlInput" class="form-label">Target URL</label>
-                <input type="url" class="form-control" id="targetUrlInput">
+                <input type="url" class="form-control" id="targetUrlInput" name="targetUrl">
               </div>
               <div class="mb-3">
                 <label for="targetNameInput" class="form-label">Target Name</label>
-                <input type="text" class="form-control" id="targetNameInput">
+                <input type="text" class="form-control" id="targetNameInput" name="targetName">
               </div>
               <div class="mb-3">
-                <label for="backgroundInput" class="form-label" required>Background Image *</label>
+                <label for="backgroundInput" class="form-label">Background Image *</label>
                 <div class="relative">
                   <input
                     type="text"
                     id="backgroundInput"
+                    name="bgUrl"
                     placeholder="Enter photo name..."
-                    class="form-control">
+                    class="form-control"
+                    required>
                   <div
                     id="searchResults"
                     class="absolute z-10 w-fill mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-52 w-[100%] overflow-y-auto hidden">
                   </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Save Newsletter</button>
+              </div>
+              <button type="submit" class="btn btn-primary mt-3">Save Newsletter</button>
             </form>
           </div>
         </div>
@@ -77,6 +80,98 @@
     </div>
 
     <script>
+      $(document).ready(function() {
+        const form = $("#newsletterForm");
+
+        const validations = {
+          titleInput: {
+            validate: function(value) {
+              return value.length >= 3 && value.length <= 100;
+            },
+            errorMessage: "Title must be between 3 and 100 characters"
+          },
+          summaryInput: {
+            validate: function(value) {
+              return value.length >= 10 && value.length <= 500;
+            },
+            errorMessage: "Summary must be between 10 and 500 characters"
+          },
+          targetUrlInput: {
+            validate: function(value) {
+              return !value || /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(value);
+            },
+            errorMessage: "Invalid URL format"
+          },
+          targetNameInput: {
+            validate: function(value) {
+              return !value || (value.length >= 2 && value.length <= 50);
+            },
+            errorMessage: "Target name must be between 2 and 50 characters if provided"
+          },
+          backgroundInput: {
+            validate: function(value) {
+              return /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/.test(value);
+            },
+            errorMessage: "Invalid image URL format"
+          }
+        };
+
+        function addErrorMessage(field, message) {
+          const $field = $("#" + field);
+          const errorId = field + "-error";
+
+          if ($("#" + errorId).length === 0) {
+            $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+          }
+
+          $field.addClass("border-red-600");
+        }
+
+        function removeErrorMessage(field) {
+          const $field = $("#" + field);
+          const errorId = field + "-error";
+
+          $("#" + errorId).remove();
+          $field.removeClass("border-red-600");
+        }
+
+        function validateField(field) {
+          const $field = $("#" + field);
+          const value = $field.val();
+          const validation = validations[field];
+
+          if (!validation) return true;
+
+          if (!validation.validate(value)) {
+            addErrorMessage(field, validation.errorMessage);
+            return false;
+          } else {
+            removeErrorMessage(field);
+            return true;
+          }
+        }
+
+        form.on("submit", function(event) {
+          let isValid = true;
+
+          Object.keys(validations).forEach(function(field) {
+            if (!validateField(field)) {
+              isValid = false;
+            }
+          });
+
+          if (!isValid) {
+            event.preventDefault();
+          }
+        });
+
+        Object.keys(validations).forEach(function(field) {
+          $("#" + field).on("input blur", function() {
+            validateField(field);
+          });
+        });
+      });
+
       function debounce(func, delay) {
         let timeoutId;
         return function() {
@@ -269,8 +364,6 @@
         });
 
         newsletterForm.addEventListener('submit', function(event) {
-          event.preventDefault();
-
           const index = $('#newsletterIndex').val();
           const newsletterId = $('#newsletterId').val();
           const title = $('#titleInput').val();
@@ -333,8 +426,6 @@
         submitNewsletterChangesBtn.addEventListener('click', function() {
           const formData = new FormData();
 
-          console.log(changedNewsletters);
-
           Object.entries(changedNewsletters).forEach(([id, newsletter]) => {
             formData.append(`changed[${id}][title]`, newsletter.title);
             formData.append(`changed[${id}][summary]`, newsletter.summary);
@@ -388,6 +479,82 @@
         </div>
         <button type="submit" class="btn btn-primary mb-3">Update</button>
       </form>
+
+      <script>
+        $(document).ready(function() {
+          const form = $("form[action='/admin/home-page?introduction-update=true']");
+
+          const validations = {
+            'introduction-title': {
+              validate: function(value) {
+                return value.length >= 3 && value.length <= 100;
+              },
+              errorMessage: "Title must be between 3 and 100 characters"
+            },
+            'introduction-paragraphs': {
+              validate: function(value) {
+                return value.length >= 10 && value.length <= 1000;
+              },
+              errorMessage: "Content must be between 10 and 1000 characters"
+            }
+          };
+
+          function addErrorMessage(field, message) {
+            const $field = $("#" + field);
+            const errorId = field + "-error";
+
+            if ($("#" + errorId).length === 0) {
+              $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+            }
+
+            $field.addClass("border-red-600");
+          }
+
+          function removeErrorMessage(field) {
+            const $field = $("#" + field);
+            const errorId = field + "-error";
+
+            $("#" + errorId).remove();
+            $field.removeClass("border-red-600");
+          }
+
+          function validateField(field) {
+            const $field = $("#" + field);
+            const value = $field.val();
+            const validation = validations[field];
+
+            if (!validation) return true;
+
+            if (!validation.validate(value)) {
+              addErrorMessage(field, validation.errorMessage);
+              return false;
+            } else {
+              removeErrorMessage(field);
+              return true;
+            }
+          }
+
+          form.on("submit", function(event) {
+            let isValid = true;
+
+            Object.keys(validations).forEach(function(field) {
+              if (!validateField(field)) {
+                isValid = false;
+              }
+            });
+
+            if (!isValid) {
+              event.preventDefault();
+            }
+          });
+
+          Object.keys(validations).forEach(function(field) {
+            $("#" + field).on("input blur", function() {
+              validateField(field);
+            });
+          });
+        });
+      </script>
     </div>
   </section>
 
@@ -428,11 +595,11 @@
               <input type="hidden" id="quoteId" name="quoteId">
               <div class="mb-3">
                 <label for="authorInput" class="form-label">Author</label>
-                <input type="text" class="form-control" id="authorInput" required>
+                <input type="text" class="form-control" id="authorInput" name="author" required>
               </div>
               <div class="mb-3">
                 <label for="quoteInput" class="form-label">Quote</label>
-                <textarea class="form-control" id="quoteInput" rows="3" required></textarea>
+                <textarea class="form-control" id="quoteInput" name="content" rows="3" required></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Save Quote</button>
             </form>
@@ -442,6 +609,80 @@
     </div>
 
     <script>
+      $(document).ready(function() {
+        const form = $("#quoteForm");
+
+        const validations = {
+          authorInput: {
+            validate: function(value) {
+              return value.length >= 2 && value.length <= 50;
+            },
+            errorMessage: "Author must be between 2 and 50 characters"
+          },
+          quoteInput: {
+            validate: function(value) {
+              return value.length >= 10 && value.length <= 200;
+            },
+            errorMessage: "Quote must be between 10 and 200 characters"
+          }
+        };
+
+        function addErrorMessage(field, message) {
+          const $field = $("#" + field);
+          const errorId = field + "-error";
+
+          if ($("#" + errorId).length === 0) {
+            $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+          }
+
+          $field.addClass("border-red-600");
+        }
+
+        function removeErrorMessage(field) {
+          const $field = $("#" + field);
+          const errorId = field + "-error";
+
+          $("#" + errorId).remove();
+          $field.removeClass("border-red-600");
+        }
+
+        function validateField(field) {
+          const $field = $("#" + field);
+          const value = $field.val();
+          const validation = validations[field];
+
+          if (!validation) return true;
+
+          if (!validation.validate(value)) {
+            addErrorMessage(field, validation.errorMessage);
+            return false;
+          } else {
+            removeErrorMessage(field);
+            return true;
+          }
+        }
+
+        form.on("submit", function(event) {
+          let isValid = true;
+
+          Object.keys(validations).forEach(function(field) {
+            if (!validateField(field)) {
+              isValid = false;
+            }
+          });
+
+          if (!isValid) {
+            event.preventDefault();
+          }
+        });
+
+        Object.keys(validations).forEach(function(field) {
+          $("#" + field).on("input blur", function() {
+            validateField(field);
+          });
+        });
+      });
+
       document.addEventListener('DOMContentLoaded', function() {
         const quotesTableBody = document.getElementById('quotesTableBody');
         const quoteModal = new bootstrap.Modal(document.getElementById('quoteModal'));
@@ -517,8 +758,6 @@
         });
 
         quoteForm.addEventListener('submit', function(event) {
-          event.preventDefault();
-
           const index = $('#quoteIndex').val();
           const quoteId = $('#quoteId').val();
           const author = $('#authorInput').val();
