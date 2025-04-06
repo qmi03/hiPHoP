@@ -111,68 +111,173 @@
 $(document).ready(function() {
   const form = $("form[action='/signup']");
   
-  form.on("submit", function(event) {
-    const password = $("#password").val();
-    const rePassword = $("#re-password").val();
+  const validations = {
+    username: {
+      validate: function(value) {
+        return value.trim() !== "" && value.length >= 3;
+      },
+      errorMessage: "Invalid username!"
+    },
+    firstname: {
+      validate: function(value) {
+        return value.trim() !== "";
+      },
+      errorMessage: "Invalid first name!"
+    },
+    lastname: {
+      validate: function(value) {
+        return value.trim() !== "";
+      },
+      errorMessage: "Invalid last name!"
+    },
+    email: {
+      validate: function(value) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+      },
+      errorMessage: "Invalid email!"
+    },
+    password: {
+      validate: function(value) {
+        return value.length >= 6 && value.length <= 256;
+      },
+      errorMessage: "Password length must be between 6 and 256 characters!"
+    },
+    "re-password": {
+      validate: function(value) {
+        return value === $("#password").val();
+      },
+      errorMessage: "Re-entered password does not match!"
+    },
+    dob: {
+      validate: function(value) {
+        if (!value) return false;
+        
+        const date = new Date(value);
+        if (isNaN(date.getTime())) return false;
+        
+        const today = new Date();
+        if (date > today) return false;
+        
+        const minAge = 13;
+        const yearDiff = today.getFullYear() - date.getFullYear();
+        const monthDiff = today.getMonth() - date.getMonth();
+        const dayDiff = today.getDate() - date.getDate();
+        
+        if (yearDiff < minAge || (yearDiff === minAge && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)))) {
+          return false;
+        }
+        
+        return true;
+      },
+      errorMessage: "Invalid date of birth!"
+    },
+    address: {
+      validate: function(value) {
+        return value.trim() !== "" && value.length >= 5;
+      },
+      errorMessage: "Invalid address!"
+    }
+  };
+  
+  function addErrorMessage(field, message) {
+    const $field = $("#" + field);
+    const errorId = field + "-error";
     
-    if (password !== rePassword) {
-      event.preventDefault();
-      
-      const errorMsgExists = $("#re-password-error").length > 0;
-      
-      if (!errorMsgExists) {
-        $("#re-password").after(
-          '<p id="re-password-error" class="text-sm text-red-600">Re-entered password does not match!!</p>'
-        );
+    if ($("#" + errorId).length === 0) {
+      if ($field.closest('.lg\\:grid').length > 0) {
+        $field.after('<div></div><p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+      } else {
+        $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
       }
-      
-      $("#re-password").addClass("border-red-600");
+    }
+    
+    $field.addClass("border-red-600");
+  }
+  
+  function removeErrorMessage(field) {
+    const $field = $("#" + field);
+    const errorId = field + "-error";
+    
+    $("#" + errorId).remove();
+    
+    if ($field.next().is("div") && $field.next().next().attr("id") === errorId) {
+      $field.next().remove();
+    }
+    
+    $field.removeClass("border-red-600");
+  }
+  
+  function validateField(field) {
+    const $field = $("#" + field);
+    const value = $field.val();
+    const validation = validations[field];
+    
+    if (!validation) return true;
+    
+    if (!validation.validate(value)) {
+      addErrorMessage(field, validation.errorMessage);
+      return false;
     } else {
-      $("#re-password-error").remove();
-      
-      $("#re-password").removeClass("border-red-600");
+      removeErrorMessage(field);
+      return true;
+    }
+  }
+  
+  form.on("submit", function(event) {
+    let isValid = true;
+    
+    Object.keys(validations).forEach(function(field) {
+      if (!validateField(field)) {
+        isValid = false;
+      }
+    });
+    
+    if (!isValid) {
+      event.preventDefault();
     }
   });
   
-  $("#re-password").on("input", function() {
-    const password = $("#password").val();
-    const rePassword = $(this).val();
-    
-    if (rePassword !== "" && password !== rePassword) {
-      const errorMsgExists = $("#re-password-error").length > 0;
-      
-      if (!errorMsgExists) {
-        $(this).after(
-          '<p id="re-password-error" class="text-sm text-red-600">Re-entered password does not match!</p>'
-        );
-      }
-      
-      $(this).addClass("border-red-600");
-    } else {
-      $("#re-password-error").remove();
-      
-      $(this).removeClass("border-red-600");
-    }
+  Object.keys(validations).forEach(function(field) {
+    $("#" + field).on("input blur", function() {
+      validateField(field);
+    });
   });
   
   $("#password").on("input", function() {
-    const password = $(this).val();
-    const rePassword = $("#re-password").val();
+    const rePassword = $("#re-password");
+    if (rePassword.val() !== "") {
+      validateField("re-password");
+    }
+  });
+  
+  $("#avatar").on("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) {
+      return;
+    }
     
-    if (rePassword !== "" && password !== rePassword) {
-      const errorMsgExists = $("#re-password-error").length > 0;
+    if (!file.type.match("image.*")) {
+      const errorId = "avatar-error";
       
-      if (!errorMsgExists) {
-        $("#re-password").after(
-          '<p id="re-password-error" class="text-sm text-red-600">Re-entered password does not match!</p>'
-        );
+      if ($("#" + errorId).length === 0) {
+        $("#user-avatar-display").after('<p id="' + errorId + '" class="text-sm text-red-600">Please select a valid image file!</p>');
       }
       
-      $("#re-password").addClass("border-red-600");
+      return;
     } else {
-      $("#re-password-error").remove();
+      $("#avatar-error").remove();
+    }
+    
+    if (file.size > 5 * 1024 * 1024) {
+      const errorId = "avatar-error";
       
-      $("#re-password").removeClass("border-red-600");
+      if ($("#" + errorId).length === 0) {
+        $("#user-avatar-display").after('<p id="' + errorId + '" class="text-sm text-red-600">Image size must be less than 5MB!</p>');
+      }
+      
+      return;
+    } else {
+      $("#avatar-error").remove();
     }
   });
 });
