@@ -16,21 +16,104 @@
 
   <form action="" method="post" class="mt-10 flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="title">Title *</label>
-    <input type="text" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="title">
+    <input type="text" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="title" name="title">
     <label class="mt-5 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="content">Content *</label>
-    <textarea required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="content"></textarea>
+    <textarea required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="content" name="content"></textarea>
     <div></div>
     <div class="mt-5 lg:mt-0 flex items-center justify-start lg:none">
       <input type="submit" value="SEND" class="cursor-pointer text-white text-lg font-bold px-3 py-2 bg-cyan-600 hover:bg-gray-500 transition-colors">
     </div>
   </form>
+
+  <script>
+    $(document).ready(function() {
+      const form = $("form[action='']");
+
+      const validations = {
+        title: {
+          validate: function(value) {
+            return value.length >= 3 && value.length <= 100;
+          },
+          errorMessage: "Title must be between 3 and 100 characters"
+        },
+        content: {
+          validate: function(value) {
+            return value.length >= 10 && value.length <= 1000;
+          },
+          errorMessage: "Content must be between 10 and 1000 characters"
+        }
+      };
+
+      function addErrorMessage(field, message) {
+        const $field = $("#" + field);
+        const errorId = field + "-error";
+
+        if ($("#" + errorId).length === 0) {
+          if ($field.closest('.lg\\:grid').length > 0) {
+            $field.after('<div></div><p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+          } else {
+            $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
+          }
+        }
+
+        $field.addClass("border-red-600");
+      }
+
+      function removeErrorMessage(field) {
+        const $field = $("#" + field);
+        const errorId = field + "-error";
+
+        $("#" + errorId).remove();
+
+        if ($field.next().is("div") && $field.next().next().attr("id") === errorId) {
+          $field.next().remove();
+        }
+
+        $field.removeClass("border-red-600");
+      }
+
+      function validateField(field) {
+        const $field = $("#" + field);
+        const value = $field.val();
+        const validation = validations[field];
+
+        if (!validation) return true;
+
+        if (!validation.validate(value)) {
+          addErrorMessage(field, validation.errorMessage);
+          return false;
+        } else {
+          removeErrorMessage(field);
+          return true;
+        }
+      }
+
+      form.on("submit", function(event) {
+        let isValid = true;
+
+        Object.keys(validations).forEach(function(field) {
+          if (!validateField(field)) {
+            isValid = false;
+          }
+        });
+
+        if (!isValid) {
+          event.preventDefault();
+        }
+      });
+
+      Object.keys(validations).forEach(function(field) {
+        $("#" + field).on("input blur", function() {
+          validateField(field);
+        });
+      });
+    });
+  </script>
 </section>
-
-
 
 <section class="mt-10 bg-white mx-5 lg:mx-20 relative">
   <h2 class="p-5 text-xl text-white text-center bg-pink-500">Find Us on the Map</h2>
   <div id="map" class="flex items-center justify-center">
-    <iframe src="https://maps.google.com/maps?q=<?php echo htmlspecialchars($data['latitude']); ?>,<?php echo htmlspecialchars($data['longitude']); ?>&hl=es;z=14&amp;output=embed" class="w-[100%] min-h-[500px]"></iframe>
+    <iframe src="https://maps.google.com/maps?q=<?php echo htmlspecialchars($data['latitude']); ?>,<?php echo htmlspecialchars($data['longitude']); ?>&hl=es;z=14&output=embed" class="w-[100%] min-h-[500px]"></iframe>
   </div>
 </section>
