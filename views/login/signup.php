@@ -108,4 +108,72 @@
 </section>
 
 <script>
+$(document).ready(function() {
+  const form = $("form[action='/signup']");
+  
+  form.on("submit", function(event) {
+    const password = $("#password").val();
+    const rePassword = $("#re-password").val();
+    
+    if (password !== rePassword) {
+      event.preventDefault();
+      
+      const errorMsgExists = $("#re-password-error").length > 0;
+      
+      if (!errorMsgExists) {
+        $("#re-password").after(
+          '<p id="re-password-error" class="text-sm text-red-600">Re-entered password does not match!!</p>'
+        );
+      }
+      
+      $("#re-password").addClass("border-red-600");
+    } else {
+      $("#re-password-error").remove();
+      
+      $("#re-password").removeClass("border-red-600");
+    }
+  });
+  
+  $("#re-password").on("input", function() {
+    const password = $("#password").val();
+    const rePassword = $(this).val();
+    
+    if (rePassword !== "" && password !== rePassword) {
+      const errorMsgExists = $("#re-password-error").length > 0;
+      
+      if (!errorMsgExists) {
+        $(this).after(
+          '<p id="re-password-error" class="text-sm text-red-600">Re-entered password does not match!</p>'
+        );
+      }
+      
+      $(this).addClass("border-red-600");
+    } else {
+      $("#re-password-error").remove();
+      
+      $(this).removeClass("border-red-600");
+    }
+  });
+  
+  $("#password").on("input", function() {
+    const password = $(this).val();
+    const rePassword = $("#re-password").val();
+    
+    if (rePassword !== "" && password !== rePassword) {
+      const errorMsgExists = $("#re-password-error").length > 0;
+      
+      if (!errorMsgExists) {
+        $("#re-password").after(
+          '<p id="re-password-error" class="text-sm text-red-600">Re-entered password does not match!</p>'
+        );
+      }
+      
+      $("#re-password").addClass("border-red-600");
+    } else {
+      $("#re-password-error").remove();
+      
+      $("#re-password").removeClass("border-red-600");
+    }
+  });
+});
 </script>
