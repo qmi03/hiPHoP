@@ -49,6 +49,6 @@
 #include "/auxiliaries/work_division.typ"
 #pagebreak()
 
-#include "/chapters/main.typ"
+#include "/chapters/index.typ"
 
 #bibliography("/bibliography.yml", title: [References])
