@@ -280,4 +280,92 @@ class InstrumentModel
     }
   }
 
+  /**
+   * Fetch instruments with sorting and filtering.
+   *
+   * @param array $options Sorting and filtering options
+   *
+   * @return Instrument[]
+   */
+  public function fetchInstrumentsWithOptions(array $options = []): array
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+
+      // Default query
+      $query = 'SELECT i.*, it.name AS type_name, it.category FROM instruments i JOIN instrument_types it ON i.type_id = it.id ';
+      $whereConditions = [];
+      $params = [];
+
+      // Filtering options
+      if (isset($options['category'])) {
+        $whereConditions[] = 'it.category = ?';
+        $params[] = $options['category'];
+      }
+
+      if (isset($options['min_price'])) {
+        $whereConditions[] = 'i.price >= ?';
+        $params[] = $options['min_price'];
+      }
+
+      if (isset($options['max_price'])) {
+        $whereConditions[] = 'i.price <= ?';
+        $params[] = $options['max_price'];
+      }
+
+      if (isset($options['in_stock']) && true === $options['in_stock']) {
+        $whereConditions[] = 'i.stock_quantity > 0';
+      }
+
+      if (isset($options['is_rentable'])) {
+        $whereConditions[] = 'i.is_rentable = ?';
+        $params[] = $options['is_rentable'] ? 1 : 0;
+      }
+
+      // Add WHERE clause if conditions exist
+      if (!empty($whereConditions)) {
+        $query .= ' WHERE '.implode(' AND ', $whereConditions);
+      }
+
+      // Sorting options
+      $sortOptions = [
+        'name' => 'i.title',
+        'price' => 'i.price',
+        'stock' => 'i.stock_quantity',
+        'brand' => 'i.brand',
+      ];
+
+      $sortBy = $options['sort_by'] ?? 'id';
+      $sortDirection = $options['sort_direction'] ?? 'ASC';
+
+      // Validate sort column and direction
+      $sortColumn = $sortOptions[$sortBy] ?? 'i.id';
+      $sortDirection = 'DESC' === strtoupper($sortDirection) ? 'DESC' : 'ASC';
+
+      $query .= " ORDER BY {$sortColumn} {$sortDirection}";
+
+      // Pagination
+      $pageNumber = $options['page'] ?? 0;
+      $pageSize = $options['page_size'] ?? 20;
+      $offset = $pageNumber * $pageSize;
+      $query .= ' LIMIT ? OFFSET ?';
+      $params[] = $pageSize;
+      $params[] = $offset;
+
+      // Prepare and execute
+      $stmt = $conn->prepare($query);
+      $stmt->execute($params);
+      $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      return array_map(fn ($instrument) => $this->mapToInstrument($instrument), $instruments);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
 }
