@@ -368,4 +368,38 @@ class InstrumentModel
     }
   }
 
+  /**
+   * Fetch most popular (best-selling) instruments.
+   *
+   * @param int $limit Number of instruments to fetch
+   *
+   * @return Instrument[]
+   */
+  public function fetchMostPopular(int $limit = 10): array
+  {
+    // Note: This would ideally join with a sales/order table
+    // For now, we'll use stock quantity as a proxy for popularity
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('
+                SELECT i.*, it.name AS type_name, it.category 
+                FROM instruments i 
+                JOIN instrument_types it ON i.type_id = it.id 
+                ORDER BY i.stock_quantity ASC 
+                LIMIT ?
+            ');
+      $stmt->execute([$limit]);
+      $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      return array_map(fn ($instrument) => $this->mapToInstrument($instrument), $instruments);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
 }
