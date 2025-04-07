@@ -1,20 +1,16 @@
 <?php
 
-require_once 'models/shop/InstrumentType.php';
-
-require_once 'models/shop/InstrumentCategory.php';
-
 class Instrument
 {
   public int $id;
   public string $title;
-  public string $type;
-  public InstrumentCategory $category;
+  public string $type; // From instrument_types.name
+  public string $category; // From instrument_types.category, now just a string
   public string $brand;
   public ?string $description;
-  public int $price;
+  public float $price; // Using float to match DECIMAL(10,2)
   public int $stockQuantity;
-  public ?int $imgId;
+  public ?string $imgUrl; // Directly store the URL from photos table
   public ?string $serialNumber;
   public bool $isBuyable;
   public bool $isRentable;
@@ -23,12 +19,12 @@ class Instrument
     int $id,
     string $title,
     string $type,
-    InstrumentCategory $category,
+    string $category,
     string $brand,
-    int $price,
+    float $price,
     int $stockQuantity,
     ?string $description = null,
-    ?int $imgId = null,
+    ?string $imgUrl = null,
     ?string $serialNumber = null,
     bool $isBuyable = true,
     bool $isRentable = false
@@ -41,7 +37,7 @@ class Instrument
     $this->price = $price;
     $this->stockQuantity = $stockQuantity;
     $this->description = $description;
-    $this->imgId = $imgId;
+    $this->imgUrl = $imgUrl;
     $this->serialNumber = $serialNumber;
     $this->isBuyable = $isBuyable;
     $this->isRentable = $isRentable;
@@ -57,9 +53,10 @@ class InstrumentModel
     try {
       $conn->beginTransaction();
       $stmt = $conn->prepare('
-                SELECT i.*, it.name AS type_name, it.category 
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url
                 FROM instruments i 
                 JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
                 WHERE i.id = ?
             ');
       $stmt->execute([$id]);
@@ -74,15 +71,15 @@ class InstrumentModel
         $instrument['id'],
         $instrument['title'],
         $instrument['type_name'],
-        InstrumentCategory::from($instrument['category']),
+        $instrument['category'], // Now just a string
         $instrument['brand'],
-        $instrument['price'],
+        (float) $instrument['price'],
         $instrument['stock_quantity'],
         $instrument['description'],
-        $instrument['img_id'],
+        $instrument['img_url'], // Directly use the URL
         $instrument['serial_number'],
-        $instrument['is_buyable'],
-        $instrument['is_rentable']
+        (bool) $instrument['is_buyable'],
+        (bool) $instrument['is_rentable']
       );
     } catch (PDOException $e) {
       $conn->rollBack();
@@ -99,9 +96,10 @@ class InstrumentModel
       $conn->beginTransaction();
       $offset = $pageNumber * $pageSize;
       $stmt = $conn->prepare('
-                SELECT i.*, it.name AS type_name, it.category 
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url
                 FROM instruments i 
                 JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
                 ORDER BY i.id 
                 LIMIT ? OFFSET ?
             ');
@@ -114,15 +112,15 @@ class InstrumentModel
           $instrument['id'],
           $instrument['title'],
           $instrument['type_name'],
-          InstrumentCategory::from($instrument['category']),
+          $instrument['category'],
           $instrument['brand'],
-          $instrument['price'],
+          (float) $instrument['price'],
           $instrument['stock_quantity'],
           $instrument['description'],
-          $instrument['img_id'],
+          $instrument['img_url'],
           $instrument['serial_number'],
-          $instrument['is_buyable'],
-          $instrument['is_rentable']
+          (bool) $instrument['is_buyable'],
+          (bool) $instrument['is_rentable']
         );
       }, $instruments);
     } catch (PDOException $e) {
@@ -140,9 +138,10 @@ class InstrumentModel
       $conn->beginTransaction();
       $offset = $pageNumber * $pageSize;
       $stmt = $conn->prepare('
-                SELECT i.*, it.name AS type_name, it.category 
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url
                 FROM instruments i 
                 JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
                 WHERE i.title LIKE CONCAT("%", ?, "%") OR i.brand LIKE CONCAT("%", ?, "%")
                 ORDER BY i.id 
                 LIMIT ? OFFSET ?
@@ -156,15 +155,15 @@ class InstrumentModel
           $instrument['id'],
           $instrument['title'],
           $instrument['type_name'],
-          InstrumentCategory::from($instrument['category']),
+          $instrument['category'],
           $instrument['brand'],
-          $instrument['price'],
+          (float) $instrument['price'],
           $instrument['stock_quantity'],
           $instrument['description'],
-          $instrument['img_id'],
+          $instrument['img_url'],
           $instrument['serial_number'],
-          $instrument['is_buyable'],
-          $instrument['is_rentable']
+          (bool) $instrument['is_buyable'],
+          (bool) $instrument['is_rentable']
         );
       }, $instruments);
     } catch (PDOException $e) {
@@ -221,7 +220,7 @@ class InstrumentModel
    *
    * @return Instrument[]
    */
-  public function fetchByCategory(InstrumentCategory $category, int $pageNumber, int $pageSize): array
+  public function fetchByCategory(string $category, int $pageNumber, int $pageSize): array
   {
     $conn = Database::getInstance();
 
@@ -229,14 +228,15 @@ class InstrumentModel
       $conn->beginTransaction();
       $offset = $pageNumber * $pageSize;
       $stmt = $conn->prepare('
-                SELECT i.*, it.name AS type_name, it.category 
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url
                 FROM instruments i 
                 JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
                 WHERE it.category = ?
                 ORDER BY i.id 
                 LIMIT ? OFFSET ?
             ');
-      $stmt->execute([$category->value, $pageSize, $offset]);
+      $stmt->execute([$category, $pageSize, $offset]);
       $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
       $conn->commit();
 
@@ -261,9 +261,10 @@ class InstrumentModel
       $conn->beginTransaction();
       $offset = $pageNumber * $pageSize;
       $stmt = $conn->prepare('
-                SELECT i.*, it.name AS type_name, it.category 
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url
                 FROM instruments i 
                 JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
                 WHERE i.is_rentable = TRUE AND i.stock_quantity > 0
                 ORDER BY i.id 
                 LIMIT ? OFFSET ?
@@ -294,12 +295,15 @@ class InstrumentModel
     try {
       $conn->beginTransaction();
 
-      // Default query
-      $query = 'SELECT i.*, it.name AS type_name, it.category FROM instruments i JOIN instrument_types it ON i.type_id = it.id ';
+      $query = '
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url 
+                FROM instruments i 
+                JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
+            ';
       $whereConditions = [];
       $params = [];
 
-      // Filtering options
       if (isset($options['category'])) {
         $whereConditions[] = 'it.category = ?';
         $params[] = $options['category'];
@@ -324,12 +328,10 @@ class InstrumentModel
         $params[] = $options['is_rentable'] ? 1 : 0;
       }
 
-      // Add WHERE clause if conditions exist
       if (!empty($whereConditions)) {
         $query .= ' WHERE '.implode(' AND ', $whereConditions);
       }
 
-      // Sorting options
       $sortOptions = [
         'name' => 'i.title',
         'price' => 'i.price',
@@ -339,14 +341,11 @@ class InstrumentModel
 
       $sortBy = $options['sort_by'] ?? 'id';
       $sortDirection = $options['sort_direction'] ?? 'ASC';
-
-      // Validate sort column and direction
       $sortColumn = $sortOptions[$sortBy] ?? 'i.id';
       $sortDirection = 'DESC' === strtoupper($sortDirection) ? 'DESC' : 'ASC';
 
       $query .= " ORDER BY {$sortColumn} {$sortDirection}";
 
-      // Pagination
       $pageNumber = $options['page'] ?? 0;
       $pageSize = $options['page_size'] ?? 20;
       $offset = $pageNumber * $pageSize;
@@ -354,7 +353,6 @@ class InstrumentModel
       $params[] = $pageSize;
       $params[] = $offset;
 
-      // Prepare and execute
       $stmt = $conn->prepare($query);
       $stmt->execute($params);
       $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -377,16 +375,15 @@ class InstrumentModel
    */
   public function fetchMostPopular(int $limit = 10): array
   {
-    // Note: This would ideally join with a sales/order table
-    // For now, we'll use stock quantity as a proxy for popularity
     $conn = Database::getInstance();
 
     try {
       $conn->beginTransaction();
       $stmt = $conn->prepare('
-                SELECT i.*, it.name AS type_name, it.category 
+                SELECT i.*, it.name AS type_name, it.category, p.url AS img_url
                 FROM instruments i 
                 JOIN instrument_types it ON i.type_id = it.id 
+                LEFT JOIN photos p ON i.img_id = p.id
                 ORDER BY i.stock_quantity ASC 
                 LIMIT ?
             ');
@@ -413,15 +410,15 @@ class InstrumentModel
       $instrument['id'],
       $instrument['title'],
       $instrument['type_name'],
-      InstrumentCategory::from($instrument['category']),
+      $instrument['category'], // Now just a string
       $instrument['brand'],
-      $instrument['price'],
+      (float) $instrument['price'],
       $instrument['stock_quantity'],
       $instrument['description'],
-      $instrument['img_id'],
+      $instrument['img_url'], // Directly use the URL
       $instrument['serial_number'],
-      $instrument['is_buyable'],
-      $instrument['is_rentable']
+      (bool) $instrument['is_buyable'],
+      (bool) $instrument['is_rentable']
     );
   }
 }
