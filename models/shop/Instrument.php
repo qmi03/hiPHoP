@@ -402,4 +402,26 @@ class InstrumentModel
     }
   }
 
+  /**
+   * Map database row to Instrument object.
+   *
+   * @param array $instrument Database row
+   */
+  private function mapToInstrument(array $instrument): Instrument
+  {
+    return new Instrument(
+      $instrument['id'],
+      $instrument['title'],
+      $instrument['type_name'],
+      InstrumentCategory::from($instrument['category']),
+      $instrument['brand'],
+      $instrument['price'],
+      $instrument['stock_quantity'],
+      $instrument['description'],
+      $instrument['img_id'],
+      $instrument['serial_number'],
+      $instrument['is_buyable'],
+      $instrument['is_rentable']
+    );
+  }
 }
