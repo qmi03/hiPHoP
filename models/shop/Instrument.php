@@ -215,4 +215,38 @@ class InstrumentModel
       return 0;
     }
   }
+
+  /**
+   * Fetch instruments by category.
+   *
+   * @return Instrument[]
+   */
+  public function fetchByCategory(InstrumentCategory $category, int $pageNumber, int $pageSize): array
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare('
+                SELECT i.*, it.name AS type_name, it.category 
+                FROM instruments i 
+                JOIN instrument_types it ON i.type_id = it.id 
+                WHERE it.category = ?
+                ORDER BY i.id 
+                LIMIT ? OFFSET ?
+            ');
+      $stmt->execute([$category->value, $pageSize, $offset]);
+      $instruments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      return array_map(fn ($instrument) => $this->mapToInstrument($instrument), $instruments);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
+  /**
 }
