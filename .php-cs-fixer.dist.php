@@ -17,6 +17,7 @@ return (new Config())
   ->setRules([
     '@PhpCsFixer' => true,
     'escape_implicit_backslashes' => false, // Prevent unescaping in strings
+    'single_quote' => true,
   ])
   ->setFinder($finder) // Attach the Finder configuration
 ;
