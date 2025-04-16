@@ -66,11 +66,12 @@ class AdminController
 
   public function users(): void
   {
-    $userPage = (int) $_GET['gallery-page'] + 0;
+    $userPage = (int) $_GET['page'] + 0;
     renderAdminView('views/admin/users.php', [
       'user' => $GLOBALS['user'],
       'paginated_users' => (new UserModel())->fetchPage($userPage, 12),
       'users_count' => (new UserModel())->fetchCount(),
+      'current_page' => $userPage,
     ]);
   }
 
