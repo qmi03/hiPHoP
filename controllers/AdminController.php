@@ -43,6 +43,10 @@ class AdminController
       if ('GET' == $method) {
         $this->contacts();
       }
+    } elseif ('/admin/users/' == $path) {
+      if ('GET' == $method) {
+        $this->users();
+      }
     }
   }
 
@@ -58,6 +62,16 @@ class AdminController
   public function contacts(): void
   {
     renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user']]);
+  }
+
+  public function users(): void
+  {
+    $userPage = (int) $_GET['gallery-page'] + 0;
+    renderAdminView('views/admin/users.php', [
+      'user' => $GLOBALS['user'],
+      'paginated_users' => (new UserModel())->fetchPage($userPage, 12),
+      'users_count' => (new UserModel())->fetchCount(),
+    ]);
   }
 
   public function handleQuoteUpdate(array $formData): void

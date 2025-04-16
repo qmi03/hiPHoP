@@ -25,6 +25,7 @@ $routes = [
   '/admin/contacts/' => new AdminController(),
   '/admin/photo/upload/' => new AdminController(),
   '/admin/photo/search/' => new AdminController(),
+  '/admin/users/' => new AdminController(),
   '/account/' => new AccountController(),
   '/shop/' => new ShopController(),
 ];

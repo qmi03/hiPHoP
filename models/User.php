@@ -48,4 +48,44 @@ class UserModel
       return null;
     }
   }
+
+  public function fetchPage(int $pageNumber, int $pageSize): array
+  {
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare("SELECT * FROM users ORDER BY id LIMIT {$pageSize} OFFSET {$offset}");
+      $stmt->execute();
+      $users = $stmt->fetchAll();
+      $conn->commit();
+
+      return array_map(function ($user) {
+        return new User($user['id'], new DateTime($user['dob']), $user['first_name'], $user['last_name'], $user['address'], $user['email'], $user['username'], $user['avatar_url'], $user['is_admin']);
+      }, $users);
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
+  public function fetchCount(): int
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('SELECT COUNT(*) FROM users');
+      $stmt->execute();
+      $total = $stmt->fetch();
+      $conn->commit();
+
+      return $total[0];
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return 0;
+    }
+  }
 }
