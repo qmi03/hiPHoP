@@ -40,11 +40,18 @@
                   <td><?= $user->username ?></td>
                   <td><?= $user->email ?></td>
                   <td>
-                    <button class="btn btn-sm btn-outline-primary user-edit-btn"
-                      data-user-id="<?= $user->id ?>">Edit</button>
-                    <button class="btn btn-sm btn-outline-warning user-change-pwd-btn"
-                      data-user-id="<?= $user->id ?>">Change
-                      Password</button>
+                    <button
+                      class="btn btn-sm btn-outline-primary user-edit-btn"
+                      onclick="editUser(<?= $user->id ?>)"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      class="btn btn-sm btn-outline-warning user-change-pwd-btn"
+                      onclick="changePwd(<?= $user->id ?>)"
+                    >
+                      Change Password
+                    </button>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -71,9 +78,107 @@
       </div>
     </div>
   </section>
+
+  <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-user-modal-title">Edit user</h5>
+          <button type="button" class="close" aria-label="Close" onclick="hideEditModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-user-form">
+            <input type="hidden" name="id" id="edit-user-id">
+            <div class="form-group">
+              <label for="edit-username">First name</label>
+              <input type="text" class="form-control" id="edit-first-name" name="firstName">
+            </div>
+            <div class="form-group">
+              <label for="edit-username">Last name</label>
+              <input type="text" class="form-control" id="edit-last-name" name="lastName">
+            </div>
+            <div class="form-group">
+              <label for="edit-username">Address</label>
+              <input type="text" class="form-control" id="edit-address" name="address">
+            </div>
+            <div class="form-group">
+              <label for="edit-username">Day of birth</label>
+              <input type="date" class="form-control" id="edit-dob" name="dob">
+            </div>
+            <div class="form-group">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="edit-is-admin" name="isAdmin">
+                <label class="form-check-label" for="edit-is-admin">
+                  Is admin
+                </label>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="hideEditModal()">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitEditUser()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
 const pageData = <?= json_encode($data) ?>;
 console.log(pageData);
+
+function populateForm(form, data) {
+  $.each(data, function(key, value) {
+    var element = $('[name="' + key + '"]', form);
+    if (element.length > 0) {
+      if (element.is(':checkbox')) {
+        element.prop('checked', value);
+      } else if (element.is(':radio')) {
+        element.filter('[value="' + value + '"]').prop('checked', true);
+      } else if (element.is('select')) {
+        element.val(value).change();
+      } else if (element.is('input[type="date"]')) {
+        element.val(value.date.split(' ')[0]);
+      } else {
+        element.val(value);
+      }
+    }
+  });
+}
+
+function editUser(userId) {
+  const user = pageData.paginatedUsers.find(user => user.id === userId);
+  if (!user) {
+    return;
+  }
+  $('#edit-user-modal-title').text(`Edit "${user.username}" (${user.email})`);
+  populateForm('#edit-user-form', user);
+  $('#edit-user-modal').modal('show');
+}
+function hideEditModal() {
+  $('#edit-user-modal').modal('hide');
+}
+function submitEditUser() {
+  const form = $('#edit-user-form');
+  const data = form.serializeArray().reduce((obj, item) => {
+    obj[item.name] = item.value;
+    return obj;
+  }, {});
+  console.log(data);
+  fetch('/admin/users?user-update=true', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(() => location.reload());
+}
+
+function changePwd(userId) {
+  console.log('---> change password for userId', userId);
+}
 </script>

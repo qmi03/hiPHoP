@@ -141,4 +141,23 @@ class UserModel
       return 0;
     }
   }
+
+  public function update(int $id, string $firstName, string $lastName, string $address, DateTime $dob, bool $isAdmin): void
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('
+        UPDATE users
+        SET first_name = ?, last_name = ?, address = ?, dob = ?, is_admin = ?
+        WHERE id = ?
+      ');
+      $stmt->execute([$firstName, $lastName, $address, $dob->format('Y-m-d'), (int) $isAdmin, $id]);
+      $conn->commit();
+    } catch (PDOException $e) {
+      print_r($e);
+      $conn->rollBack();
+    }
+  }
 }

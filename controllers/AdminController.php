@@ -46,6 +46,10 @@ class AdminController
     } elseif ('/admin/users/' == $path) {
       if ('GET' == $method) {
         $this->users();
+      } else if ('POST' == $method && $_REQUEST['user-update']) {
+        $this->handleUserUpdate(json_decode(file_get_contents("php://input"), true));
+      } elseif ('POST' == $method && $_REQUEST['user-change-pwd']) {
+        $this->handleUserChangePwd($_POST);
       }
     }
   }
@@ -270,5 +274,18 @@ class AdminController
     }
 
     header('Location: /admin');
+  }
+
+  public function handleUserUpdate(array $formData): void
+  {
+    $userModel = new UserModel();
+    $userModel->update(
+      id: $formData['id'],
+      firstName: $formData['firstName'],
+      lastName: $formData['lastName'],
+      address: $formData['address'],
+      dob: new DateTime($formData['dob']),
+      isAdmin: array_key_exists('isAdmin', $formData)
+    );
   }
 }
