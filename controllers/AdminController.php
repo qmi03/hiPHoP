@@ -48,8 +48,8 @@ class AdminController
         $this->users();
       } else if ('POST' == $method && $_REQUEST['user-update']) {
         $this->handleUserUpdate(json_decode(file_get_contents("php://input"), true));
-      } elseif ('POST' == $method && $_REQUEST['user-change-pwd']) {
-        $this->handleUserChangePwd($_POST);
+      } elseif ('POST' == $method && $_REQUEST['user-change-password']) {
+        $this->handleUserChangePassword(json_decode(file_get_contents("php://input"), true));
       }
     }
   }
@@ -286,6 +286,15 @@ class AdminController
       address: $formData['address'],
       dob: new DateTime($formData['dob']),
       isAdmin: array_key_exists('isAdmin', $formData)
+    );
+  }
+
+  public function handleUserChangePassword(array $formData): void
+  {
+    $userModel = new UserModel();
+    $userModel->changePassword(
+      id: $formData['id'],
+      password: $formData['password'],
     );
   }
 }

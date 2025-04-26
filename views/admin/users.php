@@ -13,7 +13,14 @@
               d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
           <form method="get" action="/admin/users" style="width: 100%">
-            <input type="search" class="form-control" style="width: 100%" placeholder="Search username/email" name="query">
+            <input
+              type="search"
+              class="form-control"
+              style="width: 100%"
+              placeholder="Search username/email"
+              name="query"
+              value="<?= htmlspecialchars($data['query']) ?>" 
+            />
             <input type="submit" hidden />
           </form>
         </div>
@@ -47,8 +54,8 @@
                       Edit
                     </button>
                     <button
-                      class="btn btn-sm btn-outline-warning user-change-pwd-btn"
-                      onclick="changePwd(<?= $user->id ?>)"
+                      class="btn btn-sm btn-outline-success user-change-pwd-btn"
+                      onclick="changePassword(<?= $user->id ?>)"
                     >
                       Change Password
                     </button>
@@ -124,6 +131,36 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="edit-user-password-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-password-modal-title" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="edit-user-password-modal-title">Change password</h5>
+          <button type="button" class="close" aria-label="Close" onclick="hidePasswordModal()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-user-password-form">
+            <input type="hidden" name="id" id="edit-user-password-id">
+            <div class="form-group">
+              <label for="edit-password">Password</label>
+              <input type="password" class="form-control" id="edit-password" name="password">
+            </div>
+            <div class="form-group">
+              <label for="edit-confirm-password">Confirm password</label>
+              <input type="password" class="form-control" id="edit-confirm-password" name="passwordConfirm">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="hidePasswordModal()">Close</button>
+          <button type="button" class="btn btn-primary" onclick="submitChangePassword()">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -167,7 +204,6 @@ function submitEditUser() {
     obj[item.name] = item.value;
     return obj;
   }, {});
-  console.log(data);
   fetch('/admin/users?user-update=true', {
     method: 'POST',
     headers: {
@@ -178,7 +214,35 @@ function submitEditUser() {
     .then(() => location.reload());
 }
 
-function changePwd(userId) {
-  console.log('---> change password for userId', userId);
+function changePassword(userId) {
+  const user = pageData.paginatedUsers.find(user => user.id === userId);
+  if (!user) {
+    return;
+  }
+  $('#edit-user-password-modal-title').text(`Change password for "${user.username}" (${user.email})`);
+  populateForm('#edit-user-password-form', {
+    id: user.id,
+    password: '',
+    passwordConfirm: '',
+  });
+  $('#edit-user-password-modal').modal('show');
+}
+function hidePasswordModal() {
+  $('#edit-user-password-modal').modal('hide');
+}
+function submitChangePassword() {
+  const form = $('#edit-user-password-form');
+  const data = form.serializeArray().reduce((obj, item) => {
+    obj[item.name] = item.value;
+    return obj;
+  }, {});
+  fetch('/admin/users?user-change-pwd=true', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+    .then(() => location.reload());
 }
 </script>

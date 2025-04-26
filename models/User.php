@@ -160,4 +160,23 @@ class UserModel
       $conn->rollBack();
     }
   }
+
+  public function changePassword(int $id, string $password): void
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('
+        UPDATE users
+        SET password = ?
+        WHERE id = ?
+      ');
+      $stmt->execute([password_hash($password, PASSWORD_BCRYPT), $id]);
+      $conn->commit();
+    } catch (PDOException $e) {
+      print_r($e);
+      $conn->rollBack();
+    }
+  }
 }
