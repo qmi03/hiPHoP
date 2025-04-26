@@ -66,12 +66,24 @@ class AdminController
 
   public function users(): void
   {
+    $userQuery = $_GET['query'] ?? '';
     $userPage = (int) $_GET['page'] + 0;
+
+    $userModel = new UserModel();
+    $paginatedUsers = $userQuery === ''
+      ? $userModel->fetchPage($userPage, 12)
+      : $userModel->fetchPageByKeyword($userQuery, $userPage, 12);
+    $usersCount = $userQuery === ''
+      ? $userModel->fetchCount()
+      : $userModel->fetchCountByKeyword($userQuery);
+
     renderAdminView('views/admin/users.php', [
       'user' => $GLOBALS['user'],
-      'paginated_users' => (new UserModel())->fetchPage($userPage, 12),
-      'users_count' => (new UserModel())->fetchCount(),
-      'current_page' => $userPage,
+      'paginatedUsers' => $paginatedUsers,
+      'query' => $userQuery,
+      'usersCount' => $usersCount,
+      'currentPage' => $userPage,
+      'totalPages' => (int) ($usersCount / 12),
     ]);
   }
 

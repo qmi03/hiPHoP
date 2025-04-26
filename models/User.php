@@ -55,15 +55,44 @@ class UserModel
     try {
       $conn->beginTransaction();
       $offset = $pageNumber * $pageSize;
-      $stmt = $conn->prepare("SELECT * FROM users ORDER BY id LIMIT {$pageSize} OFFSET {$offset}");
+      $stmt = $conn->prepare('SELECT * FROM users ORDER BY id LIMIT :limit OFFSET :offset');
+      $stmt->bindValue(':limit', $pageSize, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
       $stmt->execute();
-      $users = $stmt->fetchAll();
+      $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       $conn->commit();
 
-      return array_map(function ($user) {
-        return new User($user['id'], new DateTime($user['dob']), $user['first_name'], $user['last_name'], $user['address'], $user['email'], $user['username'], $user['avatar_url'], $user['is_admin']);
-      }, $users);
+      return array_map(fn($user) => new User($user['id'], new DateTime($user['dob']), $user['first_name'], $user['last_name'], $user['address'], $user['email'], $user['username'], $user['avatar_url'], $user['is_admin']), $users);
     } catch (PDOException $e) {
+      print_r($e);
+      $conn->rollBack();
+
+      return [];
+    }
+  }
+
+  public function fetchPageByKeyword(string $keyword, int $pageNumber, int $pageSize): array
+  {
+    $conn = Database::getInstance();
+    try {
+      $conn->beginTransaction();
+      $offset = $pageNumber * $pageSize;
+      $stmt = $conn->prepare('
+        SELECT *
+        FROM users
+        WHERE username LIKE :keyword OR email LIKE :keyword
+        ORDER BY id LIMIT :limit OFFSET :offset
+      ');
+      $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+      $stmt->bindValue(':limit', $pageSize, PDO::PARAM_INT);
+      $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+      $stmt->execute();
+      $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      $conn->commit();
+
+      return array_map(fn($user) => new User($user['id'], new DateTime($user['dob']), $user['first_name'], $user['last_name'], $user['address'], $user['email'], $user['username'], $user['avatar_url'], $user['is_admin']), $users);
+    } catch (PDOException $e) {
+      print_r($e);
       $conn->rollBack();
 
       return [];
@@ -77,6 +106,30 @@ class UserModel
     try {
       $conn->beginTransaction();
       $stmt = $conn->prepare('SELECT COUNT(*) FROM users');
+      $stmt->execute();
+      $total = $stmt->fetch();
+      $conn->commit();
+
+      return $total[0];
+    } catch (PDOException $e) {
+      $conn->rollBack();
+
+      return 0;
+    }
+  }
+
+  public function fetchCountByKeyword(string $keyword): int
+  {
+    $conn = Database::getInstance();
+
+    try {
+      $conn->beginTransaction();
+      $stmt = $conn->prepare('
+        SELECT COUNT(*)
+        FROM users
+        WHERE username LIKE :keyword OR email LIKE :keyword
+      ');
+      $stmt->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
       $stmt->execute();
       $total = $stmt->fetch();
       $conn->commit();

@@ -19,9 +19,9 @@
         </div>
       </div>
       <div class="card-body">
-        <?php if (0 == $data['users_count']) { ?>
+        <?php if (0 == $data['usersCount']) { ?>
           <p>No user found!</p>
-        <?php } elseif (0 == count($data['paginated_users'])) { ?>
+        <?php } elseif (0 == count($data['paginatedUsers'])) { ?>
           <p>No user on this page!</p>
         <?php } else { ?>
           <table id="users-table" class="table table-hover mb-0">
@@ -34,7 +34,7 @@
               </tr>
             </thead>
             <tbody id="users-table-body">
-              <?php foreach ($data['paginated_users'] as $user): ?>
+              <?php foreach ($data['paginatedUsers'] as $user): ?>
                 <tr>
                   <td><?= $user->id ?></td>
                   <td><?= $user->username ?></td>
@@ -45,8 +45,6 @@
                     <button class="btn btn-sm btn-outline-warning user-change-pwd-btn"
                       data-user-id="<?= $user->id ?>">Change
                       Password</button>
-                    <button class="btn btn-sm btn-outline-danger user-delete-btn"
-                      data-user-id="<?= $user->id ?>">Delete</button>
                   </td>
                 </tr>
               <?php endforeach; ?>
@@ -62,7 +60,7 @@
             </a>
           </li>
           <li class="page-item">
-            <a class="page-link" href="<?= $_SERVER['PATH'] ?>"><?= $data['current_page'] + 1 ?></a>
+            <a class="page-link" href="<?= $_SERVER['PATH'] ?>"><?= $data['currentPage'] + 1 ?></a>
           </li>
           <li class="page-item" id="page-item-right">
             <a class="page-link cursor-pointer">
@@ -76,8 +74,6 @@
 </div>
 
 <script>
-  const users = <?= json_encode($data['paginated_users']) ?>;
-  const users_count = <?= json_encode($data['users_count']) ?>;
-  console.log(users)
-  console.log(users_count)
+const pageData = <?= json_encode($data) ?>;
+console.log(pageData);
 </script>
