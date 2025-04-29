@@ -75,8 +75,8 @@ class AdminController
 
     $userModel = new UserModel();
     $paginatedUsers = $userQuery === ''
-      ? $userModel->fetchPage($userPage, 12)
-      : $userModel->fetchPageByKeyword($userQuery, $userPage, 12);
+      ? $userModel->fetchPage($userPage, 6)
+      : $userModel->fetchPageByKeyword($userQuery, $userPage, 6);
     $usersCount = $userQuery === ''
       ? $userModel->fetchCount()
       : $userModel->fetchCountByKeyword($userQuery);
@@ -87,7 +87,7 @@ class AdminController
       'query' => $userQuery,
       'usersCount' => $usersCount,
       'currentPage' => $userPage,
-      'totalPages' => (int) ($usersCount / 12),
+      'totalPages' => (int) (ceil($usersCount / 6)),
     ]);
   }
 

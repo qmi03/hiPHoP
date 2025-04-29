@@ -73,9 +73,9 @@
               <span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
             </a>
           </li>
-          <li class="page-item">
-            <a class="page-link" href="<?= $_SERVER['PATH'] ?>"><?= $data['currentPage'] + 1 ?></a>
-          </li>
+          <li class="page-item hidden" id="page-item-1"><a class="page-link" href="#"></a></li>
+          <li class="page-item hidden" id="page-item-2"><a class="page-link" href="#"></a></li>
+          <li class="page-item hidden" id="page-item-3"><a class="page-link" href="#"></a></li>
           <li class="page-item" id="page-item-right">
             <a class="page-link cursor-pointer">
               <span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
@@ -245,4 +245,45 @@ function submitChangePassword() {
   })
     .then(() => location.reload());
 }
+
+function updateNavigation() {
+  const baseUrl = pageData.query
+    ? `/admin/users?query=${encodeURIComponent(pageData.query)}&page=`
+    : '/admin/users?page='
+
+  console.log('---> baseUrl', baseUrl);
+  const prev = $('#page-item-left')
+  if (pageData.currentPage > 0) {
+    prev.children('a').attr('href', `${baseUrl}${pageData.currentPage - 1}`);
+  } else {
+    prev.addClass('disabled');
+  }
+  const next = $('#page-item-right')
+  if (pageData.currentPage < pageData.totalPages - 1) {
+    next.children('a').attr('href', `${baseUrl}${pageData.currentPage + 1}`);
+  } else {
+    next.addClass('disabled');
+  }
+  const pages = [$('#page-item-1'), $('#page-item-2'), $('#page-item-3')]
+  const startPage = Math.max(pageData.currentPage - 3, 0);
+  pages.forEach((page, idx) => {
+    const pageNumber = startPage + idx;
+    if (pageNumber < pageData.totalPages) {
+      page.removeClass('hidden');
+      page.children('a').text(pageNumber + 1);
+      page.children('a').attr('href', `${baseUrl}${pageNumber}`);
+    } else {
+      page.addClass('hidden');
+    }
+    if (pageNumber === pageData.currentPage) {
+      page.addClass('active');
+    } else {
+      page.removeClass('active');
+    }
+  })
+}
+
+$(document).ready(function() {
+  updateNavigation();
+})
 </script>
