@@ -156,7 +156,6 @@ class UserModel
       $stmt->execute([$firstName, $lastName, $address, $dob->format('Y-m-d'), (int) $isAdmin, $id]);
       $conn->commit();
     } catch (PDOException $e) {
-      print_r($e);
       $conn->rollBack();
     }
   }
@@ -175,7 +174,6 @@ class UserModel
       $stmt->execute([password_hash($password, PASSWORD_BCRYPT), $id]);
       $conn->commit();
     } catch (PDOException $e) {
-      print_r($e);
       $conn->rollBack();
     }
   }

@@ -165,7 +165,6 @@
 
 <script>
 const pageData = <?= json_encode($data) ?>;
-console.log(pageData);
 
 function populateForm(form, data) {
   $.each(data, function(key, value) {
@@ -251,7 +250,6 @@ function updateNavigation() {
     ? `/admin/users?query=${encodeURIComponent(pageData.query)}&page=`
     : '/admin/users?page='
 
-  console.log('---> baseUrl', baseUrl);
   const prev = $('#page-item-left')
   if (pageData.currentPage > 0) {
     prev.children('a').attr('href', `${baseUrl}${pageData.currentPage - 1}`);
