@@ -170,16 +170,17 @@ class ContactMessageModel
     }
   }
 
-  public function create(int $userId, string $message): bool
+  public function create(int $userId, string $title, string $message): bool
   {
     $conn = Database::getInstance();
     try {
       $conn->beginTransaction();
       $stmt = $conn->prepare('
-        INSERT INTO contact_messages (user_id, message)
-        VALUES (:userId, :message)
+        INSERT INTO contact_messages (user_id, title, message)
+        VALUES (:userId, :title, :message)
       ');
       $stmt->bindValue(':userId', $userId, PDO::PARAM_INT);
+      $stmt->bindValue(':title', $title, PDO::PARAM_STR);
       $stmt->bindValue(':message', $message, PDO::PARAM_STR);
       $stmt->execute();
       $conn->commit();
