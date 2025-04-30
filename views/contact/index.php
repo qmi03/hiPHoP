@@ -125,7 +125,7 @@
       <tr>
         <th scope="col" class="px-6 py-3">Title</th>
         <th scope="col" class="px-6 py-3">Created At</th>
-        <th scope="col" class="px-6 py-3">Responded At</th>
+        <th scope="col" class="px-6 py-3">Replied At</th>
         <th scope="col" class="px-6 py-3"></th>
       </tr>
     </thead>

@@ -4,6 +4,7 @@ require_once 'views/index.php';
 
 require_once 'models/Photo.php';
 require_once 'models/home/NewsLetter.php';
+require_once 'models/ContactMessage.php';
 
 class AdminController
 {
@@ -65,7 +66,19 @@ class AdminController
 
   public function contacts(): void
   {
-    renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user']]);
+    $contactPage = (int) $_GET['page'] + 0;
+
+    $contactMessageModel = new ContactMessageModel();
+    $paginatedMessages = $contactMessageModel->fetchPage($contactPage, 6);
+    $messagesCount = $contactMessageModel->count();
+
+    renderAdminView('views/admin/contacts.php', [
+      'user' => $GLOBALS['user'],
+      'paginatedMessages' => $paginatedMessages,
+      'messagesCount' => $messagesCount,
+      'currentPage' => $contactPage,
+      'totalPages' => (int) (ceil($messagesCount / 6)),
+    ]);
   }
 
   public function users(): void
