@@ -19,7 +19,7 @@
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="title">Title *</label>
     <input type="text" required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="title" name="title">
     <label class="mt-5 text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="content">Content *</label>
-    <textarea required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="content" name="content"></textarea>
+    <textarea required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="message" name="message"></textarea>
     <div></div>
     <div class="mt-5 lg:mt-0 flex items-center justify-start lg:none">
       <input type="submit" value="SEND" class="cursor-pointer text-white text-lg font-bold px-3 py-2 bg-cyan-600 hover:bg-gray-500 transition-colors">
@@ -37,7 +37,7 @@
           },
           errorMessage: "Title must be between 3 and 100 characters"
         },
-        content: {
+        message: {
           validate: function(value) {
             return value.length >= 10 && value.length <= 1000;
           },
