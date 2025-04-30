@@ -142,7 +142,10 @@
             <?= $message->respondedAt == null ? '-' : $message->respondedAt->format('Y-m-d H:i') ?>
           </td>
           <td class="px-6 py-4">
-            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+            <a
+              href="/contact/messages?id=<?= $message->id ?>"
+              class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+            >View</a>
           </td>
         </tr>
       <?php endforeach; ?>
@@ -190,11 +193,6 @@
       </li>
     </ul>
   </nav>
-
-  <script>
-    const pageData = <?= json_encode($data); ?>;
-    console.log('---> pageData', pageData);
-  </script>
 </section>
 <?php endif; ?>
 

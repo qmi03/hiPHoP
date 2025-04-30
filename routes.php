@@ -20,6 +20,7 @@ $routes = [
   '/signup/' => new LoginController(),
   '/login/forgot-password/' => new LoginController(),
   '/contact/' => new ContactController(),
+  '/contact/messages/' => new ContactController(),
   '/admin/' => new AdminController(),
   '/admin/home-page/' => new AdminController(),
   '/admin/contacts/' => new AdminController(),

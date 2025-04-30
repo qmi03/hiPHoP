@@ -14,6 +14,8 @@ class ContactController
       $this->index();
     } else if ('/contact/' == $path && 'POST' == $method && $_SESSION['isLoggedIn']) {
       $this->handleContactForm($_POST);
+    } else if ('/contact/messages/' == $path && 'GET' == $method) {
+      $this->viewMessage($_GET['id'] ?? 0);
     } else {
       renderView('views/404.php', []);
     }
@@ -62,6 +64,25 @@ class ContactController
     }
     header('Location: /contact');
     exit();
+  }
+
+  public function viewMessage(int $id): void
+  {
+    print_r($id);
+    if (!$_SESSION['isLoggedIn']) {
+      renderView('views/404.php', []);
+      return;
+    }
+    $contactMessageModel = new ContactMessageModel();
+    $message = $contactMessageModel->fetchById($id);
+    if ($message == null || $message->userId != $_SESSION['id']) {
+      renderView('views/404.php', []);
+      return;
+    }
+
+    renderView('views/contact/view-message.php', [
+      'message' => $message
+    ]);
   }
 }
 
