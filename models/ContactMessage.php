@@ -8,17 +8,20 @@ class ContactMessage
 
   public string $username;
 
+  public string $title;
+
   public string $message;
 
   public ?string $response;
 
   public ?DateTime $respondedAt;
 
-  public function __construct(int $id, int $userId, string $username, string $message, ?string $response = null, ?DateTime $respondedAt = null)
+  public function __construct(int $id, int $userId, string $username, string $title, string $message, ?string $response = null, ?DateTime $respondedAt = null)
   {
     $this->id = $id;
     $this->userId = $userId;
     $this->username = $username;
+    $this->title = $title;
     $this->message = $message;
     $this->response = $response;
     $this->respondedAt = $respondedAt;
@@ -52,6 +55,7 @@ class ContactMessageModel
         id: $message['id'],
         userId: $message['user_id'],
         username: $message['username'],
+        title: $message['title'],
         message: $message['message'],
         response: $message['response'],
         respondedAt: new DateTime($message['responded_at'])
@@ -86,6 +90,7 @@ class ContactMessageModel
         id: $message['id'],
         userId: $message['user_id'],
         username: $message['username'],
+        title: $message['title'],
         message: $message['message'],
         response: $message['response'],
         respondedAt: new DateTime($message['responded_at'])
@@ -138,6 +143,7 @@ class ContactMessageModel
         id: $message['id'],
         userId: $message['user_id'],
         username: $message['username'],
+        title: $message['title'],
         message: $message['message'],
         response: $message['response'],
         respondedAt: new DateTime($message['responded_at'])

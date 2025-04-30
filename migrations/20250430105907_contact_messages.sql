@@ -7,6 +7,7 @@ CREATE TABLE contact_messages (
   id INT PRIMARY KEY AUTO_INCREMENT,
   user_id INT NOT NULL,
   FOREIGN KEY (user_id) REFERENCES users(id),
+  title VARCHAR(255) NOT NULL,
   message TEXT NOT NULL,
   response TEXT NULL,
   responded_at TIMESTAMP NULL,
