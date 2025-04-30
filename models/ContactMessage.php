@@ -16,7 +16,9 @@ class ContactMessage
 
   public ?DateTime $respondedAt;
 
-  public function __construct(int $id, int $userId, string $username, string $title, string $message, ?string $response = null, ?DateTime $respondedAt = null)
+  public DateTime $createdAt;
+
+  public function __construct(int $id, int $userId, string $username, string $title, DateTime $createdAt, string $message, ?string $response = null, ?DateTime $respondedAt = null)
   {
     $this->id = $id;
     $this->userId = $userId;
@@ -25,6 +27,7 @@ class ContactMessage
     $this->message = $message;
     $this->response = $response;
     $this->respondedAt = $respondedAt;
+    $this->createdAt = $createdAt;
   }
 }
 
@@ -57,8 +60,9 @@ class ContactMessageModel
         username: $message['username'],
         title: $message['title'],
         message: $message['message'],
+        createdAt: new DateTime($message['created_at']),
         response: $message['response'],
-        respondedAt: new DateTime($message['responded_at'])
+        respondedAt: $message['responded_at'] != null ? new DateTime($message['responded_at']) : null
       );
     } catch (PDOException $e) {
       return null;
@@ -92,8 +96,9 @@ class ContactMessageModel
         username: $message['username'],
         title: $message['title'],
         message: $message['message'],
+        createdAt: new DateTime($message['created_at']),
         response: $message['response'],
-        respondedAt: new DateTime($message['responded_at'])
+        respondedAt: $message['responded_at'] != null ? new DateTime($message['responded_at']) : null
       ), $messages);
     } catch (PDOException $e) {
       $conn->rollBack();
@@ -145,8 +150,9 @@ class ContactMessageModel
         username: $message['username'],
         title: $message['title'],
         message: $message['message'],
+        createdAt: new DateTime($message['created_at']),
         response: $message['response'],
-        respondedAt: new DateTime($message['responded_at'])
+        respondedAt: $message['responded_at'] != null ? new DateTime($message['responded_at']) : null
       ), $messages);
     } catch (PDOException $e) {
       $conn->rollBack();

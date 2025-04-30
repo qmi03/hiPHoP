@@ -23,9 +23,31 @@ class ContactController
   public function index(): void
   {
     $contact = (new ContactModel())->fetch();
-    renderView('views/contact/index.php', [
+
+    $data = [
       'contact' => $contact
-    ]);
+    ];
+
+    if ($_SESSION['isLoggedIn']) {
+      $contactMessageModel = new ContactMessageModel();
+
+      $page = max((int) $_GET['page'] + 0, 0);
+
+      $paginatedMessages = $contactMessageModel->fetchPageByUserId($_SESSION['id'], $page, 6);
+      $messagesCount = $contactMessageModel->countByUserId($_SESSION['id']);
+      $totalPages = ceil($messagesCount / 6);
+      $startPage = min(max($totalPages - 1 - 3, 0), $page);
+      $endPage = min($startPage + 3, $totalPages - 1);
+
+      $data['paginatedMessages'] = $paginatedMessages;
+      $data['messagesCount'] = $messagesCount;
+      $data['currentPage'] = $page;
+      $data['startPage'] = $startPage;
+      $data['endPage'] = $endPage;
+      $data['totalPages'] = $totalPages;
+    }
+
+    renderView('views/contact/index.php', $data);
   }
 
   public function handleContactForm(array $data): void

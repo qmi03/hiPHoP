@@ -111,6 +111,93 @@
     });
   </script>
 </section>
+
+<?php if ($data['messagesCount'] > 0): ?>
+<section class="mt-10 bg-white mx-5 lg:mx-20 p-10 relative text-lg">
+  <div>
+  </div>
+
+  <table class="w-full text-left">
+    <caption class="p-5 text-lg font-semibold text-left text-gray-900 bg-white ">
+      Your messages
+    </caption>
+    <thead class="text-gray-700 uppercase bg-gray-50">
+      <tr>
+        <th scope="col" class="px-6 py-3">Title</th>
+        <th scope="col" class="px-6 py-3">Created At</th>
+        <th scope="col" class="px-6 py-3">Responded At</th>
+        <th scope="col" class="px-6 py-3"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($data['paginatedMessages'] as $message): ?>
+        <tr class="bg-white border-b border-gray-200">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+            <?= $message->title ?>
+          </th>
+          <td class="px-6 py-4">
+            <?= $message->createdAt->format('Y-m-d H:i') ?>
+          </td>
+          <td class="px-6 py-4">
+            <?= $message->respondedAt == null ? '-' : $message->respondedAt->format('Y-m-d H:i') ?>
+          </td>
+          <td class="px-6 py-4">
+            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+
+  <nav class="mt-5">
+    <ul class="inline-flex -space-x-px text-base h-10">
+      <li id="page-item-left">
+        <?php if ($data['currentPage'] == 0): ?>
+          <a class="flex items-center justify-center border border-gray-300 px-4 h-10 text-gray-400">Previous</a>
+        <?php else: ?>
+          <a
+            class="flex items-center justify-center border border-gray-300 px-4 h-10 hover:text-pink-600 hove1"
+            href="/contact?page=<?= $pageData['currentPage'] - 1 ?>"
+          >Previous</a>
+        <?php endif; ?>
+      </li>
+      <?php for ($i = $data['startPage']; $i <= $data['endPage']; $i++): ?>
+        <li id="page-item-<?= $i ?>">
+          <?php if ($i == $data['currentPage']): ?>
+            <a
+              class="flex items-center justify-center border border-gray-300 px-4 h-10 text-white bg-cyan-600">
+              <?= $i + 1 ?>
+            </a>
+          <?php else: ?>
+          <a
+            class="flex items-center justify-center border border-gray-300 px-4 h-10 hover:text-pink-600 hove1"
+            href="/contact?page=<?= $i ?>"
+          >
+            <?= $i + 1 ?>
+          </a>
+          <?php endif; ?>
+        </li>
+      <?php endfor; ?>
+      <li class="page-item-right">
+        <?php if ($data['currentPage'] == $data['totalPages'] - 1): ?>
+          <a class="flex items-center justify-center border border-gray-300 px-4 h-10 text-gray-400">Next</a>
+        <?php else: ?>
+          <a
+            class="flex items-center justify-center border border-gray-300 px-4 h-10 hover:text-pink-600"
+            href="/contact?page=<?= $pageData['currentPage'] + 1 ?>"
+          >Next</a>
+        <?php endif; ?>
+      </li>
+    </ul>
+  </nav>
+
+  <script>
+    const pageData = <?= json_encode($data); ?>;
+    console.log('---> pageData', pageData);
+  </script>
+</section>
+<?php endif; ?>
+
 <?php endif; ?>
 
 <section class="mt-10 bg-white mx-5 lg:mx-20 relative">
