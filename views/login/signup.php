@@ -110,7 +110,7 @@
 <script>
 $(document).ready(function() {
   const form = $("form[action='/signup']");
-  
+
   const validations = {
     username: {
       validate: function(value) {
@@ -151,22 +151,22 @@ $(document).ready(function() {
     dob: {
       validate: function(value) {
         if (!value) return false;
-        
+
         const date = new Date(value);
         if (isNaN(date.getTime())) return false;
-        
+
         const today = new Date();
         if (date > today) return false;
-        
+
         const minAge = 13;
         const yearDiff = today.getFullYear() - date.getFullYear();
         const monthDiff = today.getMonth() - date.getMonth();
         const dayDiff = today.getDate() - date.getDate();
-        
+
         if (yearDiff < minAge || (yearDiff === minAge && (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)))) {
           return false;
         }
-        
+
         return true;
       },
       errorMessage: "Invalid date of birth!"
@@ -178,11 +178,11 @@ $(document).ready(function() {
       errorMessage: "Invalid address!"
     }
   };
-  
+
   function addErrorMessage(field, message) {
     const $field = $("#" + field);
     const errorId = field + "-error";
-    
+
     if ($("#" + errorId).length === 0) {
       if ($field.closest('.lg\\:grid').length > 0) {
         $field.after('<div></div><p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
@@ -190,30 +190,29 @@ $(document).ready(function() {
         $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
       }
     }
-    
+
     $field.addClass("border-red-600");
   }
-  
+
   function removeErrorMessage(field) {
     const $field = $("#" + field);
     const errorId = field + "-error";
-    
-    $("#" + errorId).remove();
-    
+
     if ($field.next().is("div") && $field.next().next().attr("id") === errorId) {
       $field.next().remove();
     }
-    
+    $("#" + errorId).remove();
+
     $field.removeClass("border-red-600");
   }
-  
+
   function validateField(field) {
     const $field = $("#" + field);
     const value = $field.val();
     const validation = validations[field];
-    
+
     if (!validation) return true;
-    
+
     if (!validation.validate(value)) {
       addErrorMessage(field, validation.errorMessage);
       return false;
@@ -222,59 +221,59 @@ $(document).ready(function() {
       return true;
     }
   }
-  
+
   form.on("submit", function(event) {
     let isValid = true;
-    
+
     Object.keys(validations).forEach(function(field) {
       if (!validateField(field)) {
         isValid = false;
       }
     });
-    
+
     if (!isValid) {
       event.preventDefault();
     }
   });
-  
+
   Object.keys(validations).forEach(function(field) {
     $("#" + field).on("input blur", function() {
       validateField(field);
     });
   });
-  
+
   $("#password").on("input", function() {
     const rePassword = $("#re-password");
     if (rePassword.val() !== "") {
       validateField("re-password");
     }
   });
-  
+
   $("#avatar").on("change", function(e) {
     const file = e.target.files[0];
     if (!file) {
       return;
     }
-    
+
     if (!file.type.match("image.*")) {
       const errorId = "avatar-error";
-      
+
       if ($("#" + errorId).length === 0) {
         $("#user-avatar-display").after('<p id="' + errorId + '" class="text-sm text-red-600">Please select a valid image file!</p>');
       }
-      
+
       return;
     } else {
       $("#avatar-error").remove();
     }
-    
+
     if (file.size > 5 * 1024 * 1024) {
       const errorId = "avatar-error";
-      
+
       if ($("#" + errorId).length === 0) {
         $("#user-avatar-display").after('<p id="' + errorId + '" class="text-sm text-red-600">Image size must be less than 5MB!</p>');
       }
-      
+
       return;
     } else {
       $("#avatar-error").remove();

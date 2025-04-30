@@ -63,11 +63,11 @@
         const $field = $("#" + field);
         const errorId = field + "-error";
 
-        $("#" + errorId).remove();
-
         if ($field.next().is("div") && $field.next().next().attr("id") === errorId) {
           $field.next().remove();
         }
+
+        $("#" + errorId).remove();
 
         $field.removeClass("border-red-600");
       }
