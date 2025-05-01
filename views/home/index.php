@@ -1,3 +1,4 @@
+<?php if (count($data['newsLetters'])) { ?>
 <section class="md:flex text-white min-h-[500px]">
   <div id="thumbnail-container" class="transition-all duration-1000 min-h-[500px] md:min-h-0 md:flex-3/4 bg-no-repeat bg-cover bg-center relative">
     <div class="absolute bottom-10">
@@ -71,6 +72,7 @@
     }
   </script>
 </section>
+<?php } ?>
 
 <section class="mt-10 bg-white p-10 shadow-gray-300 shadow-sm">
   <h2 class="text-center text-3xl mb-10"><?php echo htmlspecialchars($data['introduction']->title); ?></h2>
