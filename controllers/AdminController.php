@@ -336,7 +336,7 @@ class AdminController
       return;
     }
 
-    if ($formData['password'] !== $formData['confirmPassword']) {
+    if ($formData['password'] !== $formData['passwordConfirm']) {
       echo json_encode(['status' => 'failed', 'message' => 'Passwords do not match']);
       return;
     }
