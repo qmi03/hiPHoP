@@ -1,20 +1,22 @@
 = Design <design>
 
-== MVC Architecture
+== Application architecture
 
-The Model-View-Controller (MVC) architectural pattern represents a fundamental approach to application design that emphasizes separation of concerns. This separation creates a modular codebase where components have distinct responsibilities, facilitating maintenance, testing, and scalability. Our PHP application embraces these core principles while implementing them in a pragmatic manner suited to web development requirements.
+Our application is structured around the model-view-controller (MVC) design pattern, which emphasizes modularity and separation of concerns in the realm of web programming.
 
-=== Conceptual overview
+Conceptually, our application is structured as in @mvc.
 
-The MVC implementation divides the application into three primary component types:
+#figure(
+  caption: "Application structure",
+  image("/static/mvc.png"),
+) <mvc>
 
-*Model Layer*: Responsible for data retrieval, storage, validation, and business rule enforcement. This layer encapsulates all data operations and presents a clean interface to controllers, abstracting database operations and ensuring data integrity.
-
-*View Layer*: Handles the presentation logic, transforming data from models into user interface elements. Our implementation uses PHP-based templates with layout composition, allowing for consistent UI elements across pages.
-
-*Controller Layer*: Orchestrates the application flow by receiving HTTP requests, interacting with appropriate models, and selecting views for rendering. Controllers serve as the intermediary that connects user interaction with system functionality.
-
-=== Directory Structure
+There are 4 main components in this figure:
+- View: The View component is responsible for presenting data to users through the user interface. It handles the visual aspects of the application, rendering content in HTML format for web browsers. The View receives processed data from controllers and generates the output that users see and interact with.
+- Model: The Model manages the application's data and business logic. It handles data storage, retrieval, and processing operations. It provides a clean interface for accessing application data and enforces data validation rules. The Model contains the core functionality that powers the application's features.
+- Controller: Controllers coordinate the interaction between the Model and View components. They process user inputs, manipulate data through the Model, and select which View to present as output. Controllers contain the application's business logic and serve as the central orchestrator in the request-response cycle. The diagram shows specialized controllers for handling both View-based interactions and API requests.
+- Router: The Router directs incoming requests to the appropriate controllers based on URL patterns and HTTP methods. It serves as the entry point for all requests to the application, acting as a traffic director that ensures each request reaches the correct handler. The Router enables clean URL structures and separation between different parts of the application.
+== Source code structure
 
 The physical organization of the codebase reflects the conceptual divisions of MVC, with additional supporting directories for configuration, middleware, and deployment resources:
 
@@ -129,3 +131,5 @@ This pattern supports dynamic interactions without requiring full page reloads:
   - User interface reflects the changes without page reload
 
 This dual-flow architecture provides flexibility to handle both traditional page requests and dynamic interactions while maintaining consistent structural organization and separation of concerns.
+
+== Database design
