@@ -30,18 +30,18 @@
 <script>
 $(document).ready(function() {
   const form = $("form[action='/login/forgot-password']");
-  
+
   const emailValidation = {
     validate: function(value) {
       return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     },
     errorMessage: "Please enter a valid email address!"
   };
-  
+
   function addErrorMessage(field, message) {
     const $field = $("#" + field);
     const errorId = field + "-error";
-    
+
     if ($("#" + errorId).length === 0) {
       if ($field.closest('.lg\\:grid').length > 0) {
         $field.after('<div></div><p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
@@ -49,28 +49,28 @@ $(document).ready(function() {
         $field.after('<p id="' + errorId + '" class="text-sm text-red-600">' + message + '</p>');
       }
     }
-    
+
     $field.addClass("border-red-600");
   }
-  
+
   function removeErrorMessage(field) {
     const $field = $("#" + field);
     const errorId = field + "-error";
-    
-    $("#" + errorId).remove();
-    
+
     if ($field.next().is("div") && $field.next().next().attr("id") === errorId) {
       $field.next().remove();
     }
-    
+
+    $("#" + errorId).remove();
+
     $field.removeClass("border-red-600");
   }
-  
+
   function validateEmail() {
     const emailField = "email";
     const $emailField = $("#" + emailField);
     const value = $emailField.val();
-    
+
     if (!emailValidation.validate(value)) {
       addErrorMessage(emailField, emailValidation.errorMessage);
       return false;
@@ -79,22 +79,22 @@ $(document).ready(function() {
       return true;
     }
   }
-  
+
   form.on("submit", function(event) {
     const isValid = validateEmail();
-    
+
     if (!isValid) {
       event.preventDefault();
     } else {
       const $submitButton = $(this).find("input[type='submit']");
       const originalValue = $submitButton.val();
-      
+
       $submitButton.val("Sending...").addClass("opacity-70").prop("disabled", true);
-      
+
       return true;
     }
   });
-  
+
   $("#email").on("input blur", function() {
     validateEmail();
   });

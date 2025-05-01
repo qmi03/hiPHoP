@@ -8,9 +8,9 @@ CREATE TABLE users (
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   address TEXT NOT NULL,
-  email TEXT UNIQUE,
+  email VARCHAR(255) UNIQUE,
   dob TIMESTAMP NOT NULL,
-  username TEXT NOT NULL UNIQUE,
+  username VARCHAR(255) NOT NULL UNIQUE,
   password TEXT NOT NULL,
   is_admin BOOL NOT NULL,
   avatar_url TEXT NOT NULL

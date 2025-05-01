@@ -4,6 +4,7 @@ require_once 'views/index.php';
 
 require_once 'models/Photo.php';
 require_once 'models/home/NewsLetter.php';
+require_once 'models/ContactMessage.php';
 
 class AdminController
 {
@@ -42,6 +43,16 @@ class AdminController
     } elseif ('/admin/contacts/' == $path) {
       if ('GET' == $method) {
         $this->contacts();
+      } elseif ('POST' == $method && $_REQUEST['reply']) {
+        $this->handleContactMessageReply($_POST);
+      }
+    } elseif ('/admin/users/' == $path) {
+      if ('GET' == $method) {
+        $this->users();
+      } elseif ('POST' == $method && $_REQUEST['user-update']) {
+        $this->handleUserUpdate($_POST);
+      } elseif ('POST' == $method && $_REQUEST['user-change-password']) {
+        $this->handleUserChangePassword($_POST);
       }
     }
   }
@@ -57,7 +68,58 @@ class AdminController
 
   public function contacts(): void
   {
-    renderAdminView('views/admin/contacts.php', ['user' => $GLOBALS['user']]);
+    $contactPage = (int) $_GET['page'] + 0;
+
+    $contactMessageModel = new ContactMessageModel();
+    $paginatedMessages = $contactMessageModel->fetchPage($contactPage, 6);
+    $messagesCount = $contactMessageModel->count();
+
+    renderAdminView('views/admin/contacts.php', [
+      'user' => $GLOBALS['user'],
+      'paginatedMessages' => $paginatedMessages,
+      'messagesCount' => $messagesCount,
+      'currentPage' => $contactPage,
+      'totalPages' => (int) (ceil($messagesCount / 6)),
+    ]);
+  }
+
+  public function handleContactMessageReply(array $formData): void
+  {
+    header('Content-Type: application/json');
+
+    $contactMessageModel = new ContactMessageModel();
+    try {
+      $contactMessageModel->response(
+        id: $formData['id'],
+        response: $formData['response'],
+      );
+      echo json_encode(['status' => 'success', 'message' => 'Reply sent successfully']);
+    } catch (Exception $e) {
+      echo json_encode(['status' => 'failed', 'message' => 'Failed to send reply', 'error' => $e->getMessage()]);
+    }
+  }
+
+  public function users(): void
+  {
+    $userQuery = $_GET['query'] ?? '';
+    $userPage = (int) $_GET['page'] + 0;
+
+    $userModel = new UserModel();
+    $paginatedUsers = $userQuery === ''
+      ? $userModel->fetchPage($userPage, 6)
+      : $userModel->fetchPageByKeyword($userQuery, $userPage, 6);
+    $usersCount = $userQuery === ''
+      ? $userModel->fetchCount()
+      : $userModel->fetchCountByKeyword($userQuery);
+
+    renderAdminView('views/admin/users.php', [
+      'user' => $GLOBALS['user'],
+      'paginatedUsers' => $paginatedUsers,
+      'query' => $userQuery,
+      'usersCount' => $usersCount,
+      'currentPage' => $userPage,
+      'totalPages' => (int) (ceil($usersCount / 6)),
+    ]);
   }
 
   public function handleQuoteUpdate(array $formData): void
@@ -243,5 +305,51 @@ class AdminController
     }
 
     header('Location: /admin');
+  }
+
+  public function handleUserUpdate(array $formData): void
+  {
+    header('Content-Type: application/json');
+
+    $userModel = new UserModel();
+    try {
+      $userModel->update(
+        id: $formData['id'],
+        firstName: $formData['firstName'],
+        lastName: $formData['lastName'],
+        address: $formData['address'],
+        dob: new DateTime($formData['dob']),
+        isAdmin: array_key_exists('isAdmin', $formData)
+      );
+      echo json_encode(['status' => 'success', 'message' => 'User updated successfully']);
+    } catch (Exception $e) {
+      echo json_encode(['status' => 'failed', 'message' => 'Failed to update user', 'error' => $e->getMessage()]);
+    }
+  }
+
+  public function handleUserChangePassword(array $formData): void
+  {
+    header('Content-Type: application/json');
+
+    if (strlen($formData['password']) < 6) {
+      echo json_encode(['status' => 'failed', 'message' => 'Password must be at least 6 characters long']);
+      return;
+    }
+
+    if ($formData['password'] !== $formData['passwordConfirm']) {
+      echo json_encode(['status' => 'failed', 'message' => 'Passwords do not match']);
+      return;
+    }
+
+    $userModel = new UserModel();
+    try {
+      $userModel->changePassword(
+        id: $formData['id'],
+        password: $formData['password'],
+      );
+      echo json_encode(['status' => 'success', 'message' => 'Password changed successfully']);
+    } catch (Exception $e) {
+      echo json_encode(['status' => 'failed', 'message' => 'Failed to change password', 'error' => $e->getMessage()]);
+    }
   }
 }
