@@ -1,1 +1,26 @@
+owasp-sql-injection:
+  type: Web
+  title: SQL Injection
+  author: ["kingthorin", "zbraiterman"]
+  url: https://owasp.org/www-community/attacks/SQL_Injection
+  date: 2025-04-21
 
+owasp-csrf:
+  type: Web
+  title: Cross site request forgery (CSRF)
+  author: ["KirstenS"]
+  url: https://owasp.org/www-community/attacks/csrf
+  date: 2025-04-21
+
+owasp-session-hijacking:
+  type: Web
+  title: Session hijacking attack
+  url: https://owasp.org/www-community/attacks/Session_hijacking_attack
+  date: 2025-04-21
+
+owasp-xss:
+  type: Web
+  title: Cross site scripting (XSS)
+  author: ["KirstenS"]
+  url: https://owasp.org/www-community/attacks/xss/
+  date: 2025-04-21

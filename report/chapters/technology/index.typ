@@ -324,7 +324,7 @@ Despite these challenges, MySQL remains a solid choice for a wide range of appli
 
 === SQL Injection
 
-SQL injection occurs when raw SQL queries incorporate unsanitized user input, allowing attackers to manipulate database queries. This vulnerability can lead to unauthorized data access, data corruption, or even complete system compromise. Attackers exploit poorly constructed queries by injecting malicious SQL fragments that alter the query's intended behavior.
+A SQL injection attack consists of insertion or “injection” of a SQL query via the input data from the client to the application. A successful SQL injection exploit can read sensitive data from the database, modify database data (Insert/Update/Delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file present on the DBMS file system and in some cases issue commands to the operating system @owasp-sql-injection.
 
 ```php
 // Vulnerable code example
@@ -354,7 +354,7 @@ $user = $stmt->fetch();
 
 === Cross-Site Scripting (XSS)
 
-XSS vulnerabilities arise when applications render unsanitized user input as HTML or JavaScript, enabling attackers to inject malicious scripts that execute in victims' browsers. These scripts can steal session cookies, redirect users to malicious sites, or manipulate page content.
+Cross-Site Scripting (XSS) attacks are a type of injection, in which malicious scripts are injected into otherwise benign and trusted websites. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user @owasp-xss.
 
 ```html
 <!-- Vulnerable code -->
@@ -383,7 +383,7 @@ setcookie("session_id", $sessionId, $expiry, "/", "", true, true); // Last param
 
 === CSRF (Cross-Site Request Forgery)
 
-CSRF attacks exploit the trust that websites place in authenticated user browsers. Attackers craft pages that automatically submit requests to vulnerable sites, potentially triggering actions like password changes or fund transfers without user awareness.
+Cross-Site Request Forgery (CSRF) is an attack that forces an end user to execute unwanted actions on a web application in which they’re currently authenticated. With a little help of social engineering (such as sending a link via email or chat), an attacker may trick the users of a web application into executing actions of the attacker’s choosing. If the victim is a normal user, a successful CSRF attack can force the user to perform state changing requests like transferring funds, changing their email address, and so forth. If the victim is an administrative account, CSRF can compromise the entire web application @owasp-csrf.
 
 ```html
 <!-- Malicious page on attacker.com -->
@@ -415,7 +415,7 @@ if (!hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
 
 === Session Hijacking
 
-Session hijacking involves attackers obtaining or guessing valid session identifiers to impersonate legitimate users. This can occur through network sniffing, XSS attacks, or predictable session ID generation.
+Session hijacking involves attackers obtaining or guessing valid session identifiers to impersonate legitimate users. The web server needs a method to recognize every user’s connections. The most useful method depends on a token that the Web Server sends to the client browser after a successful client authentication. A session token is normally composed of a string of variable width and it could be used in different ways, like in the URL, in the header of the http requisition as a cookie, in other parts of the header of the http request, or yet in the body of the http requisition. The session hijacking attack compromises the session token by stealing or predicting a valid session token to gain unauthorized access to the Web Server @owasp-session-hijacking.
 
 Mitigations:
 
