@@ -1,6 +1,6 @@
 #table(
   columns: (0.8fr, 1fr, 2fr, 2fr),
-  align: (center, center, left, left),
+  align: (center, left, left, left),
   table.header(
     [*ID*], [*Name*], [*Shared work*], [*Personal work*],
   ),
@@ -12,10 +12,10 @@
     - Implement user administration system
   ],
   [
-    \#1
+    Personal task \#1
     - Home page
     - Contact page
-    - Home page management
-    - Contact management
+    - Home page management page
+    - Contact management page
   ],
 )
