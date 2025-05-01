@@ -49,7 +49,7 @@ class AdminController
     } elseif ('/admin/users/' == $path) {
       if ('GET' == $method) {
         $this->users();
-      } else if ('POST' == $method && $_REQUEST['user-update']) {
+      } elseif ('POST' == $method && $_REQUEST['user-update']) {
         $this->handleUserUpdate($_POST);
       } elseif ('POST' == $method && $_REQUEST['user-change-password']) {
         $this->handleUserChangePassword($_POST);

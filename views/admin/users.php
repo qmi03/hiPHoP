@@ -241,7 +241,7 @@ function submitChangePassword() {
   const form = $('#edit-user-password-form');
   const formData = new FormData(form[0]);
   $.ajax({
-    url: '/admin/users?user-change-pwd=true',
+    url: '/admin/users?user-change-password=true',
     type: 'POST',
     data: formData,
     processData: false,
@@ -250,7 +250,6 @@ function submitChangePassword() {
       if (response.status === 'success') {
         alert(response.message);
         hidePasswordModal();
-        location.reload();
       } else {
         alert('Failed to change password. Please try again.');
       }
