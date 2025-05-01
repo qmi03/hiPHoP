@@ -38,8 +38,12 @@
                   <td>
                     <button
                       class="btn btn-sm btn-outline-success user-edit-btn"
+                      onclick="showMessage(<?= $message->id ?>)"
                     >
-                      View & Reply
+                      <?= $message->respondedAt == null
+                        ? 'View & Reply'
+                        : 'View'
+                      ?>
                     </button>
                   </td>
                 </tr>
@@ -68,47 +72,31 @@
     </div>
   </section>
 
-  <div class="modal fade" id="edit-user-modal" tabindex="-1" role="dialog" aria-labelledby="edit-user-modal-title" aria-hidden="true">
+  <div class="modal fade modal-lg" id="view-message-modal" tabindex="-1" role="dialog" aria-labelledby="view-message-modal-title" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="edit-user-modal-title">Edit user</h5>
-          <button type="button" class="close" aria-label="Close" onclick="hideEditModal()">
+          <h5 class="modal-title" id="view-message-modal-title">View message</h5>
+          <button type="button" class="close" aria-label="Close" onclick="hideMessageModal()">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <form id="edit-user-form">
-            <input type="hidden" name="id" id="edit-user-id">
+          <div id="message-metadata">
+            Sent by <span class="font-bold" id="message-username"></span> at <span class="font-bold" id="message-created-at"></span>
+          </div>
+          <textarea class="form-control mt-2" id="message-content" rows="5" readonly disabled></textarea>
+          <form id="message-form" class="mt-2">
+            <input type="hidden" name="id" id="message-id">
             <div class="form-group">
-              <label for="edit-username">First name</label>
-              <input type="text" class="form-control" id="edit-first-name" name="firstName">
-            </div>
-            <div class="form-group">
-              <label for="edit-username">Last name</label>
-              <input type="text" class="form-control" id="edit-last-name" name="lastName">
-            </div>
-            <div class="form-group">
-              <label for="edit-username">Address</label>
-              <input type="text" class="form-control" id="edit-address" name="address">
-            </div>
-            <div class="form-group">
-              <label for="edit-username">Day of birth</label>
-              <input type="date" class="form-control" id="edit-dob" name="dob">
-            </div>
-            <div class="form-group">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="edit-is-admin" name="isAdmin">
-                <label class="form-check-label" for="edit-is-admin">
-                  Is admin
-                </label>
-              </div>
+              <label for="message-response">Reply</label>
+              <textarea class="form-control mt-2" id="message-response" rows="5" name="response"></textarea>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick="hideEditModal()">Close</button>
-          <button type="button" class="btn btn-primary" onclick="submitEditUser()">Save changes</button>
+          <button type="button" class="btn btn-secondary" onclick="hideMessageModal()">Close</button>
+          <button type="button" id="btn-submit-reply" class="btn btn-primary d-none" onclick="submitReply()">Submit</button>
         </div>
       </div>
     </div>
@@ -117,6 +105,66 @@
 
 <script>
 const pageData = <?= json_encode($data) ?>;
+
+function showMessage(id) {
+  const message = pageData.paginatedMessages.find(m => m.id === id);
+  if (!message) {
+    console.error('Message not found');
+    return;
+  }
+  $('#view-message-modal-title').text(`View message: ${message.title}`);
+  $('#message-id').val(message.id);
+  $('#message-username').text(message.username);
+  $('#message-created-at').text(message.createdAt.date);
+  $('#message-content').val(message.message);
+  if (message.respondedAt == null) {
+    $('#btn-submit-reply').removeClass('d-none');
+    $('#message-response').attr('disabled', false).attr('readonly', false).val('');
+  } else {
+    $('#btn-submit-reply').addClass('d-none');
+    $('#message-response').attr('disabled', true).attr('readonly', true).val(message.response);
+  }
+  $('#view-message-modal').modal('show');
+}
+
+function hideMessageModal() {
+  $('#view-message-modal').modal('hide');
+}
+
+function submitReply() {
+  const form = $('#message-form');
+  const formData = new FormData(form[0]);
+  if (!formData.get('response')) {
+    alert('Please enter a reply message.');
+    return;
+  }
+  $.ajax({
+    url: '/admin/contacts?reply=true',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      try {
+        const responseObj = JSON.parse(response);
+        if (responseObj.status === 'success') {
+          alert('Reply sent successfully!');
+          hideMessageModal();
+          location.reload();
+        } else {
+          alert('Failed to send reply. Please try again.');
+        }
+      } catch (e) {
+        console.error('Failed to parse response', e);
+        alert('An error occurred. Please try again.');
+        return;
+      }
+    },
+    error: function() {
+      alert('An error occurred. Please try again.');
+    }
+  });
+}
 
 function updateNavigation() {
   const baseUrl = '/admin/contacts?page='

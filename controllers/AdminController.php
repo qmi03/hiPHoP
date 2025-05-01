@@ -43,6 +43,8 @@ class AdminController
     } elseif ('/admin/contacts/' == $path) {
       if ('GET' == $method) {
         $this->contacts();
+      } elseif ('POST' == $method && $_REQUEST['reply']) {
+        $this->handleContactMessageReply($_POST);
       }
     } elseif ('/admin/users/' == $path) {
       if ('GET' == $method) {
@@ -79,6 +81,20 @@ class AdminController
       'currentPage' => $contactPage,
       'totalPages' => (int) (ceil($messagesCount / 6)),
     ]);
+  }
+
+  public function handleContactMessageReply(array $formData): void
+  {
+    $contactMessageModel = new ContactMessageModel();
+    try {
+      $contactMessageModel->response(
+        id: $formData['id'],
+        response: $formData['response'],
+      );
+      echo json_encode(['status' => 'success', 'message' => 'Reply sent successfully']);
+    } catch (Exception $e) {
+      echo json_encode(['status' => 'failed', 'message' => 'Failed to send reply', 'error' => $e->getMessage()]);
+    }
   }
 
   public function users(): void
