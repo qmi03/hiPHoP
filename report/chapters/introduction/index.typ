@@ -7,3 +7,9 @@ The stack we've chosen:
 - TailwindCSS for ease of building user-friendly and responsive websites.
 - Pure PHP backend.
 - MySQL as the database management system.
+
+The rest of this document is structured as follows.
+- @technology[] A walkthrough on our technology choices and common pitfalls encountered in web development.
+- @design[] An in-depth problem analysis and our high-level solution to the problem of developing a music ecommerce website, including database design, application structure, etc.
+- @implementation[] Details our implementation, e.g. how we go about and implement the high-level application structure introduced in the previous section.
+- @installation[] Instructs how to install our application from our source code.
