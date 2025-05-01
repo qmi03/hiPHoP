@@ -2,25 +2,43 @@ owasp-sql-injection:
   type: Web
   title: SQL Injection
   author: ["kingthorin", "zbraiterman"]
-  url: https://owasp.org/www-community/attacks/SQL_Injection
-  date: 2025-04-21
+  url:
+    value: https://owasp.org/www-community/attacks/SQL_Injection
+    date: 2025-04-21
 
 owasp-csrf:
   type: Web
   title: Cross site request forgery (CSRF)
   author: ["KirstenS"]
-  url: https://owasp.org/www-community/attacks/csrf
-  date: 2025-04-21
+  url:
+    value: https://owasp.org/www-community/attacks/csrf
+    date: 2025-04-21
 
 owasp-session-hijacking:
   type: Web
   title: Session hijacking attack
-  url: https://owasp.org/www-community/attacks/Session_hijacking_attack
-  date: 2025-04-21
+  url:
+    value: https://owasp.org/www-community/attacks/Session_hijacking_attack
+    date: 2025-04-21
 
 owasp-xss:
   type: Web
   title: Cross site scripting (XSS)
   author: ["KirstenS"]
-  url: https://owasp.org/www-community/attacks/xss/
-  date: 2025-04-21
+  url:
+    value: https://owasp.org/www-community/attacks/xss/
+    date: 2025-04-21
+
+jquery:
+  type: Web
+  title: JQuery
+  url:
+    value: https://jquery.com/
+    date: 2025-04-21
+
+tailwind:
+  type: Web
+  title: Rapidly build modern websites without ever leaving your HTML.
+  url:
+    value: https://tailwindcss.com/
+    date: 2024-04-21

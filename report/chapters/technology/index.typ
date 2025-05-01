@@ -25,7 +25,7 @@ fetch('/api/data')
 
 However, pure JavaScript does require more verbose code for certain operations and may present browser compatibility challenges for older environments. The lack of abstraction can lead to more complex implementation for certain cross-browser functionality, potentially requiring polyfills or additional compatibility code.
 
-jQuery emerged as a solution to these exact challenges, introducing a simplified syntax that streamlined common tasks with its "write less, do more" philosophy. Released in 2006, jQuery offered cross-browser compatibility solutions when browser inconsistencies were a significant development hurdle. Its primary advantages include intuitive DOM manipulation, simplified AJAX requests, and an extensive plugin ecosystem.
+jQuery emerged as a solution to these exact challenges, introducing a simplified syntax that streamlined common tasks with its "write less, do more" philosophy. Released in 2006, jQuery offered cross-browser compatibility solutions when browser inconsistencies were a significant development hurdle. Its primary advantages include intuitive DOM manipulation, simplified AJAX requests, and an extensive plugin ecosystem @jquery.
 
 ```javascript
 // jQuery DOM selection and manipulation
@@ -143,11 +143,9 @@ Despite these advancements, the fundamental concept of asynchronous communicatio
 - Requires careful error handling.
 - Potential accessibility issues if not implemented properly.
 
-
-
 == Tailwind CSS
 
-Tailwind CSS represents a significant departure from traditional CSS frameworks, employing a utility-first approach that fundamentally changes how developers style web applications. Rather than providing pre-designed components, Tailwind offers low-level utility classes that can be composed to build custom designs without leaving your HTML.
+Tailwind CSS represents a significant departure from traditional CSS frameworks, employing a utility-first approach @tailwind that fundamentally changes how developers style web applications. Rather than providing pre-designed components, Tailwind offers low-level utility classes that can be composed to build custom designs without leaving your HTML.
 
 The utility-first methodology enables remarkably rapid UI development once developers become familiar with the class naming conventions. Instead of switching between HTML files and separate CSS stylesheets, developers can implement designs directly in markup, accelerating the development process. This approach proves particularly effective for teams implementing custom designs that don't fit neatly into the constraints of component-based frameworks.
 
