@@ -1,10 +1,6 @@
 = Introduction <introduction>
 
-Music is our passion. As an idea, we have incorporated music into this assignment, and built a music instrument ecommerce website.
-
-We're directly inspired by the design of the MusicPlace (https://musicplace.com/), which is a website that aims to teach children music courses. The design is bright, colorful and friendly, so we decided to challenge ourselves with this design. This website mainly acts as a marketing media that is within accessible reach to everyone. It contains information about various courses, snippets of their classes and user reviews. It also shows guidance on how to register their courses and provide customer service.
-
-Our website is similar to theirs in the interface, but we're focused on the ecommerce aspect: our website acts as a platform that customers can view and purchase music instruments, instead of for pure informational purposes. Besides that, our website also contains various marketing information.
+Music is one of our passions. Therefore, as an idea, we tried to incorporate music elements into this assignment and build a music instrument ecommerce website. This assignment is about building a music ecommerce website that advertises and sells musical instruments, which aims at children as our target audience. We're directly inspired by the design of the MusicPlace (https://musicplace.com/), which is a website whose purpose is to advertise children music courses. The design is bright, colorful, friendly and especially captivating to children, so we decided to challenge ourselves with this design. This website mainly acts as a marketing media that is within accessible reach to everyone. It contains information about various courses, snippets of their classes and user reviews. It also shows guidance on how to register their courses and provide customer service. Our website differs from theirs in one important aspect: ours serves as both a marketing outlet and a commercial site, while theirs is for pure educational and informational purposes.
 
 The stack we've chosen:
 - Vanilla Javascript for the frontend, with the aid of jquery.
