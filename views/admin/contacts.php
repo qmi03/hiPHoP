@@ -145,12 +145,10 @@ function submitReply() {
     processData: false,
     contentType: false,
     success: function(response) {
+      alert(response.message);
       if (response.status === 'success') {
-        alert(response.message);
         hideMessageModal();
         location.reload();
-      } else {
-        alert('Failed to send reply. Please try again.');
       }
     },
     error: function() {

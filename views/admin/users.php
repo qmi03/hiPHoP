@@ -207,12 +207,10 @@ function submitEditUser() {
     processData: false,
     contentType: false,
     success: function(response) {
+      alert(response.message);
       if (response.status === 'success') {
-        alert(response.message);
         hideEditModal();
         location.reload();
-      } else {
-        alert('Failed to edit user. Please try again.');
       }
     },
     error: function() {
@@ -247,11 +245,9 @@ function submitChangePassword() {
     processData: false,
     contentType: false,
     success: function(response) {
+      alert(response.message);
       if (response.status === 'success') {
-        alert(response.message);
         hidePasswordModal();
-      } else {
-        alert('Failed to change password. Please try again.');
       }
     },
     error: function() {

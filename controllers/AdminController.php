@@ -331,6 +331,16 @@ class AdminController
   {
     header('Content-Type: application/json');
 
+    if (strlen($formData['password']) < 6) {
+      echo json_encode(['status' => 'failed', 'message' => 'Password must be at least 6 characters long']);
+      return;
+    }
+
+    if ($formData['password'] !== $formData['confirmPassword']) {
+      echo json_encode(['status' => 'failed', 'message' => 'Passwords do not match']);
+      return;
+    }
+
     $userModel = new UserModel();
     try {
       $userModel->changePassword(
