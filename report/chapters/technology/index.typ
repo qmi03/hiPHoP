@@ -433,9 +433,9 @@ session_regenerate_id(true);
 Search Engine Optimization (SEO) is the practice of improving a website's visibility and ranking in search engine results pages (SERPs). When implemented effectively, SEO helps increase organic (non-paid) traffic to your website by making it more attractive to search engines like Google, Bing, and Yahoo.
 
 Utilized strategies:
-- Semantic HTML structure with appropriate heading hierarchy
-- Server-side rendering for faster initial page loads
-- Mobile-responsive design using Tailwind's responsive utilities
-- Optimized meta tags (`title`, `description`, Open Graph)
-- URL structure optimization with clean, descriptive URLs
-- Image optimization with appropriate `alt` tags and lazy loading
+- Semantic HTML structure with appropriate heading hierarchy.
+- Server-side rendering for faster initial page loads.
+- Mobile-responsive design using Tailwind's responsive utilities.
+- Optimized meta tags (`title`, `description`, Open Graph).
+- URL structure optimization with clean, descriptive URLs.
+- Image optimization with appropriate `alt` tags and lazy loading.
