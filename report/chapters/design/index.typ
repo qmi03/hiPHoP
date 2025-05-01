@@ -16,29 +16,44 @@ There are 4 main components in this figure:
 - Model: The Model manages the application's data and business logic. It handles data storage, retrieval, and processing operations. It provides a clean interface for accessing application data and enforces data validation rules. The Model contains the core functionality that powers the application's features.
 - Controller: Controllers coordinate the interaction between the Model and View components. They process user inputs, manipulate data through the Model, and select which View to present as output. Controllers contain the application's business logic and serve as the central orchestrator in the request-response cycle. The diagram shows specialized controllers for handling both View-based interactions and API requests.
 - Router: The Router directs incoming requests to the appropriate controllers based on URL patterns and HTTP methods. It serves as the entry point for all requests to the application, acting as a traffic director that ensures each request reaches the correct handler. The Router enables clean URL structures and separation between different parts of the application.
+
 == Source code structure
 
-The physical organization of the codebase reflects the conceptual divisions of MVC, with additional supporting directories for configuration, middleware, and deployment resources:
+The physical organization of the codebase reflects the conceptual divisions of MVC presented above, with additional supporting directories for configuration, middleware, and deployment resources:
 
 ```
-├── api/                  = API endpoints for AJAX interactions
-├── config/               = Configuration files and environment settings
-├── controllers/          = Controller classes organized by domain
-├── middleware/           = Request preprocessing components
-├── migrations/           = Database schema version files
-├── models/               = Data and business logic components
-├── public/               = Publicly accessible assets
-├── views/                = Templates and presentation logic
-│   ├── layouts/          = Layout templates for page composition
-│   └── [feature dirs]/   = Feature-specific view templates
-├── .htaccess             = Web server configuration
-├── index.php             = Application entry point
-└── routes.php            = URL routing definitions
+├── api/                  # API endpoints for AJAX interactions
+├── config/               # Configuration files and environment settings
+├── controllers/          # Controller classes organized by domain
+├── middleware/           # Request preprocessing components
+├── migrations/           # Database schema version files
+├── models/               # Data and business logic components
+├── public/               # Publicly accessible assets
+├── views/                # Templates and presentation logic
+│   ├── layouts/          # Layout templates for page composition
+│   └── [feature dirs]/   # Feature-specific view templates
+├── .htaccess             # Web server configuration
+├── index.php             # Application entry point
+└── routes.php            # URL routing definitions
 ```
 
 This structure balances conceptual purity with practical organization, grouping files by both responsibility and feature context.
 
+In more details, the main files are:
+- `api/`: Contains API controller that handle AJAX requests and return structured data in JSON format. These files define interfaces for client-side JavaScript to communicate with the server asynchronously.
+- `controllers/`: Houses controller classes that implement the application's core business logic. Controllers are organized by domain or feature and follow a consistent naming convention (e.g., UserController, ProductController). Each controller contains action methods that correspond to specific routes and HTTP methods. Controllers orchestrate the request-response flow by validating input, interacting with models to retrieve or modify data, and selecting appropriate views for rendering responses.
+- `routes.php`: Maps all URL patterns and request methods supported by the application and maps them to specific controller actions.
+- `models/`: Contains classes that represent business entities and encapsulate data access logic. Models implement validation rules, relationships between entities, and business-specific behaviors.
+- `views/`: Stores template files that define the HTML structure and presentation logic. We use our custom templating engine due to the restrictions of the assignment.
+Additionally, we have:
+- `config/`: Holds environment-specific configuration files for database connections.
+- `public/`: : Contains all browser-accessible files including compiled CSS, JavaScript bundles, images, fonts, and other static assets.
+- `migrations/`: Stores database migration scripts that define schema changes in a version-controlled, repeatable manner. Each migration file represents a specific change to the database schema.
+- `middleware/`: Contains logic that runs before a specific controller for some specific routes.
+
 == Application Flow
+
+=== .htaccess configuration
 
 The system processes user interactions through carefully defined execution paths. These flows can be categorized into two primary patterns with several distinct phases:
 
