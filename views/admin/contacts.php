@@ -145,19 +145,12 @@ function submitReply() {
     processData: false,
     contentType: false,
     success: function(response) {
-      try {
-        const responseObj = JSON.parse(response);
-        if (responseObj.status === 'success') {
-          alert('Reply sent successfully!');
-          hideMessageModal();
-          location.reload();
-        } else {
-          alert('Failed to send reply. Please try again.');
-        }
-      } catch (e) {
-        console.error('Failed to parse response', e);
-        alert('An error occurred. Please try again.');
-        return;
+      if (response.status === 'success') {
+        alert(response.message);
+        hideMessageModal();
+        location.reload();
+      } else {
+        alert('Failed to send reply. Please try again.');
       }
     },
     error: function() {

@@ -199,18 +199,26 @@ function hideEditModal() {
 }
 function submitEditUser() {
   const form = $('#edit-user-form');
-  const data = form.serializeArray().reduce((obj, item) => {
-    obj[item.name] = item.value;
-    return obj;
-  }, {});
-  fetch('/admin/users?user-update=true', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const formData = new FormData(form[0]);
+  $.ajax({
+    url: '/admin/users?user-update=true',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      if (response.status === 'success') {
+        alert(response.message);
+        hideEditModal();
+        location.reload();
+      } else {
+        alert('Failed to edit user. Please try again.');
+      }
     },
-    body: JSON.stringify(data),
-  })
-    .then(() => location.reload());
+    error: function() {
+      alert('An error occurred. Please try again.');
+    }
+  });
 }
 
 function changePassword(userId) {
@@ -231,18 +239,26 @@ function hidePasswordModal() {
 }
 function submitChangePassword() {
   const form = $('#edit-user-password-form');
-  const data = form.serializeArray().reduce((obj, item) => {
-    obj[item.name] = item.value;
-    return obj;
-  }, {});
-  fetch('/admin/users?user-change-pwd=true', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
+  const formData = new FormData(form[0]);
+  $.ajax({
+    url: '/admin/users?user-change-pwd=true',
+    type: 'POST',
+    data: formData,
+    processData: false,
+    contentType: false,
+    success: function(response) {
+      if (response.status === 'success') {
+        alert(response.message);
+        hidePasswordModal();
+        location.reload();
+      } else {
+        alert('Failed to change password. Please try again.');
+      }
     },
-    body: JSON.stringify(data),
-  })
-    .then(() => location.reload());
+    error: function() {
+      alert('An error occurred. Please try again.');
+    }
+  });
 }
 
 function updateNavigation() {

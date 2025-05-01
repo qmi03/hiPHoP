@@ -50,9 +50,9 @@ class AdminController
       if ('GET' == $method) {
         $this->users();
       } else if ('POST' == $method && $_REQUEST['user-update']) {
-        $this->handleUserUpdate(json_decode(file_get_contents("php://input"), true));
+        $this->handleUserUpdate($_POST);
       } elseif ('POST' == $method && $_REQUEST['user-change-password']) {
-        $this->handleUserChangePassword(json_decode(file_get_contents("php://input"), true));
+        $this->handleUserChangePassword($_POST);
       }
     }
   }
@@ -85,6 +85,8 @@ class AdminController
 
   public function handleContactMessageReply(array $formData): void
   {
+    header('Content-Type: application/json');
+
     $contactMessageModel = new ContactMessageModel();
     try {
       $contactMessageModel->response(
@@ -307,23 +309,37 @@ class AdminController
 
   public function handleUserUpdate(array $formData): void
   {
+    header('Content-Type: application/json');
+
     $userModel = new UserModel();
-    $userModel->update(
-      id: $formData['id'],
-      firstName: $formData['firstName'],
-      lastName: $formData['lastName'],
-      address: $formData['address'],
-      dob: new DateTime($formData['dob']),
-      isAdmin: array_key_exists('isAdmin', $formData)
-    );
+    try {
+      $userModel->update(
+        id: $formData['id'],
+        firstName: $formData['firstName'],
+        lastName: $formData['lastName'],
+        address: $formData['address'],
+        dob: new DateTime($formData['dob']),
+        isAdmin: array_key_exists('isAdmin', $formData)
+      );
+      echo json_encode(['status' => 'success', 'message' => 'User updated successfully']);
+    } catch (Exception $e) {
+      echo json_encode(['status' => 'failed', 'message' => 'Failed to update user', 'error' => $e->getMessage()]);
+    }
   }
 
   public function handleUserChangePassword(array $formData): void
   {
+    header('Content-Type: application/json');
+
     $userModel = new UserModel();
-    $userModel->changePassword(
-      id: $formData['id'],
-      password: $formData['password'],
-    );
+    try {
+      $userModel->changePassword(
+        id: $formData['id'],
+        password: $formData['password'],
+      );
+      echo json_encode(['status' => 'success', 'message' => 'Password changed successfully']);
+    } catch (Exception $e) {
+      echo json_encode(['status' => 'failed', 'message' => 'Failed to change password', 'error' => $e->getMessage()]);
+    }
   }
 }
