@@ -54,6 +54,18 @@ class AdminController
       } elseif ('POST' == $method && $_REQUEST['user-change-password']) {
         $this->handleUserChangePassword($_POST);
       }
+    } elseif ('/admin/about/' == $path) {
+      if ('GET' == $method) {
+        $this->about();
+      } else if ('POST' == $method) {
+        $this->updateAbout();
+      }
+    } elseif ('/admin/faq/' == $path) {
+      if ('GET' == $method) {
+        $this->faq();
+      } else if ('POST' == $method) {
+        $this->updateFAQ();
+      }
     }
   }
 
@@ -351,5 +363,45 @@ class AdminController
     } catch (Exception $e) {
       echo json_encode(['status' => 'failed', 'message' => 'Failed to change password', 'error' => $e->getMessage()]);
     }
+  }
+
+  public function about(): void
+  {
+    $about = new AboutModel();
+    renderView('views/admin/about.php', ['about' => $about->fetch()]);
+  }
+
+  public function updateAbout(): void
+  {
+    $about = new AboutModel();
+    $about->update([
+      $_POST['id'] => [
+        'title' => $_POST['title'],
+        'content' => $_POST['content'],
+        'imageUrl' => $_POST['imageUrl'],
+      ]
+    ]);
+    header('Location: /admin/about/');
+  }
+
+  public function faq(): void
+  {
+    $faq = new FAQModel();
+    renderView('views/admin/faq.php', ['faqs' => $faq->fetchAll()]);
+  }
+
+  public function updateFAQ(): void
+  {
+    $faq = new FAQModel();
+    if (isset($_POST['delete'])) {
+      $faq->delete($_POST['delete']);
+    }
+    if (isset($_POST['create'])) {
+      $faq->create($_POST['create']);
+    }
+    if (isset($_POST['update'])) {
+      $faq->update($_POST['update']);
+    }
+    header('Location: /admin/faq/');
   }
 }

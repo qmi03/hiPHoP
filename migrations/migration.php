@@ -40,8 +40,6 @@ class Migration
     foreach ($availableMigrations as $migration) {
       if (!in_array($migration, $executedMigrations)) {
         try {
-          $this->pdo->beginTransaction();
-
           // Load and execute the migration SQL
           $sql = file_get_contents($this->migrationsDir.'/'.$migration);
           $this->pdo->exec($sql);
@@ -50,10 +48,8 @@ class Migration
           $stmt = $this->pdo->prepare("INSERT INTO {$this->migrationsTable} (migration) VALUES (?)");
           $stmt->execute([$migration]);
 
-          $this->pdo->commit();
           $results[$migration] = 'Success';
         } catch (PDOException $e) {
-          $this->pdo->rollBack();
           $results[$migration] = 'Failed: '.$e->getMessage();
         }
       }
