@@ -53,7 +53,6 @@ class Migration
           $this->pdo->commit();
           $results[$migration] = 'Success';
         } catch (PDOException $e) {
-          $this->pdo->rollBack();
           $results[$migration] = 'Failed: '.$e->getMessage();
         }
       }

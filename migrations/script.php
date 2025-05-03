@@ -29,7 +29,7 @@ if (PHP_SAPI === 'cli') {
       echo "Running migrations...\n";
       $results = $migration->runMigrations();
       foreach ($results as $file => $result) {
-        echo "{$file}: {$result}\n";
+        echo "{$file}\n";
       }
       if (empty($results)) {
         echo "No migrations to run.\n";
