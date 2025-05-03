@@ -158,3 +158,21 @@ This pattern supports dynamic interactions without requiring full page reloads:
 This dual-flow architecture provides flexibility to handle both traditional page requests and dynamic interactions while maintaining consistent structural organization and separation of concerns.
 
 == Database design
+
+@database shows the conceptual design of our database via ER diagram.
+
+#figure(
+  caption: "Database design of our application",
+  image("/static/database.png"),
+) <database>
+
+There are five isolated relations, they are used to store information that's mostly isolated with the rest of the database:
+- `quotes`: Remarkable quotes from users to be shown on the homepage.
+- `newsletters`: Homepage's sliding banner information.
+- `introductions`: A singleton relation with only one row storing the homepage's introduction paragraphs.
+- `contacts`: A singleton relation with only one row storing our website's contact info.
+
+There are three main relations. These form the data backbone for our application:
+- `users`: A relation storing all users' information.
+- `contact_messages`: A relation storing all contact's feedback and reply messages.
+- `photos`: A relation storing the photo gallery in our application.
