@@ -1,5 +1,7 @@
 = Implementation <implementation>
 
+This chapter details our application and source code structure, highlighting how models, views, controllers, apis, routing are handled at the source code level.
+
 == Model Implementation
 
 The Model layer consists of two primary component types:
