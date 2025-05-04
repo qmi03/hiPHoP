@@ -38,7 +38,7 @@ jquery:
 
 tailwind:
   type: Web
-  title: Rapidly build modern websites without ever leaving your HTML.
+  title: Rapidly build modern websites without ever leaving your HTML
   url:
     value: https://tailwindcss.com/
     date: 2024-04-21

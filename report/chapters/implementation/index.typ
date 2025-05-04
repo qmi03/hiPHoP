@@ -2,6 +2,70 @@
 
 This chapter details our application and source code structure, highlighting how models, views, controllers, apis, routing are handled at the source code level.
 
+== Router implementation
+
+The router directs incoming requests to appropriate controllers. Here's a high-level implementation:
+
+```php
+// routes.php - Route definitions
+$routes = [
+  '/' => new HomeController(),
+  '/login/' => new LoginController(),
+  '/logout/' => new LoginController(),
+  '/signup/' => new LoginController(),
+  '/contact/' => new ContactController(),
+  '/admin/' => new AdminController(),
+  '/admin/home-page/' => new AdminController(),
+  '/admin/contacts/' => new AdminController(),
+  '/account/' => new AccountController(),
+  '/shop/' => new ShopController(),
+];
+
+// index.php - Application entry point
+<?php
+session_start();
+
+// Load dependencies
+require_once 'config/index.php';
+require_once 'routes.php';
+require_once 'views/index.php';
+require_once 'middleware/UserMiddleware.php';
+
+// Extract request information
+$path = $_SERVER['PATH_INFO'] ?? '/';
+$method = $_SERVER['REQUEST_METHOD'];
+
+// Route the request
+if (str_starts_with($path, "/api/")) {
+  // Handle API requests
+  $apiFile = trim($path, '/') . '.php';
+  if (file_exists($apiFile)) {
+    require_once($apiFile);
+  } else {
+    header('HTTP/1.1 404 Not Found');
+    echo json_encode(['error' => 'API endpoint not found']);
+  }
+} else if (array_key_exists($path, $routes)) {
+  // Handle controller-based routes
+  $controller = $routes[$path];
+  $controller->route($method, $path);
+} else {
+  // Handle 404 for undefined routes
+  header('HTTP/1.1 404 Not Found');
+  renderView('views/404.php', []);
+}
+```
+
+The routing implementation uses:
+
+- *Path-based Mapping*: Routes are defined as URL paths mapped to controller instances
+- *Array Structure*: Simple associative array provides readable route definitions
+- *Controller Instance Reuse*: Multiple paths can map to the same controller instance
+- *API Detection*: Special handling for API endpoints
+- *Error Handling*: Proper HTTP status codes for undefined routes
+
+This approach provides flexibility while maintaining simplicity and understandability.
+
 == Model Implementation
 
 The Model layer consists of two primary component types:
@@ -72,15 +136,7 @@ class UserModel {
 }
 ```
 
-The implementation employs several technical approaches:
-
-- *PDO for Database Access*: Provides secure parameterized queries and database abstraction
-- *Transaction Management*: Ensures data integrity during operations
-- *Type Declarations*: Leverages PHP's type system for code clarity and error prevention
-- *Null Handling*: Returns null for failed operations allowing graceful error management
-- *Feature-based Organization*: Models are grouped in directories by feature when appropriate
-
-This approach creates a data layer that encapsulates database operations while providing clean interfaces to the rest of the system.
+This creates a data layer that encapsulates database operations while providing clean interfaces to the rest of the system.
 
 == View Implementation
 
@@ -156,14 +212,14 @@ function renderView(string $view, array $data): void {
 */
 ```
 
-Key technical features include:
+Noticeable features:
 
-- *Output Buffering*: Captures rendered content for inclusion in layouts
-- *Layout Templates*: Provides consistent page structure across the application
-- *Context-specific Rendering*: Different rendering functions for various user contexts
-- *Data Passing*: Controllers supply data arrays to views for template variable rendering
+- *Output Buffering*: Captures rendered content for inclusion in layouts.
+- *Layout Templates*: Provides consistent page structure across the application.
+- *Context-specific Rendering*: Different rendering functions for various user contexts.
+- *Data Passing*: Controllers supply data arrays to views for template variable rendering.
 
-This implementation balances simplicity with the flexibility needed for a multi-faceted user interface.
+This balances simplicity with the flexibility needed for a multi-faceted user interface.
 
 == Controller Implementation
 
@@ -253,76 +309,11 @@ class AdminController extends Controller {
 }
 ```
 
-The implementation approach includes:
-
+Responsibilities of a controller:
 - *Method-based Routing*: Controllers determine which method to call based on HTTP method and path
 - *Model Coordination*: Controllers instantiate and utilize multiple models as needed
 - *Data Preparation*: Controllers gather and organize data before passing to views
 - *HTTP Method Validation*: Controllers enforce appropriate HTTP methods for actions
 - *Authorization Logic*: Controllers may include access control checks for protected routes
 
-This pattern creates a clean coordination layer that keeps business logic in models and presentation logic in views.
-
-== Router Implementation
-
-The Router directs incoming requests to appropriate controllers. Here's a high-level implementation:
-
-```php
-// routes.php - Route definitions
-$routes = [
-  '/' => new HomeController(),
-  '/login/' => new LoginController(),
-  '/logout/' => new LoginController(),
-  '/signup/' => new LoginController(),
-  '/contact/' => new ContactController(),
-  '/admin/' => new AdminController(),
-  '/admin/home-page/' => new AdminController(),
-  '/admin/contacts/' => new AdminController(),
-  '/account/' => new AccountController(),
-  '/shop/' => new ShopController(),
-];
-
-// index.php - Application entry point
-<?php
-session_start();
-
-// Load dependencies
-require_once 'config/index.php';
-require_once 'routes.php';
-require_once 'views/index.php';
-require_once 'middleware/UserMiddleware.php';
-
-// Extract request information
-$path = $_SERVER['PATH_INFO'] ?? '/';
-$method = $_SERVER['REQUEST_METHOD'];
-
-// Route the request
-if (str_starts_with($path, "/api/")) {
-  // Handle API requests
-  $apiFile = trim($path, '/') . '.php';
-  if (file_exists($apiFile)) {
-    require_once($apiFile);
-  } else {
-    header('HTTP/1.1 404 Not Found');
-    echo json_encode(['error' => 'API endpoint not found']);
-  }
-} else if (array_key_exists($path, $routes)) {
-  // Handle controller-based routes
-  $controller = $routes[$path];
-  $controller->route($method, $path);
-} else {
-  // Handle 404 for undefined routes
-  header('HTTP/1.1 404 Not Found');
-  renderView('views/404.php', []);
-}
-```
-
-The routing implementation uses:
-
-- *Path-based Mapping*: Routes are defined as URL paths mapped to controller instances
-- *Array Structure*: Simple associative array provides readable route definitions
-- *Controller Instance Reuse*: Multiple paths can map to the same controller instance
-- *API Detection*: Special handling for API endpoints
-- *Error Handling*: Proper HTTP status codes for undefined routes
-
-This approach provides flexibility while maintaining simplicity and understandability.
+This creates a clean coordination layer that keeps business logic in models and presentation logic in views.
