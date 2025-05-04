@@ -3,6 +3,9 @@
 dev:
 	npx @tailwindcss/cli -i ./public/css/tailwind.css -o ./public/css/tailwind.output.css --watch
 
+build:
+	npx @tailwindcss/cli -i ./public/css/tailwind.css -o ./public/css/tailwind.output.css
+
 clean:
 	rm -rf ./public/css/tailwind.output.css
 
