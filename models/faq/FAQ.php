@@ -20,11 +20,14 @@ class FAQModel {
   public function fetchAll(): array {
     try {
       $conn = Database::getInstance();
+      $conn->query("SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED");
       
-      // Log connection status
-      error_log("Database connection established: " . ($conn ? "yes" : "no"));
+      $stmt = $conn->prepare('
+        SELECT id, question, answer, category, created_at
+        FROM faqs 
+        ORDER BY category, created_at DESC
+      ');
       
-      $stmt = $conn->prepare('SELECT * FROM faqs ORDER BY category, created_at DESC');
       if (!$stmt->execute()) {
         error_log("Failed to execute FAQ query: " . print_r($stmt->errorInfo(), true));
         return [];
@@ -45,65 +48,100 @@ class FAQModel {
       
     } catch (PDOException $e) {
       error_log("Database error in fetchAll: " . $e->getMessage());
-      throw $e; // Let controller handle the error
+      throw $e;
     }
   }
 
   public function create(array $data): bool {
     try {
+      if (!$this->validateData($data)) {
+        throw new Exception("Invalid FAQ data");
+      }
+
       $conn = Database::getInstance();
       $stmt = $conn->prepare('
         INSERT INTO faqs (id, question, answer, category) 
-        VALUES (UUID(), ?, ?, ?)
+        VALUES (UUID(), :question, :answer, :category)
       ');
-      return $stmt->execute([
-        $data['question'],
-        $data['answer'],
-        $data['category']
+      
+      $result = $stmt->execute([
+        ':question' => trim($data['question']),
+        ':answer' => trim($data['answer']),
+        ':category' => trim($data['category'])
       ]);
+
+      if (!$result) {
+        throw new Exception("Failed to create FAQ: " . implode(", ", $stmt->errorInfo()));
+      }
+
+      return true;
     } catch (PDOException $e) {
-      return false;
+      error_log("Error creating FAQ: " . $e->getMessage());
+      throw $e;
     }
   }
 
   public function update(array $data): bool {
     try {
       $conn = Database::getInstance();
+      $conn->beginTransaction();
+      
       $stmt = $conn->prepare('
         UPDATE faqs 
-        SET question = ?, answer = ?, category = ?
-        WHERE id = ?
+        SET question = :question, 
+            answer = :answer, 
+            category = :category,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = :id
       ');
       
-      $success = true;
       foreach ($data as $id => $item) {
-        $result = $stmt->execute([
-          $item['question'],
-          $item['answer'],
-          $item['category'],
-          $id
+        if (!$this->validateData($item)) {
+          throw new Exception("Invalid FAQ data for ID: $id");
+        }
+        
+        $success = $stmt->execute([
+          ':question' => trim($item['question']),
+          ':answer' => trim($item['answer']),
+          ':category' => trim($item['category']),
+          ':id' => $id
         ]);
-        $success = $success && $result;
+
+        if (!$success) {
+          throw new Exception("Failed to update FAQ ID: $id");
+        }
       }
-      return $success;
-    } catch (PDOException $e) {
-      return false;
+      
+      return $conn->commit();
+    } catch (Exception $e) {
+      if (isset($conn) && $conn->inTransaction()) {
+        $conn->rollBack();
+      }
+      error_log("Error updating FAQ: " . $e->getMessage());
+      throw $e;
     }
   }
 
-  public function delete(array $ids): bool {
+  public function delete(array $ids): int {
     try {
       $conn = Database::getInstance();
-      $stmt = $conn->prepare('DELETE FROM faqs WHERE id = ?');
-      
-      $success = true;
-      foreach ($ids as $id) {
-        $result = $stmt->execute([$id]);
-        $success = $success && $result;
-      }
-      return $success;
+      $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+      $stmt = $conn->prepare("DELETE FROM faqs WHERE id IN ($placeholders)");
+      $stmt->execute($ids);
+      return $stmt->rowCount();
     } catch (PDOException $e) {
-      return false;
+      error_log("Error deleting FAQ: " . $e->getMessage());
+      return 0;
     }
+  }
+
+  private function validateData(array $data): bool {
+    return isset($data['question']) 
+        && isset($data['answer']) 
+        && isset($data['category'])
+        && strlen(trim($data['question'])) >= 5 
+        && strlen(trim($data['question'])) <= 200
+        && strlen(trim($data['answer'])) >= 10 
+        && strlen(trim($data['category'])) >= 3;
   }
 }

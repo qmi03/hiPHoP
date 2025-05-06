@@ -443,29 +443,90 @@ class AdminController
 
   public function updateFAQ(): void
   {
-    $faqModel = new FAQModel();
-    $userQuestionModel = new UserQuestionModel();
-    
-    if (isset($_POST['delete'])) {
-      $faqModel->delete($_POST['delete']);
-    }
-    if (isset($_POST['create'])) {
-      foreach ($_POST['create'] as $faq) {
-        if (!empty($faq['question']) && !empty($faq['answer']) && !empty($faq['category'])) {
-          $faqModel->create($faq);
-        }
+    try {
+      $faqModel = new FAQModel();
+      $userQuestionModel = new UserQuestionModel();
+      $action = $_POST['action'] ?? '';
+
+      switch ($action) {
+        case 'create':
+          $createData = $_POST['create'] ?? [];
+          if ($this->validateFaqData($createData)) {
+            if ($faqModel->create($createData)) {
+              $_SESSION['admin_message'] = 'New FAQ created successfully';
+            } else {
+              throw new Exception('Failed to create FAQ');
+            }
+          } else {
+            throw new Exception('Invalid FAQ data');
+          }
+          break;
+
+        case 'update':
+          $updateId = $_POST['id'] ?? '';
+          $updateData = $_POST['update'] ?? [];
+          if ($updateId && $this->validateFaqData($updateData)) {
+            if ($faqModel->update([$updateId => $updateData])) {
+              $_SESSION['admin_message'] = 'FAQ updated successfully';
+            } else {
+              throw new Exception('Failed to update FAQ');
+            }
+          } else {
+            throw new Exception('Invalid FAQ data or ID');
+          }
+          break;
+
+        case 'delete':
+          $deleteId = $_POST['id'] ?? '';
+          if ($deleteId) {
+            if ($faqModel->delete([$deleteId]) > 0) {
+              $_SESSION['admin_message'] = 'FAQ deleted successfully';
+            } else {
+              throw new Exception('Failed to delete FAQ');
+            }
+          } else {
+            throw new Exception('Invalid FAQ ID');
+          }
+          break;
+
+        case 'answer_question':
+          $questionId = $_POST['answer_question']['id'] ?? '';
+          $answer = $_POST['answer_question']['answer'] ?? '';
+          if ($questionId && $answer) {
+            if ($userQuestionModel->markAsAnswered($questionId, $answer)) {
+              $question = $userQuestionModel->getById($questionId);
+              $faqModel->create([
+                'question' => $question['content'],
+                'answer' => $answer,
+                'category' => 'User Questions'
+              ]);
+              $_SESSION['admin_message'] = 'Question answered and added to FAQ successfully';
+            } else {
+              throw new Exception('Failed to process user question');
+            }
+          } else {
+            throw new Exception('Invalid question ID or answer');
+          }
+          break;
+
+        default:
+          throw new Exception('Invalid action');
       }
+    } catch (Exception $e) {
+      $_SESSION['admin_error'] = $e->getMessage();
     }
-    if (isset($_POST['update'])) {
-      $faqModel->update($_POST['update']);
-    }
-    if (isset($_POST['answer_question'])) {
-      $userQuestionModel->answer(
-        $_POST['answer_question']['id'],
-        $_POST['answer_question']['answer']
-      );
-    }
-    
-    header('Location: /admin/faq/');
+
+    header('Location: /admin/faq');
+    exit;
+  }
+
+  private function validateFaqData(array $data): bool {
+    return isset($data['question']) 
+        && isset($data['answer']) 
+        && isset($data['category'])
+        && strlen(trim($data['question'])) >= 5 
+        && strlen(trim($data['question'])) <= 200
+        && strlen(trim($data['answer'])) >= 10 
+        && strlen(trim($data['category'])) >= 3;
   }
 }

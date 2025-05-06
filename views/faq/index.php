@@ -50,11 +50,22 @@
   </div>
 </section>
 
-<?php if ($_SESSION['isLoggedIn']): ?>
+<?php if ($data['isLoggedIn']): ?>
 <section class="mt-10 bg-white mx-5 lg:mx-20 p-10 relative text-lg">
+  <?php if (!empty($data['sent'])): ?>
+    <div id="faq-success-alert" class="mb-5 p-4 rounded bg-green-100 text-green-800 border border-green-300">
+      Gửi câu hỏi thành công!
+    </div>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var textarea = document.getElementById('question');
+        if (textarea) textarea.value = '';
+      });
+    </script>
+  <?php endif; ?>
   <p class="mb-5">Can't find what you're looking for? Ask us directly!</p>
 
-  <form action="/faq/ask" method="post" class="mt-5 flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
+  <form action="/faq" method="post" class="mt-5 flex flex-col lg:grid grid-cols-[200px_1fr] gap-x-5 lg:gap-y-5 text-xl">
     <label class="text-left lg:text-right text-pink-600 lg:self-center cursor-pointer" for="question">Your Question *</label>
     <textarea required class="px-2 py-1 border-gray-300 border-2 rounded-sm focus:border-pink-200 shadow-gray shadow-sm text-lg italic" id="question" name="question" rows="4"></textarea>
     <div></div>
@@ -65,7 +76,7 @@
 
   <script>
     $(document).ready(function() {
-      const form = $("form[action='/faq/ask']");
+      const form = $("form[action='/faq']");
 
       const validations = {
         question: {
@@ -160,7 +171,7 @@
       <?php foreach ($data['paginatedQuestions'] as $question): ?>
         <tr class="bg-white border-b border-gray-200">
           <th scope="row" class="px-6 py-4 font-medium text-gray-900">
-            <?= $question->content ?>
+            <?= htmlspecialchars($question->content) ?>
           </th>
           <td class="px-6 py-4">
             <?= $question->createdAt->format('Y-m-d H:i') ?>

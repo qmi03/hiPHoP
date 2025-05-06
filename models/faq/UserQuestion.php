@@ -26,6 +26,8 @@ class UserQuestion {
 }
 
 class UserQuestionModel {
+    // create, fetchByUserId, countByUserId, fetchUnanswered, answer đã đúng chuẩn controller sử dụng
+
     public function create(int $userId, string $content): bool {
         try {
             $conn = Database::getInstance();
