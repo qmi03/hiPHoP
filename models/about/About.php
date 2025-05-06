@@ -1,29 +1,99 @@
 <?php
 
-class About {
-    private $db;
+class About
+{
+    public string $id;
+    public string $title;
+    public string $content;
+    public ?string $image_path;
+    public string $created_at;
+    public string $updated_at;
 
-    public function __construct() {
-        $this->db = Database::getInstance();
+    public function __construct(string $id, string $title, string $content, ?string $image_path, string $created_at, string $updated_at)
+    {
+        $this->id = $id;
+        $this->title = $title;
+        $this->content = $content;
+        $this->image_path = $image_path;
+        $this->created_at = $created_at;
+        $this->updated_at = $updated_at;
     }
+}
 
-    public function fetch() {
+class AboutModel
+{
+    public function fetch(): ?About
+    {
         try {
-            $stmt = $this->db->prepare('SELECT * FROM about_page WHERE id = 1');
-            $stmt->execute();
-            return $stmt->fetch();
+            $conn = Database::getInstance();
+            if (!$conn) {
+                error_log("Failed to get database connection");
+                return null;
+            }
+
+            $stmt = $conn->prepare('SELECT * FROM about ORDER BY created_at DESC LIMIT 1');
+            if (!$stmt->execute()) {
+                error_log("Failed to execute about query: " . implode(", ", $stmt->errorInfo()));
+                return null;
+            }
+
+            $about = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$about) {
+                error_log("No records found in about table");
+                // Create a default record if none exists
+                $this->createDefaultAbout();
+                return $this->fetch(); // Try fetching again
+            }
+            
+            return new About(
+                $about['id'],
+                $about['title'],
+                $about['content'],
+                $about['image_path'],
+                $about['created_at'],
+                $about['updated_at']
+            );
         } catch (PDOException $e) {
+            error_log("Database error in AboutModel::fetch: " . $e->getMessage());
             return null;
         }
     }
 
-    public function getTeamMembers() {
+    private function createDefaultAbout(): bool
+    {
         try {
-            $stmt = $this->db->prepare('SELECT * FROM team_members ORDER BY id ASC');
-            $stmt->execute(); 
-            return $stmt->fetchAll();
+            $conn = Database::getInstance();
+            $stmt = $conn->prepare('INSERT INTO about (id, title, content, image_path) VALUES (UUID(), :title, :content, :image_path)');
+            return $stmt->execute([
+                ':title' => 'Welcome to Our Website',
+                ':content' => 'We are a passionate team dedicated to providing the best services to our customers.',
+                ':image_path' => 'uploads/about/default-about.jpg'
+            ]);
         } catch (PDOException $e) {
-            return [];
+            error_log("Failed to create default about: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function update(string $id, array $data): bool
+    {
+        try {
+            $conn = Database::getInstance();
+            // Remove leading slash from image path if present
+            if (isset($data['image_path'])) {
+                $data['image_path'] = ltrim($data['image_path'], '/');
+            }
+            
+            $stmt = $conn->prepare('UPDATE about SET title = :title, content = :content, image_path = :image_path WHERE id = :id');
+            return $stmt->execute([
+                ':id' => $id,
+                ':title' => $data['title'],
+                ':content' => $data['content'],
+                ':image_path' => $data['image_path'] ?? $data['current_image']
+            ]);
+        } catch (PDOException $e) {
+            error_log("Database error in AboutModel::update: " . $e->getMessage());
+            return false;
         }
     }
 }

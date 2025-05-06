@@ -87,6 +87,18 @@ array_pop($subpaths);
                   <span><i class="bi bi-bell-fill"></i> Contacts</span>
                 </a>
               </li>
+              <li
+                class="menu-item active">
+                <a href="/admin/about" class='menu-link'>
+                  <span><i class="bi bi-info-circle-fill"></i> About</span>
+                </a>
+              </li>
+              <li
+                class="menu-item active">
+                <a href="/admin/faq" class='menu-link'>
+                  <span><i class="bi bi-question-circle-fill"></i> FAQ</span>
+                </a>
+              </li>
             </ul>
           </div>
         </nav>

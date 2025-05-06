@@ -5,6 +5,9 @@ require_once 'views/index.php';
 require_once 'models/Photo.php';
 require_once 'models/home/NewsLetter.php';
 require_once 'models/ContactMessage.php';
+require_once 'models/about/About.php';
+require_once 'models/faq/FAQ.php';
+require_once 'models/faq/UserQuestion.php';
 
 class AdminController
 {
@@ -367,41 +370,102 @@ class AdminController
 
   public function about(): void
   {
-    $about = new AboutModel();
-    renderView('views/admin/about.php', ['about' => $about->fetch()]);
+    $aboutModel = new AboutModel();
+    renderAdminView('views/admin/about.php', [
+      'user' => $GLOBALS['user'], 
+      'about' => $aboutModel->fetch()
+    ]);
   }
 
   public function updateAbout(): void
   {
-    $about = new AboutModel();
-    $about->update([
-      $_POST['id'] => [
-        'title' => $_POST['title'],
-        'content' => $_POST['content'],
-        'imageUrl' => $_POST['imageUrl'],
-      ]
+    $id = $_POST['id'] ?? '';
+    $title = $_POST['title'] ?? '';
+    $content = $_POST['content'] ?? '';
+    
+    $aboutModel = new AboutModel();
+    $currentAbout = $aboutModel->fetch();
+    $imagePath = $currentAbout ? $currentAbout->image_path : null;
+
+    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+      $uploadDir = 'uploads/about/';
+      if (!file_exists($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+      }
+
+      $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
+      $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+      
+      if (in_array($fileExtension, $allowedExtensions)) {
+        $fileName = uniqid() . '.' . $fileExtension;
+        $uploadPath = $uploadDir . $fileName;
+        
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
+          if ($currentAbout && $currentAbout->image_path && file_exists($currentAbout->image_path)) {
+            unlink($currentAbout->image_path);
+          }
+          $imagePath = $uploadPath;
+        }
+      }
+    }
+
+    $success = $aboutModel->update($id, [
+      'title' => $title,
+      'content' => $content,
+      'image_path' => $imagePath
     ]);
-    header('Location: /admin/about/');
+    
+    if (!$success) {
+        error_log("Failed to update about page with data: " . print_r([
+            'id' => $id,
+            'title' => $title,
+            'content' => $content,
+            'image_path' => $imagePath
+        ], true));
+    }
+    
+    header('Location: /admin/about' . ($success ? '?success=true' : '?error=true'));
   }
 
   public function faq(): void
   {
-    $faq = new FAQModel();
-    renderView('views/admin/faq.php', ['faqs' => $faq->fetchAll()]);
+    $faqModel = new FAQModel();
+    $userQuestionModel = new UserQuestionModel();
+    
+    $questions = $userQuestionModel->fetchUnanswered();
+    
+    renderAdminView('views/admin/faq.php', [
+      'user' => $GLOBALS['user'],
+      'faqs' => $faqModel->fetchAll(),
+      'userQuestions' => $questions
+    ]);
   }
 
   public function updateFAQ(): void
   {
-    $faq = new FAQModel();
+    $faqModel = new FAQModel();
+    $userQuestionModel = new UserQuestionModel();
+    
     if (isset($_POST['delete'])) {
-      $faq->delete($_POST['delete']);
+      $faqModel->delete($_POST['delete']);
     }
     if (isset($_POST['create'])) {
-      $faq->create($_POST['create']);
+      foreach ($_POST['create'] as $faq) {
+        if (!empty($faq['question']) && !empty($faq['answer']) && !empty($faq['category'])) {
+          $faqModel->create($faq);
+        }
+      }
     }
     if (isset($_POST['update'])) {
-      $faq->update($_POST['update']);
+      $faqModel->update($_POST['update']);
     }
+    if (isset($_POST['answer_question'])) {
+      $userQuestionModel->answer(
+        $_POST['answer_question']['id'],
+        $_POST['answer_question']['answer']
+      );
+    }
+    
     header('Location: /admin/faq/');
   }
 }

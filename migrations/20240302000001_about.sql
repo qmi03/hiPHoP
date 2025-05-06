@@ -5,12 +5,12 @@ CREATE TABLE IF NOT EXISTS about (
   id VARCHAR(36) PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   content TEXT NOT NULL,
-  image_url VARCHAR(255),
+  image_path VARCHAR(255), -- Changed from image_url
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-INSERT INTO about (id, title, content, image_url) VALUES (
+INSERT INTO about (id, title, content, image_path) VALUES (
   UUID(),
   'Welcome to Our Website',
   'We are a passionate team dedicated to providing the best services to our customers. Our mission is to make your experience with us exceptional and memorable.
@@ -25,5 +25,5 @@ Our Values:
 - Integrity: We conduct business with honesty and transparency
 
 Join us on this journey as we continue to grow and serve you better!',
-  '/public/images/about-us.jpg'
-); 
+  'uploads/about/default-about.jpg'  -- Update path format
+);
