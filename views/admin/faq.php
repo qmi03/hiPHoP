@@ -24,7 +24,22 @@
       <?php if (empty($data['userQuestions'])): ?>
         <p>No new questions from users.</p>
       <?php else: ?>
-        <?php foreach ($data['userQuestions'] as $question): ?>
+        <?php 
+        $seenQuestions = [];
+        $processedQuestions = [];
+
+        // First pass: group similar questions
+        foreach ($data['userQuestions'] as $question) {
+          $normalizedQuestion = strtolower(trim($question['content']));
+          if (!in_array($normalizedQuestion, $seenQuestions)) {
+            $seenQuestions[] = $normalizedQuestion;
+            $processedQuestions[] = $question;
+          }
+        }
+
+        // Display unique questions
+        foreach ($processedQuestions as $question):
+        ?>
           <div class="border rounded-lg p-4 mb-4">
             <div class="mb-2">
               <strong>From:</strong> <?php echo htmlspecialchars($question['username']); ?> 
@@ -61,7 +76,13 @@
       
       <div class="space-y-4 mb-6" id="existingFaqs">
         <!-- Existing FAQs -->
-        <?php foreach ($data['faqs'] as $faq): ?>
+        <?php 
+        $seenFaqs = [];
+        foreach ($data['faqs'] as $faq): 
+          $normalizedQuestion = strtolower(trim($faq->question));
+          if (!in_array($normalizedQuestion, $seenFaqs)):
+            $seenFaqs[] = $normalizedQuestion;
+        ?>
           <div class="border rounded-lg p-4 space-y-2">
             <div class="mb-3">
               <label class="form-label">Question *</label>
@@ -90,7 +111,10 @@
                 data-id="<?php echo htmlspecialchars($faq->id); ?>">Delete</button>
             </div>
           </div>
-        <?php endforeach; ?>
+        <?php 
+          endif;
+        endforeach; 
+        ?>
       </div>
 
       <!-- New FAQ form -->
@@ -146,57 +170,61 @@
         // Handle FAQ deletion
         $('.delete-faq').click(function(e) {
             e.preventDefault();
-            if (confirm('Are you sure you want to delete this FAQ?')) {
-                const id = $(this).data('id');
-                const form = $('#faqForm');
-                
-                form.find('input[name="action"]').val('delete');
-                form.append($('<input>', {
-                    type: 'hidden',
-                    name: 'id',
-                    value: id
-                }));
-                
-                form.submit();
-            }
+            const id = $(this).data('id');
+            const form = $('#faqForm');
+            
+            form.find('input[name="action"]').val('delete');
+            form.append($('<input>', {
+                type: 'hidden',
+                name: 'id',
+                value: id
+            }));
+            
+            form.submit();
         });
 
-        // Handle new FAQ creation
-        $('#addNewFaq').click(function() {
-            const template = $('#newFaqTemplate').html();
-            const newFaq = $(template);
-            $('#newFaqContainer').append(newFaq);
+        // Single unified Add New FAQ handler
+        $('#addNewFaq').on('click', function() {
+          // Check if there's already a new FAQ form
+          if ($('#newFaqContainer').children().length > 0) {
+            alert('Please save or cancel the current new FAQ before adding another one.');
+            return;
+          }
+
+          const template = $('#newFaqTemplate').html();
+          const newFaq = $(template);
+          $('#newFaqContainer').append(newFaq);
+          
+          newFaq.find('button.save-new-faq').click(function(e) {
+            e.preventDefault();
+            const container = $(this).closest('.border');
+            const form = $('#faqForm');
             
-            newFaq.find('button.save-new-faq').click(function(e) {
-                e.preventDefault();
-                const container = $(this).closest('.border');
-                const form = $('#faqForm');
-                
-                if (!validateContainer(container)) {
-                  return;
-                }
-                
-                form.find('input[name="action"]').val('create');
-                form.append($('<input>', {
-                    type: 'hidden',
-                    name: 'create[question]',
-                    value: container.find('.question-input').val().trim()
-                }));
-                
-                form.append($('<input>', {
-                    type: 'hidden',
-                    name: 'create[answer]',
-                    value: container.find('.answer-input').val().trim()
-                }));
-                
-                form.append($('<input>', {
-                    type: 'hidden',
-                    name: 'create[category]',
-                    value: container.find('.category-input').val().trim()
-                }));
-                
-                form.submit();
-            });
+            if (!validateContainer(container)) {
+              return;
+            }
+            
+            form.find('input[name="action"]').val('create');
+            form.append($('<input>', {
+                type: 'hidden',
+                name: 'create[question]',
+                value: container.find('.question-input').val().trim()
+            }));
+            
+            form.append($('<input>', {
+                type: 'hidden',
+                name: 'create[answer]',
+                value: container.find('.answer-input').val().trim()
+            }));
+            
+            form.append($('<input>', {
+                type: 'hidden',
+                name: 'create[category]',
+                value: container.find('.category-input').val().trim()
+            }));
+            
+            form.submit();
+          });
         });
 
         // Handle answer submission for user questions
@@ -321,14 +349,6 @@
 
         $('.category-input').on("input blur", function() {
           validateInput($(this), 'category');
-        });
-
-        // Add new FAQ row dynamically
-        $('#addNewFaq').on('click', function() {
-          const template = $('#newFaqTemplate').html();
-          const newFaq = template.replace(/\[0\]/g, `[${newFaqCount}]`);
-          $('#newFaqContainer').append(newFaq);
-          newFaqCount++;
         });
       });
     </script>

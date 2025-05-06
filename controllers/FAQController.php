@@ -33,9 +33,10 @@ class FAQController {
             $question = $_POST['question'] ?? '';
             if (strlen($question) >= 10 && strlen($question) <= 1000) {
                 $userQuestionModel = new UserQuestionModel();
-                $userQuestionModel->create($_SESSION['userId'], $question);
-                header('Location: /faq?sent=1');
-                exit;
+                if ($userQuestionModel->create($_SESSION['userId'], $question)) {
+                    header('Location: /faq?sent=1');
+                    exit;
+                }
             }
         } else {
             $sent = isset($_GET['sent']) ? true : false;
@@ -46,15 +47,18 @@ class FAQController {
             $faqModel = new FAQModel();
             $faqs = $faqModel->fetchAll();
 
+            // Remove duplicate questions
             $uniqueFaqs = [];
             $seenQuestions = [];
             foreach ($faqs as $faq) {
-                if (!in_array($faq->question, $seenQuestions)) {
+                $normalizedQuestion = strtolower(trim($faq->question));
+                if (!in_array($normalizedQuestion, $seenQuestions)) {
                     $uniqueFaqs[] = $faq;
-                    $seenQuestions[] = $faq->question;
+                    $seenQuestions[] = $normalizedQuestion;
                 }
             }
 
+            // User questions pagination
             $userQuestionModel = new UserQuestionModel();
             $userQuestions = [];
             $questionsCount = 0;
@@ -86,12 +90,10 @@ class FAQController {
                 'endPage' => $endPage
             ]);
 
-            error_log("View rendered successfully");
-
         } catch (Exception $e) {
             error_log("Error in FAQController::index - " . $e->getMessage());
             renderView('views/faq/index.php', [
-                'error' => 'An error occurred while loading FAQs: ' . $e->getMessage(),
+                'error' => 'An error occurred while loading FAQs',
                 'faqs' => []
             ]);
         }

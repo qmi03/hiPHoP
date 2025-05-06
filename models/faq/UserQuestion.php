@@ -117,4 +117,31 @@ class UserQuestionModel {
             return false;
         }
     }
+
+    public function getById(int $id): ?array {
+        try {
+            $conn = Database::getInstance();
+            $stmt = $conn->prepare('
+                SELECT * FROM user_questions WHERE id = ?
+            ');
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return null;
+        }
+    }
+
+    public function markAsAnswered(int $id, string $answer): bool {
+        try {
+            $conn = Database::getInstance();
+            $stmt = $conn->prepare('
+                UPDATE user_questions 
+                SET answer = ?, is_answered = true 
+                WHERE id = ?
+            ');
+            return $stmt->execute([$answer, $id]);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
