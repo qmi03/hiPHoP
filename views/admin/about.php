@@ -2,11 +2,26 @@
   <h3>About Page Management</h3>
 </div>
 
-<?php if (isset($_GET['success'])) { ?>
-  <div class="alert alert-success">Changes saved successfully!</div>
-<?php } elseif (isset($_GET['error'])) { ?>
-  <div class="alert alert-danger">Error saving changes. Please try again.</div>
-<?php } ?>
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-check-circle me-2"></i>Success
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center py-4">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+        <p class="mt-3 mb-0">Changes saved successfully!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success px-4" onclick="window.location.reload()">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <section class="section">
   <div class="card">
@@ -14,9 +29,8 @@
       <h5 class="card-title">About Information</h5>
     </div>
     <?php if ($data['about']) { ?>
-      <form method="POST" class="card-body" id="aboutForm" enctype="multipart/form-data">
+      <form method="POST" class="card-body" id="aboutForm">
         <input type="hidden" name="id" value="<?php echo htmlspecialchars($data['about']->id); ?>">
-        <input type="hidden" name="current_image" value="<?php echo htmlspecialchars($data['about']->image_path); ?>">
         
         <div class="mb-3">
           <label for="title" class="form-label">Title *</label>
@@ -27,20 +41,6 @@
         <div class="mb-3">
           <label for="content" class="form-label">Content *</label>
           <textarea id="content" name="content" rows="10" class="form-control" required><?php echo htmlspecialchars($data['about']->content); ?></textarea>
-        </div>
-
-        <div class="mb-3">
-          <label for="image" class="form-label">Image *</label>
-          <input type="file" id="image" name="image" class="form-control" accept="image/*"
-            <?php echo empty($data['about']->image_path) ? 'required' : ''; ?>>
-          <?php if (!empty($data['about']->image_path)) { ?>
-            <div class="mt-2">
-              <img src="<?php echo htmlspecialchars($data['about']->image_path); ?>" 
-                alt="Current image" 
-                class="max-w-xs image-preview">
-              <p class="text-sm text-gray-600 mt-1">Current image: <?php echo htmlspecialchars(basename($data['about']->image_path)); ?></p>
-            </div>
-          <?php } ?>
         </div>
 
         <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -62,16 +62,6 @@
                 return value.length >= 10;
               },
               errorMessage: "Content must be at least 10 characters"
-            },
-            'image': {
-              validate: function(input) {
-                if (!input.files || !input.files[0]) return true; // Skip if no new file
-                const file = input.files[0];
-                const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-                const maxSize = 5 * 1024 * 1024; // 5MB
-                return validTypes.includes(file.type) && file.size <= maxSize;
-              },
-              errorMessage: "Please select a valid image file (JPG, PNG, GIF, WEBP) under 5MB"
             }
           };
 
@@ -100,16 +90,6 @@
 
             if (!validation) return true;
 
-            if (field === 'image') {
-              if (!validation.validate($field[0])) {
-                addErrorMessage(field, validation.errorMessage);
-                return false;
-              } else {
-                removeErrorMessage(field);
-                return true;
-              }
-            }
-
             if (!validation.validate(value)) {
               addErrorMessage(field, validation.errorMessage);
               return false;
@@ -130,7 +110,22 @@
 
             if (!isValid) {
               event.preventDefault();
+              return;
             }
+
+            event.preventDefault();
+            
+            $.ajax({
+              type: "POST",
+              url: form.attr("action"),
+              data: form.serialize(),
+              success: function() {
+                $("#successModal").modal("show");
+              },
+              error: function() {
+                alert("Error saving changes. Please try again.");
+              }
+            });
           });
 
           Object.keys(validations).forEach(function(field) {
@@ -138,31 +133,8 @@
               validateField(field);
             });
           });
-
-          // Update image preview on file select
-          $("#image").on('change', function() {
-            const file = this.files[0];
-            if (file) {
-              const reader = new FileReader();
-              reader.onload = function(e) {
-                $('.image-preview').attr('src', e.target.result);
-              };
-              reader.readAsDataURL(file);
-            }
-          });
         });
       </script>
-
-      <style>
-        .image-preview {
-          max-width: 300px;
-          max-height: 200px;
-          object-fit: contain;
-        }
-        .image-preview.error {
-          border: 2px solid #dc3545;
-        }
-      </style>
     <?php } ?>
   </div>
 </section>

@@ -384,43 +384,16 @@ class AdminController
     $content = $_POST['content'] ?? '';
     
     $aboutModel = new AboutModel();
-    $currentAbout = $aboutModel->fetch();
-    $imagePath = $currentAbout ? $currentAbout->image_path : null;
-
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-      $uploadDir = 'uploads/about/';
-      if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-      }
-
-      $fileExtension = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-      $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-      
-      if (in_array($fileExtension, $allowedExtensions)) {
-        $fileName = uniqid() . '.' . $fileExtension;
-        $uploadPath = $uploadDir . $fileName;
-        
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadPath)) {
-          if ($currentAbout && $currentAbout->image_path && file_exists($currentAbout->image_path)) {
-            unlink($currentAbout->image_path);
-          }
-          $imagePath = $uploadPath;
-        }
-      }
-    }
-
     $success = $aboutModel->update($id, [
       'title' => $title,
-      'content' => $content,
-      'image_path' => $imagePath
+      'content' => $content
     ]);
     
     if (!$success) {
         error_log("Failed to update about page with data: " . print_r([
             'id' => $id,
             'title' => $title,
-            'content' => $content,
-            'image_path' => $imagePath
+            'content' => $content
         ], true));
     }
     

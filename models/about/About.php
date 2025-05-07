@@ -5,16 +5,14 @@ class About
     public string $id;
     public string $title;
     public string $content;
-    public ?string $image_path;
     public string $created_at;
     public string $updated_at;
 
-    public function __construct(string $id, string $title, string $content, ?string $image_path, string $created_at, string $updated_at)
+    public function __construct(string $id, string $title, string $content, string $created_at, string $updated_at)
     {
         $this->id = $id;
         $this->title = $title;
         $this->content = $content;
-        $this->image_path = $image_path;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
     }
@@ -49,7 +47,6 @@ class AboutModel
                 $about['id'],
                 $about['title'],
                 $about['content'],
-                $about['image_path'],
                 $about['created_at'],
                 $about['updated_at']
             );
@@ -63,11 +60,10 @@ class AboutModel
     {
         try {
             $conn = Database::getInstance();
-            $stmt = $conn->prepare('INSERT INTO about (id, title, content, image_path) VALUES (UUID(), :title, :content, :image_path)');
+            $stmt = $conn->prepare('INSERT INTO about (id, title, content) VALUES (UUID(), :title, :content)');
             return $stmt->execute([
                 ':title' => 'Welcome to Our Website',
-                ':content' => 'We are a passionate team dedicated to providing the best services to our customers.',
-                ':image_path' => 'uploads/about/default-about.jpg'
+                ':content' => 'We are a passionate team dedicated to providing the best services to our customers.'
             ]);
         } catch (PDOException $e) {
             error_log("Failed to create default about: " . $e->getMessage());
@@ -79,17 +75,11 @@ class AboutModel
     {
         try {
             $conn = Database::getInstance();
-            // Remove leading slash from image path if present
-            if (isset($data['image_path'])) {
-                $data['image_path'] = ltrim($data['image_path'], '/');
-            }
-            
-            $stmt = $conn->prepare('UPDATE about SET title = :title, content = :content, image_path = :image_path WHERE id = :id');
+            $stmt = $conn->prepare('UPDATE about SET title = :title, content = :content WHERE id = :id');
             return $stmt->execute([
                 ':id' => $id,
                 ':title' => $data['title'],
-                ':content' => $data['content'],
-                ':image_path' => $data['image_path'] ?? $data['current_image']
+                ':content' => $data['content']
             ]);
         } catch (PDOException $e) {
             error_log("Database error in AboutModel::update: " . $e->getMessage());

@@ -4,16 +4,9 @@
 </section>
 
 <section class="bg-white mx-5 lg:mx-20 relative top-[-10px] text-lg">
-  <div class="md:flex gap-8 items-start p-10">
-    <div class="md:w-1/2 mb-8 md:mb-0">
-      <img src="/<?php echo htmlspecialchars($data['about']->image_path); ?>" 
-           alt="About Image" 
-           class="w-full h-auto rounded-lg shadow-lg">
-    </div>
-    <div class="md:w-1/2">
-      <div class="prose max-w-none">
-        <?php echo nl2br(htmlspecialchars($data['about']->content)); ?>
-      </div>
+  <div class="p-10">
+    <div class="prose max-w-none">
+      <?php echo nl2br(htmlspecialchars($data['about']->content)); ?>
     </div>
   </div>
 </section>
@@ -59,8 +52,4 @@
     </div>
   </div>
 </section>
-
-
-
-
 <?php } ?>
