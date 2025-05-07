@@ -14,9 +14,13 @@ $routes = [
   '/logout/' => new LoginController(),
   '/signup/' => new LoginController(),
   '/contact/' => new ContactController(),
+  '/about/' => new AboutController(),
+  '/faq/' => new FAQController(),
   '/admin/' => new AdminController(),
   '/admin/home-page/' => new AdminController(),
   '/admin/contacts/' => new AdminController(),
+  '/admin/about/' => new AdminController(),
+  '/admin/faq/' => new AdminController(),
   '/account/' => new AccountController(),
   '/shop/' => new ShopController(),
 ];

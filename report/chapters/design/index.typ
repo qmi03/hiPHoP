@@ -215,3 +215,48 @@ Under the contact form, users can see their messages along with the responses.
 === Contact management
 
 This feature is admin-exclusive, allowing the admin to see all messages, their reply status and response to them.
+
+=== About page
+
+The About page comprises 2 main sections:
+- The main content section displays the company's overview through a customizable title and content.
+- The "Why Choose Us" section highlights 4 key value propositions:
+  - Expert Team: Highlighting our highly skilled professionals
+  - Innovation: Emphasizing our cutting-edge solutions
+  - Customer Focus: Demonstrating our commitment to satisfaction
+  - Results-Driven: Showcasing our focus on measurable outcomes
+
+=== About page management
+
+The About page management interface provides administrators with tools to maintain the page content:
+
+- A simple form interface containing:
+  - Title field with validation (3-100 characters)
+  - Content field with validation (minimum 10 characters)
+
+=== FAQ page
+
+The FAQ page offers a comprehensive question-and-answer interface with several key features:
+
+*Search and Filtering*
+- Dynamic search functionality for questions and answers
+- Category-based filtering with an "All" option
+- Visual feedback for active category selection
+
+*FAQ Display*
+- Collapsible question/answer pairs
+- Smooth animations for expanding/collapsing answers
+- Clear visual hierarchy and spacing
+
+=== FAQ management
+
+The FAQ management interface provides administrators with comprehensive tools:
+
+*FAQ Entry Management*
+- Create new FAQ entries with:
+  - Question (5-200 characters)
+  - Answer (minimum 10 characters)
+  - Category assignment
+- Update existing FAQ entries
+- Delete obsolete entries
+- Real-time validation
