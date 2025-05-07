@@ -1,0 +1,16 @@
+-- Migration: faqs
+-- Created at: 2024-03-02 00:00:02
+
+DROP TABLE IF EXISTS faqs;
+
+CREATE TABLE faqs (
+  id VARCHAR(36) PRIMARY KEY,
+  question TEXT NOT NULL,
+  answer TEXT NOT NULL,
+  category VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Ensure clean initial data
+DELETE FROM faqs;

@@ -5,6 +5,9 @@ require_once 'views/index.php';
 require_once 'models/Photo.php';
 require_once 'models/home/NewsLetter.php';
 require_once 'models/ContactMessage.php';
+require_once 'models/about/About.php';
+require_once 'models/faq/FAQ.php';
+require_once 'models/faq/UserQuestion.php';
 
 class AdminController
 {
@@ -53,6 +56,18 @@ class AdminController
         $this->handleUserUpdate($_POST);
       } elseif ('POST' == $method && $_REQUEST['user-change-password']) {
         $this->handleUserChangePassword($_POST);
+      }
+    } elseif ('/admin/about/' == $path) {
+      if ('GET' == $method) {
+        $this->about();
+      } else if ('POST' == $method) {
+        $this->updateAbout();
+      }
+    } elseif ('/admin/faq/' == $path) {
+      if ('GET' == $method) {
+        $this->faq();
+      } else if ('POST' == $method) {
+        $this->updateFAQ();
       }
     }
   }
@@ -351,5 +366,140 @@ class AdminController
     } catch (Exception $e) {
       echo json_encode(['status' => 'failed', 'message' => 'Failed to change password', 'error' => $e->getMessage()]);
     }
+  }
+
+  public function about(): void
+  {
+    $aboutModel = new AboutModel();
+    renderAdminView('views/admin/about.php', [
+      'user' => $GLOBALS['user'], 
+      'about' => $aboutModel->fetch()
+    ]);
+  }
+
+  public function updateAbout(): void
+  {
+    $id = $_POST['id'] ?? '';
+    $title = $_POST['title'] ?? '';
+    $content = $_POST['content'] ?? '';
+    
+    $aboutModel = new AboutModel();
+    $success = $aboutModel->update($id, [
+      'title' => $title,
+      'content' => $content
+    ]);
+    
+    if (!$success) {
+        error_log("Failed to update about page with data: " . print_r([
+            'id' => $id,
+            'title' => $title,
+            'content' => $content
+        ], true));
+    }
+    
+    header('Location: /admin/about' . ($success ? '?success=true' : '?error=true'));
+  }
+
+  public function faq(): void
+  {
+    $faqModel = new FAQModel();
+    $userQuestionModel = new UserQuestionModel();
+    
+    $questions = $userQuestionModel->fetchUnanswered();
+    
+    renderAdminView('views/admin/faq.php', [
+      'user' => $GLOBALS['user'],
+      'faqs' => $faqModel->fetchAll(),
+      'userQuestions' => $questions
+    ]);
+  }
+
+  public function updateFAQ(): void
+  {
+    try {
+      $faqModel = new FAQModel();
+      $userQuestionModel = new UserQuestionModel();
+      $action = $_POST['action'] ?? '';
+
+      switch ($action) {
+        case 'create':
+          $createData = $_POST['create'] ?? [];
+          if ($this->validateFaqData($createData)) {
+            if ($faqModel->create($createData)) {
+              $_SESSION['admin_message'] = 'New FAQ created successfully';
+            } else {
+              throw new Exception('Failed to create FAQ');
+            }
+          } else {
+            throw new Exception('Invalid FAQ data');
+          }
+          break;
+
+        case 'update':
+          $updateId = $_POST['id'] ?? '';
+          $updateData = $_POST['update'] ?? [];
+          if ($updateId && $this->validateFaqData($updateData)) {
+            if ($faqModel->update([$updateId => $updateData])) {
+              $_SESSION['admin_message'] = 'FAQ updated successfully';
+            } else {
+              throw new Exception('Failed to update FAQ');
+            }
+          } else {
+            throw new Exception('Invalid FAQ data or ID');
+          }
+          break;
+
+        case 'delete':
+          $deleteId = $_POST['id'] ?? '';
+          if ($deleteId) {
+            if ($faqModel->delete([$deleteId]) > 0) {
+              $_SESSION['admin_message'] = 'FAQ deleted successfully';
+            } else {
+              throw new Exception('Failed to delete FAQ');
+            }
+          } else {
+            throw new Exception('Invalid FAQ ID');
+          }
+          break;
+
+        case 'answer_question':
+          $questionId = $_POST['answer_question']['id'] ?? '';
+          $answer = $_POST['answer_question']['answer'] ?? '';
+          if ($questionId && $answer) {
+            if ($userQuestionModel->markAsAnswered($questionId, $answer)) {
+              $question = $userQuestionModel->getById($questionId);
+              $faqModel->create([
+                'question' => $question['content'],
+                'answer' => $answer,
+                'category' => 'User Questions'
+              ]);
+              $_SESSION['admin_message'] = 'Question answered and added to FAQ successfully';
+            } else {
+              throw new Exception('Failed to process user question');
+            }
+          } else {
+            throw new Exception('Invalid question ID or answer');
+          }
+          break;
+
+        default:
+          throw new Exception('Invalid action');
+      }
+    } catch (Exception $e) {
+      $_SESSION['admin_error'] = $e->getMessage();
+    }
+
+    header('Location: /admin/faq');
+    exit;
+  }
+
+  private function validateFaqData(array $data): bool {
+    return isset($data['question']) 
+        && isset($data['answer']) 
+        && isset($data['category'])
+        && strlen(trim($data['question'])) >= 5 
+        && strlen(trim($data['question'])) <= 200
+        && strlen(trim($data['answer'])) >= 10 
+        && strlen(trim($data['category'])) >= 3;
   }
 }
