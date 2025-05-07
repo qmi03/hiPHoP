@@ -138,6 +138,9 @@ $path = $_SERVER['PATH'];
             <img width="30px" height="30px" alt="user avatar" src="<?php echo $GLOBALS['user']->avatarUrl; ?>" class="block w-[30px] h-[30px] rounded-full">
             <span><?php echo $GLOBALS['user']->username; ?></span>
             <div role="menu" tabindex="-1" class="bg-pink-600 w-[200px] absolute group-hover:opacity-100 opacity-0 top-[35px] right-0 z-50 transition-all shadow-md shadow-gray-800 border-gray-800 border-1 flex flex-col items-stretch not-italic text-white">
+              <?php if ($GLOBALS['user'] && $GLOBALS['user']->isAdmin): ?>
+                <a class="p-1 hover:bg-cyan-600" href="/admin">Admin</a>
+              <?php endif; ?>
               <a class="p-1 hover:bg-cyan-600" href="/account">Account</a>
               <a class="p-1 hover:bg-cyan-600" href="/logout">Logout</a>
             </div>
