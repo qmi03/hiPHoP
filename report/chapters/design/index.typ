@@ -176,3 +176,42 @@ There are three main relations. These form the data backbone for our application
 - `users`: A relation storing all users' information.
 - `contact_messages`: A relation storing all contact's feedback and reply messages.
 - `photos`: A relation storing the photo gallery in our application.
+
+== Features
+
+=== Home page
+
+The home page comprises 3 main sections:
+- The newsletters section
+- The introduction paragraph section
+- The quote section
+
+The newsletters are stored inside the `newletters` relation. We implemented a sliding animation for this section. This ection shows all the news headline for the page.
+
+The introductions are stored inside the `introductions` relation. This relation is a singleton table storing only one rows, containing the introduction heading and all the paragraphs. This section shows the welcoming paragraphs to the user.
+
+The quotes are stored inside the `quotes` relation. This section shows a sliding box with all the positive customer feedbacks.
+
+=== Home page management
+
+The home page management feature is an admin-exclusive feature. We allow admins to:
+- Add newsletters.
+- Modify newsletters.
+- Delete newsletters.
+- Modify introduction lines.
+- Add quotes.
+- Modify quotes.
+- Delete quotes.
+
+=== Contact page
+
+The contact page comprises 3 main sections:
+- The basic info section contains the email, telephone number and our location.
+- The contact form section contains a form for user feedback. This is only visible to logged in users.
+- The map section visualizes our location on the map.
+
+Under the contact form, users can see their messages along with the responses.
+
+=== Contact management
+
+This feature is admin-exclusive, allowing the admin to see all messages, their reply status and response to them.
