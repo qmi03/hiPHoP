@@ -18,4 +18,14 @@
     - Home page management page
     - Contact management page
   ],
+  [2212136], [Nguyễn Đình Nam],
+  [
+  ],
+  [
+    Personal task \#2
+    - FAQ page
+    - FAQ management page
+    - About page
+    - About management page
+  ]
 )
