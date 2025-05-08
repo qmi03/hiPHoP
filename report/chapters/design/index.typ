@@ -212,9 +212,17 @@ The contact page comprises 3 main sections:
 
 Under the contact form, users can see their messages along with the responses.
 
+The basic info are stored inside the `contacts` singleton relation, with only one row storing email, facebook, github, telephone number, address.
+
+All of the messages are stored inside the `contact_messages` relation.
+
 === Contact management
 
-This feature is admin-exclusive, allowing the admin to see all messages, their reply status and response to them.
+This feature is admin-exclusive, allowing the admin to view all messages, their reply status and response to them.
+
+The messages are paginated on the frontend, to access next or previous page, the client would need to send to server a request with the appropriate query string.
+
+All of the messages are stored inside the `contact_messages` relation.
 
 === About page
 
