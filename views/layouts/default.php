@@ -61,6 +61,14 @@ $path = $_SERVER['PATH'];
             <span><?php echo $GLOBALS['user']->username; ?></span>
           </a>
         </div>
+        <?php if ($GLOBALS['user'] && $GLOBALS['user']->isAdmin): ?>
+          <a class="flex gap-2 items-center text-xl text-white <?php echo '/logout/' == $path ? '' : 'opacity-80'; ?> m-4" href="/admin">
+            <span>ADMIN</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="m7.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
+          </a>
+        <?php endif; ?>
         <a class="flex gap-2 items-center text-xl text-white <?php echo '/logout/' == $path ? '' : 'opacity-80'; ?> m-4" href="/logout">
           <span>LOGOUT</span>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 30 30" stroke-width="1.5" stroke="currentColor" class="size-5">
